@@ -7,6 +7,7 @@ use App\Http\Requests\Article\UpdateArticleRequest;
 use App\Models\Article;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
@@ -34,10 +35,13 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request)
     {
-        Gate::authorize('create', Auth::user());
+        Gate::authorize('create', Article::class);
 
-        dd($request->all());
+        $string = $request->get('title') . now()->format('Y-m-d-m-Y-H-i-s');
+        $data = ($request->validated() + ['slug' => Str::slug($string)]);
+        Auth::user()->articles()->create($data);
 
+        return back()->with(['message' => 'Article Created Successfully']);
     }
 
     /**
