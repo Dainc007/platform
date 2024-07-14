@@ -44,4 +44,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function isAdmin()
+    {
+        return true;
+    }
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
 }
