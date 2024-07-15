@@ -21,7 +21,6 @@ const props = defineProps({
 
       <div class="relative">
         <a href="#">
-          {{               props.article.img}} <br><br><br><br>
           <img class="w-full"
                :src="props.article.img"
                :alt="props.article.title">

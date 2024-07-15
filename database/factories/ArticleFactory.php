@@ -24,7 +24,7 @@ class ArticleFactory extends Factory
             'title' => $title = fake()->title,
             'content' => fake()->realText(1000),
             'slug' => Str::slug(Str::words(5)),
-            'img'  => '/articles/' . $arr[rand(0,3)]
+            'img'  => '/dummy/' . $arr[rand(0,3)]
         ];
     }
 }
