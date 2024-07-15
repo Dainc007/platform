@@ -22,7 +22,7 @@ const props = defineProps({
       <div class="relative">
         <a href="#">
           <img class="w-full"
-               :src="props.article.img"
+               :src="'https://picsum.photos/id/' + props.article.id * 10 + '/800/400'"
                :alt="props.article.title">
         </a>
         <a href="#!"
