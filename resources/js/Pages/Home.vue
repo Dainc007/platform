@@ -45,7 +45,7 @@
                perfectly adjusted to your needs.
             </span>
           </h1>
-          <p class="leading-normal text-base md:text-2xl mb-8 text-center md:text-left">
+          <p class="leading-normal text-base md:text-2xl mb-8 text-center md:text-left text-white">
             Log in and see for yourself!
           </p>
 
