@@ -1,6 +1,6 @@
 <template>
   <div style="background-image: url('home/header.png');">
-    <div class="h-full">
+    <div class="h-full min-h-screen">
       <!--Nav-->
       <div class="w-full container mx-auto">
         <div class="w-full flex items-center justify-between">
