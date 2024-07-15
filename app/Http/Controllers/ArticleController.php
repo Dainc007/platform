@@ -16,7 +16,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::orderBy('created_at', 'desc')->get();
+        $articles = Article::orderBy('created_at', 'desc')->limit(10)->with('user')->get();
         return inertia('Article/Index', ['articles' => $articles]);
     }
 
