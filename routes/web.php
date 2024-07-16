@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -23,7 +24,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resources([
-    'articles' => ArticleController::class
+    'articles' => ArticleController::class,
+    'users' => UserController::class
+
 ]);
 
 require __DIR__.'/auth.php';
