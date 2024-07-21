@@ -13,6 +13,6 @@ class ConversationSeeder extends Seeder
      */
     public function run(): void
     {
-        Conversation::factory(10)->create();
+        Conversation::factory(1)->create();
     }
 }
