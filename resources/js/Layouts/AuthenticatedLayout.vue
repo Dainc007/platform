@@ -8,7 +8,7 @@
                     <slot name="header" />
                 </div>
             </header>
-
+            <FlashMessage></FlashMessage>
             <!-- Page Content -->
             <main>
                 <slot />
@@ -19,4 +19,5 @@
 
 <script setup>
 import AuthenticatedTopNav from "@/Layouts/AuthenticatedTopNav.vue";
+import FlashMessage from "@/Components/FlashMessage.vue";
 </script>
