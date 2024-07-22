@@ -9,7 +9,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::paginate(10);
+        $users = User::whereAny(['name', 'email'], 'LIKE', '%' . $_REQUEST['search'] . '%')->paginate(10);
 
         return inertia('User/Index', ['users' => $users]);
     }
