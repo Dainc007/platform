@@ -1,23 +1,37 @@
 <script setup>
-import { computed } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import {computed, reactive} from 'vue';
+import {Link, router} from '@inertiajs/vue3';
+import NavLink from "@/Components/NavLink.vue";
+import DangerButton from "@/Components/DangerButton.vue";
+import Delete from "@/Pages/Article/Delete.vue";
 
 const props = defineProps({
   article: {
     type: Object,
     required: true,
   },
+  status: String
 });
+
+const form = reactive({
+  id: props.article.id
+})
+
+function submit() {
+  router.post('/articles', form)
+}
 </script>
 
 <template>
   <div class="max-w-screen-lg mx-auto p-5 sm:p-10 md:p-16">
 
-    <div class="mb-10 rounded overflow-hidden flex flex-col mx-auto">
+    <div class="mb-10 rounded overflow-hidden flex flex-col mx-auto relative">
       <a href="#"
-         class=" text-white text-xl sm:text-4xl font-semibold inline-block hover:text-indigo-600 transition duration-500 ease-in-out inline-block mb-2">
-        {{props.article.title}}
+         class="text-white text-xl sm:text-4xl font-semibold inline-block hover:text-indigo-600 transition duration-500 ease-in-out mb-2">
+        {{ props.article.title }}
       </a>
+
+      <Delete :article="props.article" class="absolute top-0 right-0"></Delete>
 
       <div class="relative">
         <a href="#">
@@ -34,7 +48,7 @@ const props = defineProps({
             class="text-lg">|</span>&nbsp;&nbsp;<span>Read more</span></a>
       </div>
       <p class="text-white py-5 text-base leading-8">
-        {{props.article.content}}
+        {{ props.article.content }}
       </p>
       <div class="py-5 text-sm font-regular text-gray-900 flex">
             <span class="mr-3 flex flex-row items-center">
@@ -58,7 +72,7 @@ const props = defineProps({
             </path>
             <path d="M0 0h24v24H0z" fill="none"></path>
           </svg>
-          <span class="ml-1 text-white">{{props.article.user.name}}</span></a>
+          <span class="ml-1 text-white">{{ props.article.user.name }}</span></a>
       </div>
       <hr>
     </div>

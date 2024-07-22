@@ -2,21 +2,21 @@
 
 namespace App\Http\Requests\Article;
 
+use App\Models\Article;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreArticleRequest extends FormRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
+    public function authorize(): bool
+    {
+        return $this->user()->can('create', Article::class);
+    }
     public function rules(): array
     {
         return [
             'title' => ['required', 'string', 'max:255'],
             'content' => ['required', 'string'],
-            'img' => ['required', 'string']
+            'img' => ['string']
         ];
     }
 }

@@ -1,7 +1,12 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
+use App\Models\Conversation;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -13,7 +18,10 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return Inertia::render('Dashboard', ['friend' => Auth::user(),
+        'currentUser' => Auth::user(),
+        'conversation' => Conversation::with('messages.user')->find(2)
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -23,7 +31,10 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resources([
-    'articles' => ArticleController::class
+    'articles' => ArticleController::class,
+    'users' => UserController::class,
+    'conversations' => ConversationController::class,
+    'messages'  => MessageController::class
 ]);
 
 require __DIR__.'/auth.php';
