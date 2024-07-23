@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -34,7 +35,8 @@ Route::resources([
     'articles' => ArticleController::class,
     'users' => UserController::class,
     'conversations' => ConversationController::class,
-    'messages'  => MessageController::class
+    'messages'  => MessageController::class,
+    'employees' => EmployeeController::class
 ]);
 
 require __DIR__.'/auth.php';
