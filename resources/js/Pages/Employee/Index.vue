@@ -110,7 +110,7 @@ watch(search, (search) => {
                         </td>
                         <th scope="row"
                             class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                            <img class="w-10 h-10 rounded-full" src="/articles/1.png"
+                            <img class="w-10 h-10 rounded-full" src="/dummy/1.png"
                                  alt="Jese image">
                             <div class="ps-3">
                                 <div class="text-base font-semibold">{{ employee.firstname }} {{employee.lastname}}</div>
