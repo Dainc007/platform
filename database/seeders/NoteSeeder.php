@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Conversation;
+use App\Models\Note;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class ConversationSeeder extends Seeder
+class NoteSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Conversation::factory(2)->create();
+        Note::factory(1000)->create();
     }
 }

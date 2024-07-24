@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Conversation;
+use App\Models\Product;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class ConversationSeeder extends Seeder
+class ProductSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Conversation::factory(2)->create();
+        Product::factory(10000)->create();
     }
 }

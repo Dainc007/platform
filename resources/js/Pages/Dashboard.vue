@@ -20,10 +20,12 @@ const props = defineProps({
 });
 
 onMounted(() => {
-  Echo.channel(`conversations.${props.conversation.id}`)
-      .listen('MessageCreated', (event) => {
-        props.conversation.messages.push(event.message);
-      });
+    if (props.conversation) {
+        Echo.channel(`conversations.${props.conversation.id}`)
+            .listen('MessageCreated', (event) => {
+                props.conversation.messages.push(event.message);
+            });
+    }
 });
 </script>
 
@@ -38,7 +40,7 @@ onMounted(() => {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg my-2">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <ChatMessage v-for="message in conversation.messages" :message></ChatMessage>
+                        <ChatMessage v-if="conversation" v-for="message in conversation.messages" :message></ChatMessage>
                         <SendMessage :current-user="props.currentUser" :friend="props.friend"/>
                     </div>
                 </div>
