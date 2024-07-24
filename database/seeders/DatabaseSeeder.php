@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             MessageSeeder::class,
             ArticleSeeder::class,
             NoteSeeder::class,
+            ProjectSeeder::class,
+            ProductSeeder::class
         ]);
     }
 }
