@@ -4,7 +4,10 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\NoteController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\UserController;
 use App\Models\Conversation;
 use Illuminate\Support\Facades\Auth;
@@ -36,7 +39,10 @@ Route::resources([
     'users' => UserController::class,
     'conversations' => ConversationController::class,
     'messages'  => MessageController::class,
-    'employees' => EmployeeController::class
+    'employees' => EmployeeController::class,
+    'notes' =>  NoteController::class,
+    'projects' => ProjectController::class,
+    'products' => ProductController::class
 ]);
 
 require __DIR__.'/auth.php';

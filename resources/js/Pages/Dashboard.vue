@@ -20,10 +20,12 @@ const props = defineProps({
 });
 
 onMounted(() => {
-  Echo.channel(`conversations.${props.conversation.id}`)
-      .listen('MessageCreated', (event) => {
-        props.conversation.messages.push(event.message);
-      });
+    if (props.conversation) {
+        Echo.channel(`conversations.${props.conversation.id}`)
+            .listen('MessageCreated', (event) => {
+                props.conversation.messages.push(event.message);
+            });
+    }
 });
 </script>
 

@@ -39,6 +39,12 @@ const showingNavigationDropdown = ref(false);
                         <NavLink :href="route('employees.index')" :active="route().current('employees*')">
                             Employees
                         </NavLink>
+                        <NavLink :href="route('projects.index')" :active="route().current('projects*')">
+                            Projects
+                        </NavLink>
+                        <NavLink :href="route('products.index')" :active="route().current('products*')">
+                            Products
+                        </NavLink>
                         <NavLink :href="route('notes.index')" :active="route().current('notes*')">
                             Notes
                         </NavLink>
@@ -125,17 +131,23 @@ const showingNavigationDropdown = ref(false);
                 <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                     Dashboard
                 </ResponsiveNavLink>
-                <ResponsiveNavLink :href="route('articles.index')" :active="route().current('articles.index')">
+                <ResponsiveNavLink :href="route('articles.index')" :active="route().current('articles*')">
                     Articles
                 </ResponsiveNavLink>
-                <ResponsiveNavLink :href="route('users.index')" :active="route().current('users.index')">
+                <ResponsiveNavLink :href="route('users.index')" :active="route().current('users*')">
                     Users
                 </ResponsiveNavLink>
-                <ResponsiveNavLink :href="route('employees.index')" :active="route().current('employees.index')">
+                <ResponsiveNavLink :href="route('employees.index')" :active="route().current('employees*')">
                     Employees
                 </ResponsiveNavLink>
-                <ResponsiveNavLink :href="route('notes.index')" :active="route().current('notes.index')">
-                    Employees
+                <ResponsiveNavLink :href="route('projects.index')" :active="route().current('projects*')">
+                    Projects
+                </ResponsiveNavLink>
+                <ResponsiveNavLink :href="route('products.index')" :active="route().current('products*')">
+                    Projects
+                </ResponsiveNavLink>
+                <ResponsiveNavLink :href="route('notes.index')" :active="route().current('notes*')">
+                    Notes
                 </ResponsiveNavLink>
             </div>
 
