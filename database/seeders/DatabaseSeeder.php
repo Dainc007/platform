@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             ArticleSeeder::class,
             NoteSeeder::class,
             ProjectSeeder::class,
-            ProductSeeder::class
+            ProductSeeder::class,
+            CurrencySeeder::class
         ]);
     }
 }
