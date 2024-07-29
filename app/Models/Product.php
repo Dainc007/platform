@@ -10,15 +10,26 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'supplier',
+        'contractor_id',
         'code',
         'price',
         'brand',
-        'currency'
+        'currency_id'
     ];
 
     protected $casts = [
         'updated_at' => 'date:Y-m-d',
     ];
+
+    public function contractor()
+    {
+        return $this->belongsTo(Contractor::class);
+    }
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
+
 
 }

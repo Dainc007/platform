@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('supplier');
+            $table->foreignId('contractor_id')->constrained();
             $table->string('code');
             $table->integer('price');
-            $table->string('currency');
-            $table->string('brand');
+            $table->foreignId('currency_id')->constrained();
             $table->timestamps();
+
+            $table->unique(['contractor_id', 'code']);
         });
     }
 

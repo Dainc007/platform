@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProductController;
@@ -38,11 +40,13 @@ Route::resources([
     'articles' => ArticleController::class,
     'users' => UserController::class,
     'conversations' => ConversationController::class,
-    'messages'  => MessageController::class,
+    'messages' => MessageController::class,
     'employees' => EmployeeController::class,
-    'notes' =>  NoteController::class,
+    'notes' => NoteController::class,
     'projects' => ProjectController::class,
-    'products' => ProductController::class
+    'products' => ProductController::class,
+    'files' => FileController::class,
+    'contractors' => ContractorController::class
 ]);
 
 require __DIR__.'/auth.php';

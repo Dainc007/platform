@@ -65,9 +65,6 @@ function formatPrice(price) {
                         <th scope="col" class="px-6 py-3">
                             Currency
                         </th>
-                        <th scope="col" class="px-6 py-3">
-                            Brand
-                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -87,16 +84,13 @@ function formatPrice(price) {
                             </div>
                         </th>
                         <td class="px-6 py-4">
-                            {{product.supplier}}
+                            {{product.contractor.name}}
                         </td>
                         <td class="px-6 py-4">
                             {{formatPrice(product.price)}}
                         </td>
                         <td class="px-6 py-4">
-                            {{product.currency}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{product.brand}}
+                            {{product.currency.code}}
                         </td>
                     </tr>
                     </tbody>

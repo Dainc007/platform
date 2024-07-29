@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
+use App\Imports\ProductsImport;
+use App\Models\Contractor;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -14,7 +16,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::where('code', 'LIKE', '%' . $request->input('search', '') . '%')->paginate(15);
+        $products = Product::where('code', 'LIKE', '%' . $request->input('search', '') . '%')->with(['currency', 'contractor'])->paginate(15);
         return inertia('Product/Index', ['products' => $products]);
     }
 

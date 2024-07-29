@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Note\StoreNoteRequest;
-use App\Http\Requests\Note\UpdateNoteRequest;
-use App\Models\Note;
+use App\Http\Requests\Currency\StoreCurrencyRequest;
+use App\Http\Requests\Currency\UpdateCurrencyRequest;
+use App\Models\Currency;
 
-class NoteController extends Controller
+class CurrencyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $notes = Note::orderBy('notable_type')->paginate(15);
-         return inertia('Note/Index', [
-                'notes' => $notes
-         ]);
+        //
     }
 
     /**
@@ -30,7 +27,7 @@ class NoteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreNoteRequest $request)
+    public function store(StoreCurrencyRequest $request)
     {
         //
     }
@@ -38,7 +35,7 @@ class NoteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Note $note)
+    public function show(Currency $currency)
     {
         //
     }
@@ -46,7 +43,7 @@ class NoteController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Note $note)
+    public function edit(Currency $currency)
     {
         //
     }
@@ -54,7 +51,7 @@ class NoteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateNoteRequest $request, Note $note)
+    public function update(UpdateCurrencyRequest $request, Currency $currency)
     {
         //
     }
@@ -62,7 +59,7 @@ class NoteController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Note $note)
+    public function destroy(Currency $currency)
     {
         //
     }

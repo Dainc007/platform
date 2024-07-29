@@ -5,25 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Currency extends Model
+class Contractor extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name', 'code'
+        'name', 'files'
     ];
 
-    //todo separate class
-    const AVAILABLE_CURRENCIES = [
-      'dollar' => 'USD',
-        'pound' => 'GBP',
-        'euro' => 'EUR',
-        'złoty' => 'PLN'
-    ];
-
+    public function files()
+    {
+        return $this->morphMany(File::class, 'fileable');
+    }
 
     public function products()
     {
         return $this->hasMany(Product::class);
     }
+
 }
