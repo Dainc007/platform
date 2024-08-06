@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,5 +25,9 @@ class AppServiceProvider extends ServiceProvider
         Model::preventLazyLoading(! $this->app->isProduction());
         Model::preventSilentlyDiscardingAttributes();
         Model::preventAccessingMissingAttributes();
+
+        Gate::define('viewPulse', function (User $user) {
+            return $user->isAdmin();
+        });
     }
 }
