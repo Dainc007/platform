@@ -13,6 +13,10 @@ class Contractor extends Model
         'name', 'files'
     ];
 
+    protected $casts = [
+        'updated_at' => 'date:Y-m-d m:i',
+    ];
+
     public function files()
     {
         return $this->morphMany(File::class, 'fileable');

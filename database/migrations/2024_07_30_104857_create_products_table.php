@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('contractor_id')->constrained();
             $table->string('code');
             $table->integer('price');
             $table->foreignId('currency_id')->constrained();
+
+            $table->foreignId('contractor_id')->constrained()->onDelete('cascade');
+            $table->foreignId('file_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
             $table->unique(['contractor_id', 'code']);

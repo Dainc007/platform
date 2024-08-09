@@ -20,4 +20,12 @@
 <script setup>
 import AuthenticatedTopNav from "@/Layouts/AuthenticatedTopNav.vue";
 import FlashMessage from "@/Components/FlashMessage.vue";
+
+import { onMounted } from 'vue'
+import { initFlowbite } from 'flowbite'
+
+// initialize components based on data attribute selectors
+onMounted(() => {
+    initFlowbite();
+})
 </script>
