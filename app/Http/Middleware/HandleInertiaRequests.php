@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Currency;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
@@ -41,7 +42,8 @@ class HandleInertiaRequests extends Middleware
             ],
             'flash' => [
                 'message' =>  session('message')
-            ]
+            ],
+            'currencies' => Currency::all(),
         ];
     }
 }

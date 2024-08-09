@@ -4,6 +4,7 @@ namespace App\Http\Requests\File;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreFileRequest extends FormRequest
 {
@@ -15,7 +16,9 @@ class StoreFileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'required|file|mimes:jpg,png,pdf,xlsx,xls,csv|max:10240'
+            'file' => 'required|file|max:10240',
+            'currency_id' => Rule::exists('currencies', 'id'),
+            'contractor_id'  => 'required'
         ];
     }
 }

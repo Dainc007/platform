@@ -10,11 +10,11 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'contractor_id',
         'code',
         'price',
-        'brand',
-        'currency_id'
+        'currency_id',
+        'contractor_id',
+        'file_id'
     ];
 
     protected $casts = [
@@ -29,6 +29,11 @@ class Product extends Model
     public function currency()
     {
         return $this->belongsTo(Currency::class);
+    }
+
+    public function file()
+    {
+        return $this->belongsTo(File::class);
     }
 
 

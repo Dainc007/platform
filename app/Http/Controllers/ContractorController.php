@@ -6,6 +6,7 @@ use App\Http\Requests\Contractor\StoreContractorRequest;
 use App\Http\Requests\Contractor\UpdateContractorRequest;
 use App\Imports\ProductsImport;
 use App\Models\Contractor;
+use App\Models\Currency;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -18,7 +19,7 @@ class ContractorController extends Controller
     public function index(Request $request)
     {
         return inertia('Contractor/Index', [
-            'contractors' => Contractor::where('name', 'LIKE', '%' . $request->input('search', '') . '%')->paginate(10)
+            'contractors' => Contractor::where('name', 'LIKE', '%' . $request->input('search', '') . '%')->with('files')->paginate(10)
         ]);
 
     }
@@ -37,18 +38,16 @@ class ContractorController extends Controller
     public function store(StoreContractorRequest $request)
     {
         $file = $request->file('file');
+        $name = $request->get('name');
         $path = $file->storeAs('uploads', $file->getClientOriginalName());
+        $currencyId = $request->get('currency_id');
 
-        $contractor = Contractor::create([
-            'name' => $request->get('name')
-        ]);
+        $contractor = Contractor::updateOrCreate(['name' => $name], ['name' => $name]);
+        $file       = $contractor->files()->create(['path' => $path]);
 
-        $contractor->files()->create(['path' => $path]);
-
-        Excel::import(new ProductsImport($contractor->id, 4),$path);
+        Excel::import(new ProductsImport($contractor->id, $currencyId, $file->id),$path);
 
         return redirect()->route('contractors.index')->with('success', 'Contractor added successfully!');
-
     }
 
     /**
@@ -64,7 +63,7 @@ class ContractorController extends Controller
      */
     public function edit(Contractor $contractor)
     {
-        //
+        return inertia('Contractor/Edit', ['contractor' => $contractor->load('files')]);
     }
 
     /**
@@ -72,7 +71,9 @@ class ContractorController extends Controller
      */
     public function update(UpdateContractorRequest $request, Contractor $contractor)
     {
-        //
+        $contractor->update($request->validated());
+
+        return back()->with(['success' => 'Contractor updated successfully!', 'contractor' => $contractor]);
     }
 
     /**
@@ -80,6 +81,8 @@ class ContractorController extends Controller
      */
     public function destroy(Contractor $contractor)
     {
-        //
+        $contractor->delete();
+
+        return back()->with(['message' => 'Contractor Deleted Successfully']);
     }
 }

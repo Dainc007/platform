@@ -2,10 +2,18 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {Link, router} from "@inertiajs/vue3";
 import { ref, watch } from 'vue';
+import {Inertia} from "@inertiajs/inertia";
 
 defineProps({
   contractors: Array,
 });
+
+const destroy = (id) => {
+    if(confirm('Are you sure?')) {
+        Inertia.delete(route('contractors.destroy', id))
+    }
+    return (destroy)
+}
 
 const search = ref('');
 
@@ -39,14 +47,9 @@ watch(search, (search) => {
               <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
                   aria-labelledby="dropdownActionContractorButton">
                 <li>
-                  <a :href="route('contractors.create')" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create</a>
+                  <Link :href="route('contractors.create')" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create</Link>
                 </li>
               </ul>
-              <div class="py-1">
-                <a href="#"
-                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete
-                  User</a>
-              </div>
             </div>
           </div>
           <label for="table-search" class="sr-only">Search</label>
@@ -78,13 +81,10 @@ watch(search, (search) => {
             <th scope="col" class="px-6 py-3">
               Name
             </th>
-            <th scope="col" class="px-6 py-3">
-              Position
+            <th scope="col" class="px-6 py-3 text-center">
+              Files
             </th>
-            <th scope="col" class="px-6 py-3">
-              Status
-            </th>
-            <th scope="col" class="px-6 py-3">
+            <th scope="col" class="px-6 py-3 text-center">
               Action
             </th>
           </tr>
@@ -107,23 +107,29 @@ watch(search, (search) => {
                 <div class="font-normal text-gray-500">{{contractor.name}}</div>
               </div>
             </th>
-            <td class="px-6 py-4">
-              React Developer
-            </td>
-            <td class="px-6 py-4">
-              <div v-if="Math.random() >= 0.5" class="flex items-center">
-                <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-                Online
-              </div>
-              <div v-else class="flex items-center">
-                <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
-                Online
-              </div>
-            </td>
-            <td class="px-6 py-4">
-              <a :href="route('contractors.edit', contractor)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-auto">Edit</a>
-              <a :href="route('contractors.destroy', contractor)" class="font-medium text-red-600 dark:text-red-500 hover:underline mx-auto">Delete</a>
-            </td>
+              <td class="px-6 py-4 text-center">
+                  <div v-for="file in contractor.files" :key="file.id"
+                       class="text-gray-900 px-2 py-1 text-center inline-flex items-center relative group">
+                      <i class="fas fa-file-alt text-gray-500 dark:text-gray-400 mx-1 py-1 fa-solid group-hover:text-gray-700"></i>
+                      <span
+                          class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-auto p-2 min-w-max rounded-md shadow-md text-white bg-gray-900 text-xs font-bold transition-all duration-100 scale-0 group-hover:scale-100 z-50">
+                        {{ file.path }}
+                      </span>
+                  </div>
+              </td>
+
+              <td class="px-6 py-4 text-center">
+                  <Link :title="Edytuj" :href="route('contractors.edit', contractor)"
+                        class="m-1 p-1 text-gray-900 bg-white dark:bg-gray-800 dark:text-gray-200 hover:bg-gray-100
+                        dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:ring-4 focus:outline-none
+                        focus:ring-gray-100 dark:focus:ring-gray-700 font-medium rounded-lg text-xs px-2 py-1 text-center inline-flex items-center">
+                      <i class="mx-1 py-1 fa-solid fa-edit"></i> <!-- Ikona edycji -->
+                  </Link>
+
+                  <button @click="destroy(contractor.id)" title="Usuń" :href="route('contractors.destroy', contractor)" class="m-1 p-1 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs px-2 py-1 text-center inline-flex items-center">
+                      <i class="mx-1 py-1 fa-solid fa-trash"></i> <!-- Ikona usuwania -->
+                  </button>
+              </td>
           </tr>
           </tbody>
         </table>
