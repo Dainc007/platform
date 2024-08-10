@@ -23,6 +23,7 @@
     "dependencies": {
         "@fortawesome/vue-fontawesome": "^3.0.8",
         "@inertiajs/inertia": "^0.11.1",
-        "flowbite": "^2.5.1"
+        "flowbite": "^2.5.1",
+        "laravel-vue-i18n": "^2.7.7"
     }
 }

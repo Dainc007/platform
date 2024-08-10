@@ -1,0 +1,10 @@
+{
+    "user.name": "Name",
+    "user.email": "Email",
+    "user.password": "Password",
+    "user.password.confirm": "Confirm Password",
+
+    "register": "Register",
+    "register.submit": "Register",
+    "register.hasAccount": "Already registered?"
+}
