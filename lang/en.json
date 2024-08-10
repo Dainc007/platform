@@ -6,5 +6,9 @@
 
     "register": "Register",
     "register.submit": "Register",
-    "register.hasAccount": "Already registered?"
+    "register.hasAccount": "Already registered?",
+
+    "login": "Log in",
+    "login.rememberMe": "Remember me",
+    "login.forgot.password": "Forgot your password?"
 }
