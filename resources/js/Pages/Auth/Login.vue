@@ -71,9 +71,10 @@ const submit = () => {
 
             <div class="block mt-4">
                 <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">                    {{ $t('register.submit') }}
-</span>
+                    <Checkbox name="remember" v-model:checked="form.remember"/>
+                    <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">
+                        {{$t('register.submit')}}
+                    </span>
                 </label>
             </div>
 
