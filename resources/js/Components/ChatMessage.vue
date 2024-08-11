@@ -14,7 +14,7 @@ const props = defineProps({
 <template>
     <div :key="message.id" class="flex flex-col mb-4" :class="{'items-end': message.user_id === currentUser.id, 'items-start': message.user_id !== currentUser.id}">
         <div class="flex items-center mb-1">
-            <span v-if="message.user_id === currentUser.id" class="text-gray-500 text-sm">{{ new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}</span>
+            <span v-if="message.user_id === currentUser.id" class="text-gray-500 text-sm">{{ message.created_at }}</span>
             <img
                 :src="'https://i.pravatar.cc/150?u=' + message.user_id"
                 alt="Avatar"

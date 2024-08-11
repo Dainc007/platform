@@ -17,7 +17,7 @@ class Message extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'date:Y-m-d m:i',
+        'created_at' => 'date:d M y m:i',
     ];
 
     public function broadcastOn(string $event): array
