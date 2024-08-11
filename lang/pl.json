@@ -10,5 +10,22 @@
 
     "login": "Zaloguj",
     "login.rememberMe": "Zapamiętaj mnie",
-    "login.forgot.password": "Zapomniałeś hasła?"
+    "login.forgot.password": "Zapomniałeś hasła?",
+
+    "platform": "Platforma",
+    "platform.adjusted": "perfekcyjnie dostosowana do Twoich potrzeb.",
+    "platform.tryout": "Zaloguj się i wypróbuj!",
+
+    "signUp": "Zapisz się",
+    "newsletter.signUp": "Zapisz się do newslettera i bądź na bieżąco",
+
+    "nav.dashboard": "Tablica",
+    "nav.articles": "Artykuły",
+    "nav.users": "Użytkownicy",
+    "nav.employees": "Pracownicy",
+    "nav.projects": "Projekty",
+    "nav.products": "Produkty",
+    "nav.contractors": "Kontrahenci",
+    "nav.files": "Pliki",
+    "nav.notes": "Notatki"
 }

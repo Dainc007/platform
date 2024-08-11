@@ -28,31 +28,31 @@ const showingNavigationDropdown = ref(false);
                     <!-- Navigation Links -->
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Chat
+                            {{$t('nav.dashboard')}}
                         </NavLink>
                         <NavLink :href="route('articles.index')" :active="route().current('articles*')">
-                            Articles
+                            {{$t('nav.articles')}}
                         </NavLink>
                         <NavLink :href="route('users.index')" :active="route().current('users*')">
-                            Users
+                            {{$t('nav.users')}}
                         </NavLink>
                         <NavLink :href="route('employees.index')" :active="route().current('employees*')">
-                            Employees
+                            {{$t('nav.employees')}}
                         </NavLink>
                         <NavLink :href="route('projects.index')" :active="route().current('projects*')">
-                            Projects
+                            {{$t('nav.projects')}}
                         </NavLink>
                         <NavLink :href="route('products.index')" :active="route().current('products*')">
-                            Products
+                            {{$t('nav.products')}}
                         </NavLink>
                       <NavLink :href="route('contractors.index')" :active="route().current('contractors*')">
-                        Contractors
+                          {{$t('nav.contractors')}}
                       </NavLink>
                       <NavLink :href="route('files.index')" :active="route().current('files*')">
-                        Files
+                          {{$t('nav.files')}}
                       </NavLink>
                         <NavLink :href="route('notes.index')" :active="route().current('notes*')">
-                            Notes
+                            {{$t('nav.notes')}}
                         </NavLink>
                     </div>
                 </div>
@@ -88,7 +88,7 @@ const showingNavigationDropdown = ref(false);
                             <template #content>
                                 <DropdownLink :href="route('profile.edit')"> Profile</DropdownLink>
                                 <DropdownLink :href="route('logout')" method="post" as="button">
-                                    Log Out
+                                    {{$t('logout')}}
                                 </DropdownLink>
                             </template>
                         </Dropdown>
@@ -135,31 +135,31 @@ const showingNavigationDropdown = ref(false);
         >
             <div class="pt-2 pb-3 space-y-1">
                 <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                    Dashboard
+                    {{$t('nav.dashboard')}}
                 </ResponsiveNavLink>
                 <ResponsiveNavLink :href="route('articles.index')" :active="route().current('articles*')">
-                    Articles
+                    {{$t('nav.articles')}}
                 </ResponsiveNavLink>
                 <ResponsiveNavLink :href="route('users.index')" :active="route().current('users*')">
-                    Users
+                    {{$t('nav.users')}}
                 </ResponsiveNavLink>
                 <ResponsiveNavLink :href="route('employees.index')" :active="route().current('employees*')">
-                    Employees
+                    {{$t('nav.employees')}}
                 </ResponsiveNavLink>
                 <ResponsiveNavLink :href="route('projects.index')" :active="route().current('projects*')">
-                    Projects
+                    {{$t('nav.projects')}}
                 </ResponsiveNavLink>
                 <ResponsiveNavLink :href="route('products.index')" :active="route().current('products*')">
-                    Products
+                    {{$t('nav.products')}}
                 </ResponsiveNavLink>
               <ResponsiveNavLink :href="route('contractors.index')" :active="route().current('contractors*')">
-                Contractors
+                  {{$t('nav.contractors')}}
               </ResponsiveNavLink>
               <ResponsiveNavLink :href="route('files.index')" :active="route().current('files*')">
-                Files
+                  {{$t('nav.files')}}
               </ResponsiveNavLink>
                 <ResponsiveNavLink :href="route('notes.index')" :active="route().current('notes*')">
-                    Notes
+                    {{$t('nav.notes')}}
                 </ResponsiveNavLink>
             </div>
 
@@ -173,9 +173,9 @@ const showingNavigationDropdown = ref(false);
                 </div>
 
                 <div class="mt-3 space-y-1">
-                    <ResponsiveNavLink :href="route('profile.edit')"> Profile</ResponsiveNavLink>
+                    <ResponsiveNavLink :href="route('profile.edit')">{{$t('profile')}}</ResponsiveNavLink>
                     <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                        Log Out
+                        {{$t('logout')}}
                     </ResponsiveNavLink>
                 </div>
             </div>
