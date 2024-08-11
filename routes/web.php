@@ -24,9 +24,12 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard', ['friend' => Auth::user(),
+    return Inertia::render('Dashboard', [
+        'friend' => Auth::user(),
         'currentUser' => Auth::user(),
-        'conversation' => Conversation::with('messages.user')->find(2)
+        'conversation' => Conversation::with(['messages' => function ($query) {
+            $query->orderBy('id', 'desc');
+        }, 'messages.user'])->find(2)
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
