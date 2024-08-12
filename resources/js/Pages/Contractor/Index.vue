@@ -98,11 +98,8 @@ watch(search, (search) => {
                 <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
               </div>
             </td>
-            <th scope="row"
-                class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-              <img class="w-10 h-10 rounded-full" src="/dummy/1.png"
-                   alt="Jese image">
-              <div class="ps-3">
+            <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+              <div>
                 <div class="text-base font-semibold">{{ contractor.name }}</div>
                 <div class="font-normal text-gray-500">{{contractor.name}}</div>
               </div>
