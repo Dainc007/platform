@@ -87,10 +87,10 @@ function formatPrice(price) {
                             </div>
                         </th>
                         <td class="px-6 py-4">
-                            {{product.contractor.name}}
+                            {{product.brand.name}}
                         </td>
                         <td class="px-6 py-4">
-                            {{product.brand.name}}
+                            {{product.contractor.name}}
                         </td>
                         <td class="px-6 py-4">
                             {{formatPrice(product.price)}}
