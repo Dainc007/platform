@@ -19,9 +19,12 @@ return new class extends Migration
 
             $table->foreignId('contractor_id')->constrained()->onDelete('cascade');
             $table->foreignId('file_id')->constrained()->onDelete('cascade');
+            $table->foreignId('brand_id')->constrained()->onDelete('cascade');
+
             $table->timestamps();
 
-            $table->unique(['contractor_id', 'code']);
+            $table->unique(['contractor_id', 'code', 'brand_id']);
+
         });
     }
 

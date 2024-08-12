@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\EmployeeController;
@@ -49,7 +50,8 @@ Route::resources([
     'projects' => ProjectController::class,
     'products' => ProductController::class,
     'files' => FileController::class,
-    'contractors' => ContractorController::class
+    'contractors' => ContractorController::class,
+    'brands' => BrandController::class
 ]);
 
 require __DIR__.'/auth.php';
