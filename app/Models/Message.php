@@ -16,6 +16,10 @@ class Message extends Model
         'user_id',
     ];
 
+    protected $casts = [
+        'created_at' => 'date:d M y m:i',
+    ];
+
     public function broadcastOn(string $event): array
     {
         return [$this->conversation, $this->user];

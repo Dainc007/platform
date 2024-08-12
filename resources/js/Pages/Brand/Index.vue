@@ -2,22 +2,24 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {Link, router} from "@inertiajs/vue3";
 import { ref, watch } from 'vue';
+import {Inertia} from "@inertiajs/inertia";
 
 defineProps({
-    products: Array,
+    brands: Array,
 });
+
+const destroy = (id) => {
+    if(confirm('Are you sure?')) {
+        Inertia.delete(route('brands.destroy', id))
+    }
+    return (destroy)
+}
 
 const search = ref('');
 
 watch(search, (search) => {
-    router.get('/products', { search: search }, { preserveState: true, replace: true });
+    router.get('/brands', { search: search }, { preserveState: true, replace: true });
 });
-
-function formatPrice(price) {
-    return (price / 100).toFixed(2).replace('.', ',');
-}
-
-
 
 </script>
 
@@ -27,6 +29,29 @@ function formatPrice(price) {
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <div
                     class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+                    <div>
+                        <button id="dropdownActionContractorButton" data-dropdown-toggle="dropdownActionContractor"
+                                class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                                type="button">
+                            <span class="sr-only">Action button</span>
+                            Action
+                            <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                 fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                      stroke-width="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                        </button>
+                        <!-- Dropdown menu -->
+                        <div id="dropdownActionContractor"
+                             class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                            <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
+                                aria-labelledby="dropdownActionContractorButton">
+                                <li>
+                                    <Link :href="route('brands.create')" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create</Link>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                     <label for="table-search" class="sr-only">Search</label>
                     <div class="relative">
                         <div
@@ -37,9 +62,9 @@ function formatPrice(price) {
                                       stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                             </svg>
                         </div>
-                        <input type="text" id="table-search-users"
+                        <input type="text" id="table-search-brands"
                                class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                               placeholder="Search for products"
+                               placeholder="Search for brands"
                                v-model="search">
                     </div>
                 </div>
@@ -56,22 +81,13 @@ function formatPrice(price) {
                         <th scope="col" class="px-6 py-3">
                             Name
                         </th>
-                        <th scope="col" class="px-6 py-3">
-                            Brand
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Supplier
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Price
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Currency
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Action
                         </th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="product in products.data" v-if="products.data.length" :key="product.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <tr v-for="brand in brands.data" v-if="brands && brands.data.length" :key="brand.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td class="w-4 p-4">
                             <div class="flex items-center">
                                 <input id="checkbox-table-search-1" type="checkbox"
@@ -81,22 +97,25 @@ function formatPrice(price) {
                         </td>
                         <th scope="row"
                             class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                            <img class="w-10 h-10 rounded-full" src="/dummy/1.png"
+                                 alt="Jese image">
                             <div class="ps-3">
-                                <div class="text-base font-semibold">{{ product.code }}</div>
-                                <div class="font-normal text-gray-500">Ostatnia modyfikacja: {{ product.updated_at}}</div>
+                                <div class="text-base font-semibold">{{ brand.name }}</div>
                             </div>
                         </th>
-                        <td class="px-6 py-4">
-                            {{product.contractor.name}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{product.brand.name}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{formatPrice(product.price)}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{product.currency.code}}
+
+
+                        <td class="px-6 py-4 text-center">
+                            <Link :title="Edytuj" :href="route('brands.edit', brand)"
+                                  class="m-1 p-1 text-gray-900 bg-white dark:bg-gray-800 dark:text-gray-200 hover:bg-gray-100
+                        dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:ring-4 focus:outline-none
+                        focus:ring-gray-100 dark:focus:ring-gray-700 font-medium rounded-lg text-xs px-2 py-1 text-center inline-flex items-center">
+                                <i class="mx-1 py-1 fa-solid fa-edit"></i> <!-- Ikona edycji -->
+                            </Link>
+
+                            <button @click="destroy(brand.id)" title="Usuń" :href="route('brands.destroy', brand)" class="m-1 p-1 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs px-2 py-1 text-center inline-flex items-center">
+                                <i class="mx-1 py-1 fa-solid fa-trash"></i> <!-- Ikona usuwania -->
+                            </button>
                         </td>
                     </tr>
                     </tbody>
@@ -111,7 +130,7 @@ function formatPrice(price) {
                     </span>
                     <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
                         <Link
-                            v-for=" (link, index) in products.links"
+                            v-if="brands && brands.links" v-for=" (link, index) in brands.links"
                             :key="index"
                             :href="link.url"
                             class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"

@@ -1,0 +1,57 @@
+{
+    "user.name": "Nazwa",
+    "user.email": "Email",
+    "user.password": "Hasło",
+    "user.password.confirm": "Potwierdź Hasło",
+
+    "profile": "Profil",
+
+    "register": "Rejestracja",
+    "register.submit": "Zarejestruj",
+    "register.hasAccount": "Masz już konto?",
+
+    "login": "Zaloguj",
+    "logout": "Wyloguj",
+    "login.rememberMe": "Zapamiętaj mnie",
+    "login.forgot.password": "Zapomniałeś hasła?",
+
+    "platform": "Platforma",
+    "platform.adjusted": "perfekcyjnie dostosowana do Twoich potrzeb.",
+    "platform.tryout": "Zaloguj się i wypróbuj!",
+
+    "signUp": "Zapisz się",
+    "newsletter.signUp": "Zapisz się do newslettera i bądź na bieżąco",
+
+    "nav.dashboard": "Tablica",
+    "nav.articles": "Artykuły",
+    "nav.users": "Użytkownicy",
+    "nav.employees": "Pracownicy",
+    "nav.projects": "Projekty",
+    "nav.products": "Produkty",
+    "nav.contractors": "Kontrahenci",
+    "nav.brands": "Marki",
+    "nav.files": "Pliki",
+    "nav.notes": "Notatki",
+
+    "brand.name": "Nazwa",
+    "brand.header": "Dodawanie Marek",
+    "brand.submit": "Dodaj",
+
+    "contractor.name": "Nazwa",
+    "contractor.header": "Dodawanie Kontrahenta",
+    "contractor.submit": "Zatwierdź",
+    "contractor.currency": "Waluta",
+    "contractor.brand": "Marka",
+    "contractor.file": "Plik z Ofertą",
+    "contractor.lastUpdate": "Ostatnia Aktualizacja:",
+    "contractor.save": "Zapisz",
+    "contractor.file.upload": "Prześlij",
+    "contractor.file.path": "Ścieżka",
+    "contractor.file.updatedAt": "Ostatnia Aktualizacja",
+
+    "search": "Szukaj...",
+    "actions": "Akcje",
+    "actions.create": "Dodaj",
+    "files": "Pliki"
+
+}

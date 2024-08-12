@@ -1,0 +1,52 @@
+{
+    "user.name": "Name",
+    "user.email": "Email",
+    "user.password": "Password",
+    "user.password.confirm": "Confirm Password",
+
+    "profile": "Profile",
+
+    "register": "Register",
+    "register.submit": "Register",
+    "register.hasAccount": "Already registered?",
+
+    "login": "Log in",
+    "logout": "Log out",
+    "login.rememberMe": "Remember me",
+    "login.forgot.password": "Forgot your password?",
+
+    "platform": "Platform",
+    "platform.adjusted": "perfectly adjusted to your needs.",
+    "platform.tryout": "Log in and see for yourself!",
+
+    "signUp": "Sign Up",
+    "newsletter.signUp": "Sign Up for our newsletter",
+
+    "nav.dashboard": "Dashboard",
+    "nav.articles": "Articles",
+    "nav.users": "Users",
+    "nav.employees": "Employees",
+    "nav.projects": "Projects",
+    "nav.products": "Products",
+    "nav.contractors": "Contractors",
+    "nav.brands": "Brands",
+    "nav.files": "Files",
+    "nav.notes": "Notes",
+
+    "brand.name": "Name",
+    "brand.header": "Add Brand",
+    "brand.submit": "Submit",
+
+    "contractor": "Contractor",
+    "contractor.name": "Name",
+    "contractor.header": "Add Contractor",
+    "contractor.submit": "Submit",
+    "contractor.currency": "Currency",
+    "contractor.brand": "Brand",
+    "contractor.file": "File",
+    "contractor.lastUpdate": "Last Update:",
+    "contractor.save": "Save",
+    "contractor.file.upload": "Upload",
+    "contractor.file.path": "Path",
+    "contractor.file.updatedAt": "Updated At"
+}

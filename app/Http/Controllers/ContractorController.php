@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Contractor\StoreContractorRequest;
 use App\Http\Requests\Contractor\UpdateContractorRequest;
 use App\Imports\ProductsImport;
+use App\Models\Brand;
 use App\Models\Contractor;
 use App\Models\Currency;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class ContractorController extends Controller
      */
     public function create()
     {
-        return inertia('Contractor/Create');
+        return inertia('Contractor/Create', ['brands' => Brand::all()]);
     }
 
     /**
@@ -37,15 +38,18 @@ class ContractorController extends Controller
      */
     public function store(StoreContractorRequest $request)
     {
-        $file = $request->file('file');
         $name = $request->get('name');
-        $path = $file->storeAs('uploads', $file->getClientOriginalName());
-        $currencyId = $request->get('currency_id');
-
         $contractor = Contractor::updateOrCreate(['name' => $name], ['name' => $name]);
-        $file       = $contractor->files()->create(['path' => $path]);
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $path = $file->storeAs('uploads', $file->getClientOriginalName());
+            $currencyId = $request->get('currency_id');
+            $brandId = $request->get('brand_id');
 
-        Excel::import(new ProductsImport($contractor->id, $currencyId, $file->id),$path);
+            $file = $contractor->files()->create(['path' => $path]);
+
+            Excel::import(new ProductsImport($contractor->id, $currencyId, $file->id, $brandId), $path);
+        }
 
         return redirect()->route('contractors.index')->with('success', 'Contractor added successfully!');
     }
@@ -63,7 +67,10 @@ class ContractorController extends Controller
      */
     public function edit(Contractor $contractor)
     {
-        return inertia('Contractor/Edit', ['contractor' => $contractor->load('files')]);
+        return inertia('Contractor/Edit', [
+            'contractor' => $contractor->load('files'),
+            'brands' => Brand::all()]
+        );
     }
 
     /**

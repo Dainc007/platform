@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\EmployeeController;
@@ -24,9 +25,12 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard', ['friend' => Auth::user(),
+    return Inertia::render('Dashboard', [
+        'friend' => Auth::user(),
         'currentUser' => Auth::user(),
-        'conversation' => Conversation::with('messages.user')->find(2)
+        'conversation' => Conversation::with(['messages' => function ($query) {
+            $query->orderBy('id', 'desc');
+        }, 'messages.user'])->find(2)
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -46,7 +50,8 @@ Route::resources([
     'projects' => ProjectController::class,
     'products' => ProductController::class,
     'files' => FileController::class,
-    'contractors' => ContractorController::class
+    'contractors' => ContractorController::class,
+    'brands' => BrandController::class
 ]);
 
 require __DIR__.'/auth.php';

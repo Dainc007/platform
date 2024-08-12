@@ -38,9 +38,15 @@ onMounted(() => {
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg my-2">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <ChatMessage v-if="conversation" v-for="message in conversation.messages" :message></ChatMessage>
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg my-2 w-3/4  mx-auto">
+
+                    <div class="p-6 overflow-y-auto h-96"> <!-- Use a fixed height for the chat area -->
+                        <div v-if="conversation" v-for="message in conversation.messages" :key="message.id">
+                            <ChatMessage :current-user="props.currentUser"  :message="message"></ChatMessage>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-b-lg w-34"> <!-- Different background for the input area -->
                         <SendMessage :current-user="props.currentUser" :friend="props.friend"/>
                     </div>
                 </div>

@@ -34,7 +34,7 @@ watch(search, (search) => {
                     class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
                     type="button">
               <span class="sr-only">Action button</span>
-              Action
+              {{$t('actions')}}
               <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                    fill="none" viewBox="0 0 10 6">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -47,7 +47,7 @@ watch(search, (search) => {
               <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
                   aria-labelledby="dropdownActionContractorButton">
                 <li>
-                  <Link :href="route('contractors.create')" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create</Link>
+                  <Link :href="route('contractors.create')" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{$t('actions.create')}}</Link>
                 </li>
               </ul>
             </div>
@@ -64,7 +64,7 @@ watch(search, (search) => {
             </div>
             <input type="text" id="table-search-contractors"
                    class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                   placeholder="Search for contractors"
+                   :placeholder="$t('search')"
                    v-model="search">
           </div>
         </div>
@@ -79,13 +79,13 @@ watch(search, (search) => {
               </div>
             </th>
             <th scope="col" class="px-6 py-3">
-              Name
+              {{$t('name')}}
             </th>
             <th scope="col" class="px-6 py-3 text-center">
-              Files
+              {{$t('files')}}
             </th>
             <th scope="col" class="px-6 py-3 text-center">
-              Action
+              {{$t('actions')}}
             </th>
           </tr>
           </thead>
