@@ -17,7 +17,8 @@ class StoreFileRequest extends FormRequest
     {
         return [
             'file' => 'required|file|max:10240',
-            'currency_id' => Rule::exists('currencies', 'id'),
+            'currency_id' => 'required',
+            'brand_id' => 'required',
             'contractor_id'  => 'required'
         ];
     }

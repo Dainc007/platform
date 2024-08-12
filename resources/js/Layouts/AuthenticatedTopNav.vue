@@ -48,6 +48,9 @@ const showingNavigationDropdown = ref(false);
                       <NavLink :href="route('contractors.index')" :active="route().current('contractors*')">
                           {{$t('nav.contractors')}}
                       </NavLink>
+                        <NavLink :href="route('brands.index')" :active="route().current('brands*')">
+                            {{$t('nav.brands')}}
+                        </NavLink>
                       <NavLink :href="route('files.index')" :active="route().current('files*')">
                           {{$t('nav.files')}}
                       </NavLink>
@@ -86,7 +89,7 @@ const showingNavigationDropdown = ref(false);
                             </template>
 
                             <template #content>
-                                <DropdownLink :href="route('profile.edit')"> Profile</DropdownLink>
+                                <DropdownLink :href="route('profile.edit')">{{$t('profile')}}</DropdownLink>
                                 <DropdownLink :href="route('logout')" method="post" as="button">
                                     {{$t('logout')}}
                                 </DropdownLink>
@@ -155,6 +158,9 @@ const showingNavigationDropdown = ref(false);
               <ResponsiveNavLink :href="route('contractors.index')" :active="route().current('contractors*')">
                   {{$t('nav.contractors')}}
               </ResponsiveNavLink>
+                <ResponsiveNavLink :href="route('brands.index')" :active="route().current('brands*')">
+                    {{$t('nav.brands')}}
+                </ResponsiveNavLink>
               <ResponsiveNavLink :href="route('files.index')" :active="route().current('files*')">
                   {{$t('nav.files')}}
               </ResponsiveNavLink>

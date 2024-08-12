@@ -42,6 +42,8 @@ class FileController extends Controller
         $file = $request->file('file');
         $path = $file->storeAs('uploads', $file->getClientOriginalName());
         $contractorId = $request->get('contractor_id');
+        $brandId = $request->get('brand_id');
+
 
         $file = File::create([
             'path' => $path,
@@ -49,7 +51,7 @@ class FileController extends Controller
             'fileable_type' => Contractor::class
         ]);
 
-        Excel::import(new ProductsImport($contractorId, $request->get('currency_id'), $file->id),$path);
+        Excel::import(new ProductsImport($contractorId, $request->get('currency_id'), $file->id, $brandId),$path);
 
         return redirect()->back()->with('success', 'File uploaded successfully!');
     }

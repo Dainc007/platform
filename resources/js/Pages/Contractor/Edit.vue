@@ -9,7 +9,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 const { props } = usePage();
 const contractor = props.contractor;
 const currencies = props.currencies;
-const errors = Object;
+const brands = props.brands;
 
 const form = useForm({
     name: contractor.name,
@@ -18,6 +18,7 @@ const form = useForm({
 const uploadForm = useForm({
     file: null,
     currency_id: null,
+    brand_id: null,
     contractor_id: contractor.id
 })
 function submit() {
@@ -26,6 +27,9 @@ function submit() {
     onSuccess: () => {
       uploadForm.reset();
     },
+    onError: (errors) => {
+      form.errors = errors;
+    }
   });
 }
 
@@ -40,9 +44,9 @@ const handleFileUpload = (event) => {
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="lg:col-span-1 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                 <header>
-                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Contractor</h2>
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{$t('contractor')}}</h2>
                     <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                        Last Update: {{ contractor.updated_at }}
+                      {{$t('contractor.lastUpdate')}} {{ contractor.updated_at }}
                     </p>
                 </header>
 
@@ -62,7 +66,7 @@ const handleFileUpload = (event) => {
                     </div>
 
                     <div class="flex items-center gap-4">
-                        <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+                        <PrimaryButton :disabled="form.processing">{{$t('contractor.save')}}</PrimaryButton>
 
                         <Transition
                             enter-active-class="transition ease-in-out"
@@ -70,13 +74,13 @@ const handleFileUpload = (event) => {
                             leave-active-class="transition ease-in-out"
                             leave-to-class="opacity-0"
                         >
-                            <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
+                            <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">{{$t('contractor.saved')}}.</p>
                         </Transition>
                     </div>
                 </form>
 
                 <header class="mt-10">
-                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Upload File</h2>
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{$t('contractor.file.upload')}}</h2>
                 </header>
 
                 <form @submit.prevent="submit" class="mt-6 space-y-6">
@@ -94,7 +98,7 @@ const handleFileUpload = (event) => {
                     </div>
 
                     <div>
-                        <label for="currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Currency</label>
+                        <label for="currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{$t('contractor.currency')}}</label>
                         <select
                             id="currency_id"
                             v-model="uploadForm.currency_id"
@@ -105,10 +109,24 @@ const handleFileUpload = (event) => {
                             </option>
                         </select>
                     </div>
-                    <div v-if="errors.currency_id" class="text-red-500">{{ errors.currency_id }}</div>
+                    <div v-if="form.errors.currency_id" class="text-red-500">{{ form.errors.currency_id }}</div>
+
+                    <div>
+                        <label for="brand" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{$t('contractor.brand')}}</label>
+                        <select
+                            id="brand_id"
+                            v-model="uploadForm.brand_id"
+                            class="mt-1 block w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                        >
+                            <option v-for="brand in brands" :key="brand.id" :value="brand.id">
+                                {{ brand.name }}
+                            </option>
+                        </select>
+                    </div>
+                    <div v-if="form.errors.brand_id" class="text-red-500">{{ form.errors.brand_id }}</div>
 
                     <div class="flex items-center gap-4">
-                        <PrimaryButton :disabled="uploadForm.processing">Upload</PrimaryButton>
+                        <PrimaryButton :disabled="uploadForm.processing">{{$t('contractor.file.upload')}}</PrimaryButton>
 
                         <Transition
                             enter-active-class="transition ease-in-out"
@@ -116,7 +134,7 @@ const handleFileUpload = (event) => {
                             leave-active-class="transition ease-in-out"
                             leave-to-class="opacity-0"
                         >
-                            <p v-if="uploadForm.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Uploaded.</p>
+                            <p v-if="uploadForm.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">{{$t('contractor.file.uploaded')}}.</p>
                         </Transition>
                     </div>
                 </form>
@@ -127,8 +145,8 @@ const handleFileUpload = (event) => {
                     <table class="min-w-full bg-white dark:bg-gray-800">
                         <thead>
                         <tr>
-                            <th class="py-2 px-4 bg-gray-200 dark:bg-gray-700 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Path</th>
-                            <th class="py-2 px-4 bg-gray-200 dark:bg-gray-700 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Updated At</th>
+                            <th class="py-2 px-4 bg-gray-200 dark:bg-gray-700 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">{{$t('contractor.file.path')}}</th>
+                            <th class="py-2 px-4 bg-gray-200 dark:bg-gray-700 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">{{$t('contractor.file.updatedAt')}}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -142,6 +160,5 @@ const handleFileUpload = (event) => {
             </div>
         </div>
     </div>
-
 </AuthenticatedLayout>
 </template>

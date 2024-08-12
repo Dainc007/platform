@@ -12,12 +12,14 @@ class ProductsImport implements ToModel, WithHeadingRow
     protected int $contractorId;
     protected int $currencyId;
     protected int $fileId;
+    protected int $brandId;
 
-    public function __construct($contractorId, $currencyId, $fileId)
+    public function __construct($contractorId, $currencyId, $fileId, $brandId)
     {
         $this->contractorId = $contractorId;
         $this->currencyId   = $currencyId;
         $this->fileId       = $fileId;
+        $this->brandId      = $brandId;
 
     }
 
@@ -34,7 +36,8 @@ class ProductsImport implements ToModel, WithHeadingRow
                 'price' => (int) str_replace(',', '', $row['price_offer']),
                 'currency_id' => $this->currencyId,
                 'contractor_id' => $this->contractorId,
-                'file_id'       => $this->fileId
+                'file_id'       => $this->fileId,
+                'brand_id'      => $this->brandId
             ]
         );
     }

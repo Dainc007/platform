@@ -14,12 +14,18 @@ class Product extends Model
         'price',
         'currency_id',
         'contractor_id',
-        'file_id'
+        'file_id',
+        'brand_id'
     ];
 
     protected $casts = [
         'updated_at' => 'date:Y-m-d',
     ];
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
+    }
 
     public function contractor()
     {
