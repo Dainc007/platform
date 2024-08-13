@@ -48,5 +48,11 @@
     "contractor.save": "Save",
     "contractor.file.upload": "Upload",
     "contractor.file.path": "Path",
-    "contractor.file.updatedAt": "Updated At"
+    "contractor.file.updatedAt": "Updated At",
+
+    "product.name": "Name",
+    "product.price": "Price",
+    "product.contractor": "Supplier",
+    "product.currency": "Currency",
+    "product.brand": "Brand"
 }

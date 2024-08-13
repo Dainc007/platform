@@ -49,6 +49,12 @@
     "contractor.file.path": "Ścieżka",
     "contractor.file.updatedAt": "Ostatnia Aktualizacja",
 
+    "product.name": "Nazwa",
+    "product.price": "Cena",
+    "product.contractor": "Dostawca",
+    "product.currency": "Waluta",
+    "product.brand": "Marka",
+
     "search": "Szukaj...",
     "actions": "Akcje",
     "actions.create": "Dodaj",
