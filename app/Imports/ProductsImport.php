@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Brand;
 use App\Models\Product;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -31,18 +32,25 @@ class ProductsImport implements ToModel, WithHeadingRow, WithChunkReading, Shoul
 
     public function model(array $row)
     {
+        $price = $row['price_offer'] ?? $row['price_net_eur'];
+
+        if(isset($row['brand'])) {
+            $brand = Brand::firstOrCreate(['name' => $row['brand']]);
+        }
+
         return Product::updateOrCreate(
             [
-                'code' => $row['reference_number'],
+                'code' => $row['reference_number'] ?? $row['sku'],
                 'contractor_id' => $this->contractorId
             ],
             [
-                'code' => $row['reference_number'],
-                'price' => (int) str_replace(',', '', $row['price_offer']),
+                'code' => $row['reference_number'] ?? $row['sku'],
+                'price' => (int) str_replace(',', '', $price),
                 'currency_id' => $this->currencyId,
                 'contractor_id' => $this->contractorId,
                 'file_id'       => $this->fileId,
-                'brand_id'      => $this->brandId
+                'brand_id'      => $brand?->id ?? $this->brandId,
+                'quantity'      => $row['qty'] ?? 1
             ]
         );
     }

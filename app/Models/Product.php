@@ -15,7 +15,8 @@ class Product extends Model
         'currency_id',
         'contractor_id',
         'file_id',
-        'brand_id'
+        'brand_id',
+        'quantity'
     ];
 
     protected $casts = [
@@ -40,6 +41,11 @@ class Product extends Model
     public function file()
     {
         return $this->belongsTo(File::class);
+    }
+
+    public function brandable()
+    {
+        return $this->morphTo();
     }
 
 

@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('code');
             $table->integer('price');
+            $table->integer('quantity')->nullable();
             $table->foreignId('currency_id')->constrained();
 
             $table->foreignId('contractor_id')->constrained()->onDelete('cascade');
             $table->foreignId('file_id')->constrained()->onDelete('cascade');
-            $table->foreignId('brand_id')->constrained()->onDelete('cascade');
+            $table->foreignId('brand_id')->nullable()->constrained()->onDelete('cascade');
 
             $table->timestamps();
 

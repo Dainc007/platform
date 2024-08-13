@@ -66,7 +66,7 @@ function formatPrice(price) {
                             {{$t('product.price')}}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            {{$t('product.currency')}}
+                            {{$t('product.quantity')}}
                         </th>
                     </tr>
                     </thead>
@@ -93,10 +93,11 @@ function formatPrice(price) {
                             {{product.contractor.name}}
                         </td>
                         <td class="px-6 py-4">
-                            {{formatPrice(product.price)}}
+                            {{formatPrice(product.price)}} {{product.currency.code}}
+
                         </td>
                         <td class="px-6 py-4">
-                            {{product.currency.code}}
+                            {{product.quantity}}
                         </td>
                     </tr>
                     </tbody>
