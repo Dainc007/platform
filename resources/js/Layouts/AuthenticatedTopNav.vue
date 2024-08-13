@@ -30,18 +30,18 @@ const showingNavigationDropdown = ref(false);
                         <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             {{$t('nav.dashboard')}}
                         </NavLink>
-                        <NavLink :href="route('articles.index')" :active="route().current('articles*')">
-                            {{$t('nav.articles')}}
-                        </NavLink>
-                        <NavLink :href="route('users.index')" :active="route().current('users*')">
-                            {{$t('nav.users')}}
-                        </NavLink>
-                        <NavLink :href="route('employees.index')" :active="route().current('employees*')">
-                            {{$t('nav.employees')}}
-                        </NavLink>
-                        <NavLink :href="route('projects.index')" :active="route().current('projects*')">
-                            {{$t('nav.projects')}}
-                        </NavLink>
+<!--                        <NavLink :href="route('articles.index')" :active="route().current('articles*')">-->
+<!--                            {{$t('nav.articles')}}-->
+<!--                        </NavLink>-->
+<!--                        <NavLink :href="route('users.index')" :active="route().current('users*')">-->
+<!--                            {{$t('nav.users')}}-->
+<!--                        </NavLink>-->
+<!--                        <NavLink :href="route('employees.index')" :active="route().current('employees*')">-->
+<!--                            {{$t('nav.employees')}}-->
+<!--                        </NavLink>-->
+<!--                        <NavLink :href="route('projects.index')" :active="route().current('projects*')">-->
+<!--                            {{$t('nav.projects')}}-->
+<!--                        </NavLink>-->
                         <NavLink :href="route('products.index')" :active="route().current('products*')">
                             {{$t('nav.products')}}
                         </NavLink>
@@ -54,9 +54,9 @@ const showingNavigationDropdown = ref(false);
                       <NavLink :href="route('files.index')" :active="route().current('files*')">
                           {{$t('nav.files')}}
                       </NavLink>
-                        <NavLink :href="route('notes.index')" :active="route().current('notes*')">
-                            {{$t('nav.notes')}}
-                        </NavLink>
+<!--                        <NavLink :href="route('notes.index')" :active="route().current('notes*')">-->
+<!--                            {{$t('nav.notes')}}-->
+<!--                        </NavLink>-->
                     </div>
                 </div>
 
@@ -140,18 +140,18 @@ const showingNavigationDropdown = ref(false);
                 <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                     {{$t('nav.dashboard')}}
                 </ResponsiveNavLink>
-                <ResponsiveNavLink :href="route('articles.index')" :active="route().current('articles*')">
-                    {{$t('nav.articles')}}
-                </ResponsiveNavLink>
-                <ResponsiveNavLink :href="route('users.index')" :active="route().current('users*')">
-                    {{$t('nav.users')}}
-                </ResponsiveNavLink>
-                <ResponsiveNavLink :href="route('employees.index')" :active="route().current('employees*')">
-                    {{$t('nav.employees')}}
-                </ResponsiveNavLink>
-                <ResponsiveNavLink :href="route('projects.index')" :active="route().current('projects*')">
-                    {{$t('nav.projects')}}
-                </ResponsiveNavLink>
+<!--                <ResponsiveNavLink :href="route('articles.index')" :active="route().current('articles*')">-->
+<!--                    {{$t('nav.articles')}}-->
+<!--                </ResponsiveNavLink>-->
+<!--                <ResponsiveNavLink :href="route('users.index')" :active="route().current('users*')">-->
+<!--                    {{$t('nav.users')}}-->
+<!--                </ResponsiveNavLink>-->
+<!--                <ResponsiveNavLink :href="route('employees.index')" :active="route().current('employees*')">-->
+<!--                    {{$t('nav.employees')}}-->
+<!--                </ResponsiveNavLink>-->
+<!--                <ResponsiveNavLink :href="route('projects.index')" :active="route().current('projects*')">-->
+<!--                    {{$t('nav.projects')}}-->
+<!--                </ResponsiveNavLink>-->
                 <ResponsiveNavLink :href="route('products.index')" :active="route().current('products*')">
                     {{$t('nav.products')}}
                 </ResponsiveNavLink>
@@ -164,9 +164,9 @@ const showingNavigationDropdown = ref(false);
               <ResponsiveNavLink :href="route('files.index')" :active="route().current('files*')">
                   {{$t('nav.files')}}
               </ResponsiveNavLink>
-                <ResponsiveNavLink :href="route('notes.index')" :active="route().current('notes*')">
-                    {{$t('nav.notes')}}
-                </ResponsiveNavLink>
+<!--                <ResponsiveNavLink :href="route('notes.index')" :active="route().current('notes*')">-->
+<!--                    {{$t('nav.notes')}}-->
+<!--                </ResponsiveNavLink>-->
             </div>
 
             <!-- Responsive Settings Options -->

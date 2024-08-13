@@ -41,13 +41,13 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resources([
-    'articles' => ArticleController::class,
-    'users' => UserController::class,
+//    'articles' => ArticleController::class,
+//    'users' => UserController::class,
     'conversations' => ConversationController::class,
     'messages' => MessageController::class,
-    'employees' => EmployeeController::class,
-    'notes' => NoteController::class,
-    'projects' => ProjectController::class,
+//    'employees' => EmployeeController::class,
+//    'notes' => NoteController::class,
+//    'projects' => ProjectController::class,
     'products' => ProductController::class,
     'files' => FileController::class,
     'contractors' => ContractorController::class,
