@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Inerfaces\Fileable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Contractor extends Model
+class Contractor extends Model implements Fileable
 {
     use HasFactory;
 

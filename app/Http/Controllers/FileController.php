@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\File\CreateFile;
+use App\Actions\Product\CreateProduct;
 use App\Http\Requests\File\StoreFileRequest;
 use App\Http\Requests\File\UpdateFileRequest;
 use App\Imports\ProductsImport;
@@ -39,19 +41,11 @@ class FileController extends Controller
      */
     public function store(StoreFileRequest $request)
     {
-        $file = $request->file('file');
-        $path = $file->storeAs('uploads', $file->getClientOriginalName());
-        $contractorId = $request->get('contractor_id');
-        $brandId = $request->get('brand_id');
+        $data = $request->validated();
 
+        $file = CreateFile::handle($request->file('file'), Contractor::findOrFail($request['contractor_id']));
 
-        $file = File::create([
-            'path' => $path,
-            'fileable_id' => $request->get('contractor_id'),
-            'fileable_type' => Contractor::class
-        ]);
-
-        Excel::import(new ProductsImport($contractorId, $request->get('currency_id'), $file->id, $brandId),$path);
+        CreateProduct::fromExcelFile($data, $file);
 
         return redirect()->back()->with('success', 'File uploaded successfully!');
     }

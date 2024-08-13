@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Contractor\CreateContractor;
+use App\Actions\File\CreateFile;
+use App\Actions\Product\CreateProduct;
 use App\Http\Requests\Contractor\StoreContractorRequest;
 use App\Http\Requests\Contractor\UpdateContractorRequest;
 use App\Imports\ProductsImport;
@@ -38,17 +41,11 @@ class ContractorController extends Controller
      */
     public function store(StoreContractorRequest $request)
     {
-        $name = $request->get('name');
-        $contractor = Contractor::updateOrCreate(['name' => $name], ['name' => $name]);
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $path = $file->storeAs('uploads', $file->getClientOriginalName());
-            $currencyId = $request->get('currency_id');
-            $brandId = $request->get('brand_id');
+        $contractor = CreateContractor::handle($request->validated('name'));
 
-            $file = $contractor->files()->create(['path' => $path]);
-
-            Excel::import(new ProductsImport($contractor->id, $currencyId, $file->id, $brandId), $path);
+        if($request->hasFile('file')) {
+            $file = CreateFile::handle($request->validated('file'), $contractor);
+            CreateProduct::fromExcelFile($request->validated() + ['contractor_id' => $contractor->id], $file);
         }
 
         return redirect()->route('contractors.index')->with('success', 'Contractor added successfully!');

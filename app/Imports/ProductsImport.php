@@ -22,7 +22,6 @@ class ProductsImport implements ToModel, WithHeadingRow, WithChunkReading, Shoul
         $this->currencyId   = $currencyId;
         $this->fileId       = $fileId;
         $this->brandId      = $brandId;
-
     }
 
     public function chunkSize(): int

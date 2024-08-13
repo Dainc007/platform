@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Articles;
+namespace App\Actions\Article;
 
 use App\Models\Article;
 use App\Models\User;
