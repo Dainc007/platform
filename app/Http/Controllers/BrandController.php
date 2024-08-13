@@ -30,7 +30,7 @@ class BrandController extends Controller
      */
     public function store(StoreBrandRequest $request)
     {
-        Brand::create($request->validated());
+        Brand::updateOrCreate($request->validated(), $request->validated());
 
         return redirect()->back()->with(['message' => 'Marka została dodana poprawnie.']);
 
@@ -47,9 +47,15 @@ class BrandController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+
     public function edit(Brand $brand)
     {
-        //
+        return redirect()->back()->with(['message' => 'Not Supported (sorry!).']);
+
+        return inertia('Brand/Edit', [
+                'brand' => $brand
+            ]
+        );
     }
 
     /**
