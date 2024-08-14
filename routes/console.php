@@ -7,4 +7,4 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();
 
-\Illuminate\Support\Facades\Schedule::command('php artisan queue:work --stop-when-empty')->everyMinute()->withoutOverlapping();
+\Illuminate\Support\Facades\Schedule::command('queue:listen')->everyMinute()->withoutOverlapping();

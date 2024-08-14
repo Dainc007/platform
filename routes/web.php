@@ -39,19 +39,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-Route::resources([
-//    'articles' => ArticleController::class,
-//    'users' => UserController::class,
-    'conversations' => ConversationController::class,
-    'messages' => MessageController::class,
-//    'employees' => EmployeeController::class,
-//    'notes' => NoteController::class,
-//    'projects' => ProjectController::class,
-    'products' => ProductController::class,
-    'files' => FileController::class,
-    'contractors' => ContractorController::class,
-    'brands' => BrandController::class
-]);
+Route::middleware(['auth'])->group(function () {
+    Route::resources([
+        'conversations' => ConversationController::class,
+        'messages' => MessageController::class,
+        'products' => ProductController::class,
+        'files' => FileController::class,
+        'contractors' => ContractorController::class,
+        'brands' => BrandController::class,
+    ]);
+});
 
 require __DIR__.'/auth.php';
