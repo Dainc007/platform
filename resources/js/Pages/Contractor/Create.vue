@@ -43,7 +43,7 @@
 
                 <div>
                     <label for="type"
-                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('contractor.offer.type') }}</label>
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('offer.type') }}</label>
                     <select
                         id="type"
                         v-model="form.type"
