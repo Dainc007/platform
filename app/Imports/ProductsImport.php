@@ -16,13 +16,15 @@ class ProductsImport implements ToModel, WithHeadingRow, WithChunkReading, Shoul
     protected int $currencyId;
     protected int $fileId;
     protected int $brandId;
+    protected string $type;
 
-    public function __construct($contractorId, $currencyId, $fileId, $brandId)
+    public function __construct($contractorId, $currencyId, $fileId, $brandId, $type = 'standard')
     {
         $this->contractorId = $contractorId;
         $this->currencyId   = $currencyId;
         $this->fileId       = $fileId;
         $this->brandId      = $brandId;
+        $this->type         = $type;
     }
 
     public function chunkSize(): int
@@ -50,7 +52,8 @@ class ProductsImport implements ToModel, WithHeadingRow, WithChunkReading, Shoul
                 'contractor_id' => $this->contractorId,
                 'file_id'       => $this->fileId,
                 'brand_id'      => $brand?->id ?? $this->brandId,
-                'quantity'      => $row['qty'] ?? 1
+                'quantity'      => $row['qty'] ?? 1,
+                'type'          => $this->type
             ]
         );
     }

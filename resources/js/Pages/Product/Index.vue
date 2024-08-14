@@ -68,6 +68,9 @@ function formatPrice(price) {
                         <th scope="col" class="px-6 py-3">
                             {{$t('product.quantity')}}
                         </th>
+                        <th scope="col" class="px-6 py-3">
+                            {{$t('offer.type')}}
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -98,6 +101,9 @@ function formatPrice(price) {
                         </td>
                         <td class="px-6 py-4">
                             {{product.quantity}}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $t(':type', { type: product.type }) }}
                         </td>
                     </tr>
                     </tbody>

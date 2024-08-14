@@ -19,7 +19,8 @@ const uploadForm = useForm({
     file: null,
     currency_id: null,
     brand_id: null,
-    contractor_id: contractor.id
+    contractor_id: contractor.id,
+    type: 'standard'
 })
 function submit() {
   uploadForm.post('/files', {
@@ -95,6 +96,24 @@ const handleFileUpload = (event) => {
                       <progress v-if="uploadForm.progress" :value="uploadForm.progress.percentage" max="100">
                         {{ uploadForm.progress.percentage }}%
                       </progress>
+                    </div>
+
+                    <div>
+                        <label for="type"
+                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('contractor.offer.type') }}</label>
+                        <select
+                            id="type"
+                            v-model="uploadForm.type"
+                            class="mt-1 block w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                        >
+                            <option value="standard">
+                                Standard
+                            </option>
+                            <option value="stock">
+                                Stock
+                            </option>
+                        </select>
+                        <div v-if="uploadForm.errors.type" class="text-red-500">{{ uploadForm.errors.type }}</div>
                     </div>
 
                     <div>

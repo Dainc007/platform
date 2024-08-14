@@ -59,6 +59,7 @@
     "search": "Szukaj...",
     "actions": "Akcje",
     "actions.create": "Dodaj",
-    "files": "Pliki"
+    "files": "Pliki",
 
+    "offer.type": "Typ Oferty"
 }

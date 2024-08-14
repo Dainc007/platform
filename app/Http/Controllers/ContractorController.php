@@ -7,12 +7,9 @@ use App\Actions\File\CreateFile;
 use App\Actions\Product\CreateProduct;
 use App\Http\Requests\Contractor\StoreContractorRequest;
 use App\Http\Requests\Contractor\UpdateContractorRequest;
-use App\Imports\ProductsImport;
 use App\Models\Brand;
 use App\Models\Contractor;
-use App\Models\Currency;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 
 
 class ContractorController extends Controller
