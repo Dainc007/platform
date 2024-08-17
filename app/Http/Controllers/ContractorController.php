@@ -30,7 +30,9 @@ class ContractorController extends Controller
      */
     public function create()
     {
-        return inertia('Contractor/Create', ['brands' => Brand::all()]);
+        return inertia('Contractor/Create', [
+            'brands' => Brand::orderBy('name', 'asc')->get()
+        ]);
     }
 
     /**
@@ -63,7 +65,8 @@ class ContractorController extends Controller
     {
         return inertia('Contractor/Edit', [
             'contractor' => $contractor->load('files'),
-            'brands' => Brand::all()]
+            'brands' => Brand::orderBy('name', 'asc')->get()
+            ]
         );
     }
 
