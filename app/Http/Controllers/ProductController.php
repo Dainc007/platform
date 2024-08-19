@@ -16,8 +16,12 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::whereAny(['code', 'type'], 'LIKE', '%' . $request->input('search', '') . '%')->with(['currency', 'contractor', 'brand'])->paginate(15);
-        return inertia('Product/Index', ['products' => $products]);
+        return inertia('Product/Index', [
+            'products' => Product::whereAny(['code', 'type'], 'LIKE', '%' . $request->input('search', '') . '%')
+                ->with(['currency', 'contractor', 'brand'])
+                ->orderBy('price')
+                ->paginate(15)
+        ]);
     }
 
     /**
