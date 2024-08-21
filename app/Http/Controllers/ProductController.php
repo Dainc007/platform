@@ -8,6 +8,7 @@ use App\Imports\ProductsImport;
 use App\Models\Contractor;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -16,11 +17,22 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+        $search = $request->input('search', '');
+
+        $products = Product::where(function ($query) use ($search) {
+            $query->where('products.code', 'LIKE', '%' . $search . '%')
+                ->orWhere('products.type', 'LIKE', '%' . $search . '%');
+        })
+            ->join(DB::raw('(SELECT code, AVG(price) as avg_price FROM products GROUP BY code) as avg_prices'), function ($join) {
+                $join->on('products.code', '=', 'avg_prices.code');
+            })
+            ->select('products.*', 'avg_prices.avg_price', DB::raw('((products.price - avg_prices.avg_price) / avg_prices.avg_price) * 100 as price_difference_percentage'))
+            ->with(['currency', 'contractor', 'brand'])
+            ->orderBy('products.price')
+            ->paginate(15);
+
         return inertia('Product/Index', [
-            'products' => Product::whereAny(['code', 'type'], 'LIKE', '%' . $request->input('search', '') . '%')
-                ->with(['currency', 'contractor', 'brand'])
-                ->orderBy('price')
-                ->paginate(15)
+            'products' => $products
         ]);
     }
 

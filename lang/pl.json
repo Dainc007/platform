@@ -51,6 +51,7 @@
 
     "product.name": "Nazwa",
     "product.price": "Cena",
+    "product.price.difference": "Różnica",
     "product.contractor": "Dostawca",
     "product.currency": "Waluta",
     "product.brand": "Marka",

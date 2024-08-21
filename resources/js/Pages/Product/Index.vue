@@ -66,6 +66,9 @@ function formatPrice(price) {
                             {{$t('product.price')}}
                         </th>
                         <th scope="col" class="px-6 py-3">
+                            {{$t('product.price.difference')}}
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             {{$t('product.quantity')}}
                         </th>
                         <th scope="col" class="px-6 py-3">
@@ -97,7 +100,9 @@ function formatPrice(price) {
                         </td>
                         <td class="px-6 py-4">
                             {{formatPrice(product.price)}} {{product.currency.code}}
-
+                        </td>
+                        <td class="px-6 py-4" :class="{'text-green-500': product.price_difference_percentage > 0, 'text-red-500': product.price_difference_percentage < 0}">
+                            {{ formatPrice(product.price_difference_percentage) }}
                         </td>
                         <td class="px-6 py-4">
                             {{product.quantity}}
