@@ -14,10 +14,12 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         if (!User::where('email', 'test@example.com')->exists()) {
-            User::factory()->create([
+            $user = User::factory()->create([
                 'name' => 'Test User',
                 'email' => 'test@example.com',
             ]);
+
+            $user->assignRole('head admin');
         }
 
          User::factory(100)->create();

@@ -22,9 +22,28 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Model::preventLazyLoading(! $this->app->isProduction());
+        $this->modelPreventActions();
+        $this->processGateAdditionalActions();
+    }
+
+    /**
+     * @return void
+     */
+    public function modelPreventActions(): void
+    {
+        Model::preventLazyLoading(!$this->app->isProduction());
         Model::preventSilentlyDiscardingAttributes();
         Model::preventAccessingMissingAttributes();
+    }
+
+    /**
+     * @return void
+     */
+    public function processGateAdditionalActions(): void
+    {
+        Gate::before(function ($user, $ability) {
+            return $user->hasRole('head-admin');
+        });
 
         Gate::define('viewPulse', function (User $user) {
             return $user->isAdmin();

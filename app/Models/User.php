@@ -12,6 +12,14 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles;
 
+
+    /**
+     * Roles should be ordered from most to least important.
+     */
+    public const AVAILABLE_ROLES = [
+        'head admin', 'admin', 'moderator'
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -46,9 +54,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function isAdmin()
+    public function isAdmin(): bool
     {
-        return true;
+        return $this->hasRole(['head admin', 'admin']);
     }
 
     public function articles()
