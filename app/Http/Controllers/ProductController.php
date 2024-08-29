@@ -20,8 +20,8 @@ class ProductController extends Controller
         $search = $request->input('search', '');
 
         $products = Product::where(function ($query) use ($search) {
-            $query->where('products.code', 'LIKE', '%' . $search . '%')
-                ->orWhere('products.type', 'LIKE', '%' . $search . '%');
+            $query->where('products.code', 'LIKE', $search . '%')
+                ->orWhere('products.type', 'LIKE', $search . '%');
         })
             ->join(DB::raw('(SELECT code, AVG(price) as avg_price FROM products GROUP BY code) as avg_prices'), function ($join) {
                 $join->on('products.code', '=', 'avg_prices.code');
