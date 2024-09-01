@@ -63,6 +63,7 @@
     "files": "Pliki",
 
     "admin.panel": "Panel Admina",
-    "admin.pulse": "Puls Aplikacji"
+    "admin.pulse": "Puls Aplikacji",
+    "admin.saved": "Zapisano"
 
 }

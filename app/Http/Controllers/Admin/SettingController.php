@@ -57,7 +57,7 @@ class SettingController extends Controller
         $setting->value === 1 ? $setting->value = 0 : $setting->value = 1;
         $setting->save();
 
-        return redirect()->route('admin.dashboard')->with('success', 'Setting updated successfully.');
+        return redirect()->route('admin.dashboard');
     }
 
     /**
