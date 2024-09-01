@@ -5,7 +5,7 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import {Link} from '@inertiajs/vue3';
+import {Link, usePage} from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
 </script>
@@ -27,36 +27,16 @@ const showingNavigationDropdown = ref(false);
 
                     <!-- Navigation Links -->
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            {{$t('nav.dashboard')}}
-                        </NavLink>
-                        <NavLink :href="route('articles.index')" :active="route().current('articles*')">
-                            {{$t('nav.articles')}}
-                        </NavLink>
-                        <NavLink :href="route('users.index')" :active="route().current('users*')">
-                            {{$t('nav.users')}}
-                        </NavLink>
-                        <NavLink :href="route('employees.index')" :active="route().current('employees*')">
-                            {{$t('nav.employees')}}
-                        </NavLink>
-                        <NavLink :href="route('projects.index')" :active="route().current('projects*')">
-                            {{$t('nav.projects')}}
-                        </NavLink>
-                        <NavLink :href="route('products.index')" :active="route().current('products*')">
-                            {{$t('nav.products')}}
-                        </NavLink>
-                      <NavLink :href="route('contractors.index')" :active="route().current('contractors*')">
-                          {{$t('nav.contractors')}}
-                      </NavLink>
-                        <NavLink :href="route('brands.index')" :active="route().current('brands*')">
-                            {{$t('nav.brands')}}
-                        </NavLink>
-                      <NavLink :href="route('files.index')" :active="route().current('files*')">
-                          {{$t('nav.files')}}
-                      </NavLink>
-                        <NavLink :href="route('notes.index')" :active="route().current('notes*')">
-                            {{$t('nav.notes')}}
-                        </NavLink>
+                        <template v-for="setting in usePage().props.settings">
+                            <NavLink
+                                v-if="setting && setting.value === 1"
+                                :key="setting.id"
+                                :href="`route(${setting.name}.index)`"
+                                :active="route().current(setting.name)"
+                            >
+                                {{ $t(`nav.${setting.name}`) }}
+                            </NavLink>
+                        </template>
                     </div>
                 </div>
 
@@ -89,6 +69,7 @@ const showingNavigationDropdown = ref(false);
                             </template>
 
                             <template #content>
+                                <DropdownLink :href="route('admin.dashboard')">{{$t('admin.panel')}}</DropdownLink>
                                 <DropdownLink :href="route('profile.edit')">{{$t('profile')}}</DropdownLink>
                                 <DropdownLink :href="route('logout')" method="post" as="button">
                                     {{$t('logout')}}
@@ -137,36 +118,16 @@ const showingNavigationDropdown = ref(false);
             class="sm:hidden"
         >
             <div class="pt-2 pb-3 space-y-1">
-                <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                    {{$t('nav.dashboard')}}
-                </ResponsiveNavLink>
-                <ResponsiveNavLink :href="route('articles.index')" :active="route().current('articles*')">
-                    {{$t('nav.articles')}}
-                </ResponsiveNavLink>
-                <ResponsiveNavLink :href="route('users.index')" :active="route().current('users*')">
-                    {{$t('nav.users')}}
-                </ResponsiveNavLink>
-                <ResponsiveNavLink :href="route('employees.index')" :active="route().current('employees*')">
-                    {{$t('nav.employees')}}
-                </ResponsiveNavLink>
-                <ResponsiveNavLink :href="route('projects.index')" :active="route().current('projects*')">
-                    {{$t('nav.projects')}}
-                </ResponsiveNavLink>
-                <ResponsiveNavLink :href="route('products.index')" :active="route().current('products*')">
-                    {{$t('nav.products')}}
-                </ResponsiveNavLink>
-              <ResponsiveNavLink :href="route('contractors.index')" :active="route().current('contractors*')">
-                  {{$t('nav.contractors')}}
-              </ResponsiveNavLink>
-                <ResponsiveNavLink :href="route('brands.index')" :active="route().current('brands*')">
-                    {{$t('nav.brands')}}
-                </ResponsiveNavLink>
-              <ResponsiveNavLink :href="route('files.index')" :active="route().current('files*')">
-                  {{$t('nav.files')}}
-              </ResponsiveNavLink>
-                <ResponsiveNavLink :href="route('notes.index')" :active="route().current('notes*')">
-                    {{$t('nav.notes')}}
-                </ResponsiveNavLink>
+                <template v-for="setting in usePage().props.settings">
+                    <ResponsiveNavLink
+                        v-if="setting && setting.value === 1"
+                        :key="setting.id"
+                        :href="`route(${setting.name}.index)`"
+                        :active="route().current(setting.name)"
+                    >
+                        {{ $t(`nav.${setting.name}`) }}
+                    </ResponsiveNavLink>
+                </template>
             </div>
 
             <!-- Responsive Settings Options -->
@@ -179,6 +140,7 @@ const showingNavigationDropdown = ref(false);
                 </div>
 
                 <div class="mt-3 space-y-1">
+                    <ResponsiveNavLink :href="route('admin.dashboard')">{{$t('admin.panel')}}</ResponsiveNavLink>
                     <ResponsiveNavLink :href="route('profile.edit')">{{$t('profile')}}</ResponsiveNavLink>
                     <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                         {{$t('logout')}}

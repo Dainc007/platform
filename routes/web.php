@@ -1,17 +1,21 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminPanelController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VacationController;
 use App\Models\Conversation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -51,7 +55,16 @@ Route::resources([
     'products' => ProductController::class,
     'files' => FileController::class,
     'contractors' => ContractorController::class,
-    'brands' => BrandController::class
+    'brands' => BrandController::class,
+    'meetings' => MeetingController::class,
+    'vacations' => VacationController::class,
 ]);
+
+Route::prefix('admin')->group(function () {
+    Route::get('/dashboard', AdminPanelController::class)->name('admin.dashboard');
+    Route::resources([
+        'settings' => SettingController::class,
+    ]);
+});
 
 require __DIR__.'/auth.php';
