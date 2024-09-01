@@ -31,7 +31,7 @@ const showingNavigationDropdown = ref(false);
                             <NavLink
                                 v-if="setting && setting.value === 1"
                                 :key="setting.id"
-                                :href="`route(${setting.name}.index)`"
+                                :href="route(setting.name + '.index')"
                                 :active="route().current(setting.name)"
                             >
                                 {{ $t(`nav.${setting.name}`) }}
@@ -70,6 +70,7 @@ const showingNavigationDropdown = ref(false);
 
                             <template #content>
                                 <DropdownLink :href="route('admin.dashboard')">{{$t('admin.panel')}}</DropdownLink>
+                                <DropdownLink :href="route('pulse')">{{$t('admin.pulse')}}</DropdownLink>
                                 <DropdownLink :href="route('profile.edit')">{{$t('profile')}}</DropdownLink>
                                 <DropdownLink :href="route('logout')" method="post" as="button">
                                     {{$t('logout')}}
@@ -122,7 +123,7 @@ const showingNavigationDropdown = ref(false);
                     <ResponsiveNavLink
                         v-if="setting && setting.value === 1"
                         :key="setting.id"
-                        :href="`route(${setting.name}.index)`"
+                        :href="route(setting.name + '.index')"
                         :active="route().current(setting.name)"
                     >
                         {{ $t(`nav.${setting.name}`) }}
@@ -141,6 +142,7 @@ const showingNavigationDropdown = ref(false);
 
                 <div class="mt-3 space-y-1">
                     <ResponsiveNavLink :href="route('admin.dashboard')">{{$t('admin.panel')}}</ResponsiveNavLink>
+                    <ResponsiveNavLink :href="route('pulse')">{{$t('admin.pulse')}}</ResponsiveNavLink>
                     <ResponsiveNavLink :href="route('profile.edit')">{{$t('profile')}}</ResponsiveNavLink>
                     <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                         {{$t('logout')}}

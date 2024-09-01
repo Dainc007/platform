@@ -60,6 +60,9 @@
     "search": "Szukaj...",
     "actions": "Akcje",
     "actions.create": "Dodaj",
-    "files": "Pliki"
+    "files": "Pliki",
+
+    "admin.panel": "Panel Admina",
+    "admin.pulse": "Puls Aplikacji"
 
 }
