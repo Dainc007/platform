@@ -38,33 +38,37 @@ Route::get('/dashboard', function () {
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::middleware('guest')->group(function () {
+    Route::resource('articles', ArticleController::class)->only('show', 'index');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
-Route::resources([
-    'articles' => ArticleController::class,
-    'users' => UserController::class,
-    'conversations' => ConversationController::class,
-    'messages' => MessageController::class,
-    'employees' => EmployeeController::class,
-    'notes' => NoteController::class,
-    'projects' => ProjectController::class,
-    'products' => ProductController::class,
-    'files' => FileController::class,
-    'contractors' => ContractorController::class,
-    'brands' => BrandController::class,
-    'meetings' => MeetingController::class,
-    'vacations' => VacationController::class,
-]);
-
-Route::prefix('admin')->group(function () {
-    Route::get('/dashboard', AdminPanelController::class)->name('admin.dashboard');
+    Route::resource('articles', ArticleController::class)->except('show', 'index');
     Route::resources([
-        'settings' => SettingController::class,
+        'users' => UserController::class,
+        'conversations' => ConversationController::class,
+        'messages' => MessageController::class,
+        'employees' => EmployeeController::class,
+        'notes' => NoteController::class,
+        'projects' => ProjectController::class,
+        'products' => ProductController::class,
+        'files' => FileController::class,
+        'contractors' => ContractorController::class,
+        'brands' => BrandController::class,
+        'meetings' => MeetingController::class,
+        'vacations' => VacationController::class,
     ]);
+
+    Route::prefix('admin')->group(function () {
+        Route::get('/dashboard', AdminPanelController::class)->name('admin.dashboard');
+        Route::resources([
+            'settings' => SettingController::class,
+        ]);
+    });
 });
 
 require __DIR__.'/auth.php';
