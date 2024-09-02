@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Vacation\StoreVacationRequest;
 use App\Http\Requests\Vacation\UpdateVacationRequest;
+use App\Models\User;
 use App\Models\Vacation;
+use App\Notifications\VacationStatusChanged;
 
 class VacationController extends Controller
 {
@@ -31,7 +33,8 @@ class VacationController extends Controller
      */
     public function store(StoreVacationRequest $request)
     {
-        //
+        $user = User::findOrFail(1);
+        $user->notify(new VacationStatusChanged());
     }
 
     /**
