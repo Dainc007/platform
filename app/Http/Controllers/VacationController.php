@@ -7,16 +7,22 @@ use App\Http\Requests\Vacation\UpdateVacationRequest;
 use App\Models\User;
 use App\Models\Vacation;
 use App\Notifications\VacationStatusChanged;
+use Illuminate\Support\Facades\Auth;
 
 class VacationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        return inertia('Vacation/Index', [
+        $user = Auth::user();
 
+        $vacations = $user->isAdmin()
+            ? Vacation::where('status', 'pending')->get()
+            : $user->vacations;
+
+        return inertia('Vacation/Index', [
+            'vacations' => $vacations,
+            'statuses' => Vacation::AVAILABLE_STATUSES
         ]);
     }
 
@@ -33,8 +39,14 @@ class VacationController extends Controller
      */
     public function store(StoreVacationRequest $request)
     {
-        $user = User::findOrFail(1);
-        $user->notify(new VacationStatusChanged());
+        $date = $request->validated('date');
+        $request->user()->vacations()->create([
+            'start_at' => $date[0],
+            'end_at' => $date[1] ?? $date[0],
+        ]);
+
+        return redirect()->back()->with('message', 'Vacation created.');
+
     }
 
     /**
@@ -58,7 +70,13 @@ class VacationController extends Controller
      */
     public function update(UpdateVacationRequest $request, Vacation $vacation)
     {
-        //
+        $vacation->update($request->validated());
+
+        if($request->has('message')) {
+            $vacation->user()->notify(new VacationStatusChanged());
+        }
+
+        return redirect()->back()->with('message', 'Vacation updated.');
     }
 
     /**

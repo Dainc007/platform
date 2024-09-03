@@ -20,8 +20,18 @@ class Vacation extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'start_at',
+        'end_at',
+        'status',
     ];
+
+    protected $casts = [
+        'start_at' => 'date:d-m-y',
+        'end_at' => 'date:d-m-y',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
