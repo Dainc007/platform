@@ -64,6 +64,16 @@
 
     "admin.panel": "Panel Admina",
     "admin.pulse": "Puls Aplikacji",
-    "admin.saved": "Zapisano"
+    "admin.saved": "Zapisano",
+
+    "vacation.apply": "Złóż Wniosek Urlopowy",
+    "vacation.my": "Moje Urlopy",
+    "vacation.status": "Status",
+    "vacation.status.accepted": "Zaakceptowany",
+    "vacation.status.rejected": "Odrzucony",
+    "vacation.status.pending": "Oczekuje na rozpatrzenie",
+    "vacation.status.cancelled": "Odwołany",
+    "vacation.range": "Od - Do",
+    "vacation.date": "Data"
 
 }

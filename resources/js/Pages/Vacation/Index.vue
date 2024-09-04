@@ -52,11 +52,12 @@ const getStatusClass = (status) => {
 <template>
     <AuthenticatedLayout>
         <div class="p-12">
-            <h1 class="text-white text-center mb-2 text-lg">Moje Urlopy</h1>
+            <h1 class="text-white text-center mb-2 text-lg">{{$t('vacation.my')}}</h1>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Kolumna z VueDatePicker i przyciskiem -->
                 <div class="flex flex-col items-start space-y-4">
                     <VueDatePicker
+                        :placeholder="'Kliknij tutaj aby wybrać datę'"
                         dark="true"
                         :enableTimePicker="false"
                         range
@@ -67,68 +68,138 @@ const getStatusClass = (status) => {
                         class="w-full"
                     ></VueDatePicker>
                     <PrimaryButton
-                        class="w-full sm:w-auto"
+                        class="w-full flex justify-center"
                         @click="!form.processing && form.post(route('vacations.store'))"
                     >
-                        Zgłoś Urlop
+                        {{$t('vacation.apply')}}
                     </PrimaryButton>
                 </div>
 
                 <!-- Kolumna z tabelą -->
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="w-full text-sm text-left rtl:text-right text-blue-100 dark:text-blue-100">
-                        <thead class="text-xs text-white uppercase bg-blue-600 dark:text-white">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="px-6 py-3">Status</th>
-                            <th scope="col" class="px-6 py-3">Od - Do</th>
+                            <th scope="col" class="p-4">
+                                <div class="flex items-center">
+                                    <input id="checkbox-all-search" type="checkbox"
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                                </div>
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                {{$t('vacation.date')}}
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                {{$t('vacation.status')}}
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="vacation in vacations" :key="vacation.id" :class="getStatusClass(vacation.status)">
-                            <th scope="row" class="px-6 py-4 font-medium text-blue-50 whitespace-nowrap dark:text-blue-100">
-                                {{ vacation.status }}
+                        <tr v-for="vacation in vacations" v-if="vacations" :key="vacation.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <td class="w-4 p-4">
+                                <div class="flex items-center">
+                                    <input id="checkbox-table-search-1" type="checkbox"
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                                </div>
+                            </td>
+                            <th scope="row"
+                                class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                <div class="ps-3">
+                                    <div class="text-base font-semibold">{{ vacation.start_at }} - {{ vacation.end_at }}</div>
+                                    <div class="font-normal text-gray-500">{{ $t('vacation.status.' + vacation.status)}}
+
+                                    </div>
+                                </div>
                             </th>
-                            <td class="px-6 py-4">{{ vacation.start_at }} do {{ vacation.end_at }}</td>
+
+                            <th scope="col" class="px-6 py-3">
+                                <svg class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-gray-800 dark:text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z" clip-rule="evenodd"/>
+                                </svg>
+
+                                <svg class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-gray-800 dark:text-red-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z" clip-rule="evenodd"/>
+                                </svg>
+
+
+                                <svg class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-gray-800 dark:text-white animate-spin-slow" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M18.5 4h-13m13 16h-13M8 20v-3.333a2 2 0 0 1 .4-1.2L10 12.6a1 1 0 0 0 0-1.2L8.4 8.533a2 2 0 0 1-.4-1.2V4h8v3.333a2 2 0 0 1-.4 1.2L13.957 11.4a1 1 0 0 0 0 1.2l1.643 2.867a2 2 0 0 1 .4 1.2V20H8Z"/>
+                                </svg>
+                            </th>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-
-
             <!--            Admin Panel-->
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
-                <table class="w-full text-sm text-left rtl:text-right text-blue-100 dark:text-blue-100">
-                    <thead class="text-xs text-white uppercase bg-blue-600 dark:text-white">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">
-                            Status
+                        <th scope="col" class="p-4">
+                            <div class="flex items-center">
+                                <input id="checkbox-all-search" type="checkbox"
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                            </div>
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Od - Do
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Actions
+                            {{$t('vacation.status')}}
                         </th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="vacation in vacations" :class="getStatusClass(vacation.status)">
-                        <th scope="row" class="px-6 py-4 font-medium text-blue-50 whitespace-nowrap dark:text-blue-100">
-                            {{vacation.status}}
+                    <tr v-for="vacation in vacations" v-if="vacations" :key="vacation.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <td class="w-4 p-4">
+                            <div class="flex items-center">
+                                <input id="checkbox-table-search-1" type="checkbox"
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                            </div>
+                        </td>
+                        <th scope="row"
+                            class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                            <div class="ps-3">
+                                <div class="text-base font-semibold">{{ vacation.start_at }} - {{ vacation.end_at }}</div>
+                                <div class="font-normal text-gray-500">{{ $t('vacation.status.' + vacation.status)}}</div>
+                            </div>
                         </th>
-                        <td class="px-6 py-4">
-                            {{vacation.start_at}} - {{vacation.end_at}}
-
-                        </td>
-                        <td class="px-6 py-4">
-                            <button @click="reply(vacation)">Odpowiedz</button>
-<!--                            <a :href="route('vacations.update', vacation)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-auto">Odpowiedz</a>-->
-                        </td>
                     </tr>
                     </tbody>
                 </table>
+<!--                <table class="w-full text-sm text-left rtl:text-right text-blue-100 dark:text-blue-100">-->
+<!--                    <thead class="text-xs text-white uppercase bg-blue-600 dark:text-white">-->
+<!--                    <tr>-->
+<!--                        <th scope="col" class="px-6 py-3">-->
+<!--                            {{$t('vacation.status')}}-->
+<!--                        </th>-->
+<!--                        <th scope="col" class="px-6 py-3">-->
+<!--                            Od - Do-->
+<!--                        </th>-->
+<!--                        <th scope="col" class="px-6 py-3">-->
+<!--                            Actions-->
+<!--                        </th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    <tr v-for="vacation in vacations" :class="getStatusClass(vacation.status)">-->
+<!--                        <th scope="row" class="px-6 py-4 font-medium text-blue-50 whitespace-nowrap dark:text-blue-100">-->
+<!--                            {{vacation.status}}-->
+<!--                        </th>-->
+<!--                        <td class="px-6 py-4">-->
+<!--                            {{vacation.start_at}} - {{vacation.end_at}}-->
+
+<!--                        </td>-->
+<!--                        <td class="px-6 py-4">-->
+<!--                            <button @click="reply(vacation)">Odpowiedz</button>-->
+<!--&lt;!&ndash;                            <a :href="route('vacations.update', vacation)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-auto">Odpowiedz</a>&ndash;&gt;-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
             </div>
 
             <Modal :show="response" @close="closeModal">
@@ -162,3 +233,26 @@ const getStatusClass = (status) => {
         </div>
     </AuthenticatedLayout>
 </template>
+<style>
+@keyframes spin-slow {
+    0% {
+        transform: rotate(0deg);
+    }
+    45% {
+        transform: rotate(180deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    95% {
+        transform: rotate(360deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin-slow {
+    animation: spin-slow 8s linear infinite;
+}
+</style>
