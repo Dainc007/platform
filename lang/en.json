@@ -54,5 +54,14 @@
     "product.price": "Price",
     "product.contractor": "Supplier",
     "product.currency": "Currency",
-    "product.brand": "Brand"
+    "product.brand": "Brand",
+
+    "textarea.placeholder": "Write your thoughts here...",
+    "textarea.message": "Message (optional)",
+
+    "modal.cancel": "Cancel",
+    "modal.send": "Send",
+
+    "dataPicker.cancel": "Cancel",
+    "dataPicker.pick": "Pick"
 }

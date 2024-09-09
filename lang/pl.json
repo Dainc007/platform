@@ -34,6 +34,7 @@
     "nav.notes": "Notatki",
     "nav.meetings": "Spotkania",
     "nav.vacations": "Urlopy",
+    "nav.chat": "Chat",
 
     "brand.name": "Nazwa",
     "brand.header": "Dodawanie Marek",
@@ -67,13 +68,24 @@
     "admin.saved": "Zapisano",
 
     "vacation.apply": "Złóż Wniosek Urlopowy",
-    "vacation.my": "Moje Urlopy",
+    "vacation.my": "Urlopy",
     "vacation.status": "Status",
     "vacation.status.accepted": "Zaakceptowany",
     "vacation.status.rejected": "Odrzucony",
     "vacation.status.pending": "Oczekuje na rozpatrzenie",
     "vacation.status.cancelled": "Odwołany",
     "vacation.range": "Od - Do",
-    "vacation.date": "Data"
+    "vacation.date": "Data",
+    "vacation.send": "Wyślij",
+    "vacation.requester": "Pracownik",
+
+    "textarea.placeholder": "Treść dodatkowej wiadomości...",
+    "textarea.message": "Dodatkowa wiadomość (opcjonalnie)",
+
+    "modal.cancel": "Anuluj",
+    "modal.send": "Wyślij",
+
+    "dataPicker.cancel": "Anuluj",
+    "dataPicker.pick": "Wybierz"
 
 }
