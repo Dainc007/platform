@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Contractor;
+use App\Models\File;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +20,11 @@ class FileFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'path' => $this->faker->filePath(),
+            'fileable_id' => Contractor::factory(),
+            'fileable_type' => function () {
+                return File::class;
+            }
         ];
     }
 }

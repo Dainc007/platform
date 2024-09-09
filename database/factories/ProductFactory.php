@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Brand;
 use App\Models\Contractor;
 use App\Models\Currency;
+use App\Models\File;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,11 +21,12 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'contractor_id' => fake()->randomElement(Contractor::all()->toArray()),
+            'contractor_id' => fake()->randomElement(Contractor::pluck('id')->toArray()),
             'code'     => fake()->randomNumber(9),
             'price'    => fake()->randomNumber(5),
-            'currency_id' => fake()->randomElement(Currency::all()->toArray()),
-            'brand'    => fake()->randomElement(['bosch', 'valeo', 'brembo'])
+            'currency_id' => fake()->randomElement(Currency::pluck('id')->toArray()),
+            'brand_id'    => fake()->randomElement(Brand::pluck('id')->toArray()),
+            'file_id'   => fake()->randomElement(File::pluck('id')->toArray()),
         ];
     }
 }

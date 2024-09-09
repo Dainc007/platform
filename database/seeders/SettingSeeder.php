@@ -15,16 +15,17 @@ class SettingSeeder extends Seeder
     {
         $settings = [
             'articles',
-            'users',
-            'employees',
-            'projects',
-            'products',
-            'contractors',
             'brands',
+            'chat',
+            'contractors',
+            'employees',
             'files',
-            'notes',
             'meetings',
-            'vacations',
+            'notes',
+            'products',
+            'projects',
+            'users',
+            'vacations'
         ];
 
         foreach ($settings as $setting) {

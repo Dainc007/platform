@@ -17,7 +17,10 @@ class VacationFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'start_at' => now(),
+            'end_at' => $this->faker->dateTimeBetween('now', '+1 week'),
+            'message' => $this->faker->realText(),
+            'user_id' => rand(1, 10)
         ];
     }
 }

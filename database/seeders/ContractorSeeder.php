@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Contractor;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,6 @@ class ContractorSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Contractor::factory(100)->create();
     }
 }

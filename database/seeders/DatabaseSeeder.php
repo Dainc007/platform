@@ -16,13 +16,18 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             CurrencySeeder::class,
+            BrandSeeder::class,
             EmployeeSeeder::class,
             ConversationSeeder::class,
             MessageSeeder::class,
             ArticleSeeder::class,
             NoteSeeder::class,
             ProjectSeeder::class,
-//            ProductSeeder::class,
+            ContractorSeeder::class,
+            FileSeeder::class,
+            ProductSeeder::class,
+            VacationSeeder::class,
+            SettingSeeder::class,
         ]);
     }
 }

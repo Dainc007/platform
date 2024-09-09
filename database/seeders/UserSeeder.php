@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -19,7 +20,7 @@ class UserSeeder extends Seeder
                 'email' => 'test@example.com',
             ]);
 
-            $user->assignRole('head admin');
+            $user->assignRole(User::AVAILABLE_ROLES);
         }
 
          User::factory(100)->create();
