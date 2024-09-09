@@ -11,12 +11,10 @@ class VacationStatusChanged extends Notification
 {
     use Queueable;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct()
+    protected array $data = [];
+    public function __construct(array $data = [])
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -50,5 +48,10 @@ class VacationStatusChanged extends Notification
         return [
             //
         ];
+    }
+
+    public function toDatabase($notifiable)
+    {
+        return $this->data;
     }
 }
