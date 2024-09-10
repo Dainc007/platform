@@ -62,7 +62,6 @@ Route::middleware('auth')->group(function () {
         'meetings' => MeetingController::class,
         'vacations' => VacationController::class,
     ]);
-
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', AdminPanelController::class)->name('admin.dashboard');
         Route::resources([

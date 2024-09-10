@@ -20,7 +20,7 @@ class SettingPolicy
      */
     public function view(User $user, Setting $setting): bool
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -44,7 +44,7 @@ class SettingPolicy
      */
     public function delete(User $user, Setting $setting): bool
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -52,7 +52,7 @@ class SettingPolicy
      */
     public function restore(User $user, Setting $setting): bool
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -60,6 +60,6 @@ class SettingPolicy
      */
     public function forceDelete(User $user, Setting $setting): bool
     {
-        //
+        return $user->isAdmin();
     }
 }

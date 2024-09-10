@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Setting\StoreSettingRequest;
 use App\Http\Requests\Admin\Setting\UpdateSettingRequest;
 use App\Models\Setting;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class SettingController extends Controller
 {
@@ -14,6 +16,9 @@ class SettingController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->isAdmin()) {
+            return abort(403);
+        }
         return inertia('Admin/Setting/Index');
     }
 

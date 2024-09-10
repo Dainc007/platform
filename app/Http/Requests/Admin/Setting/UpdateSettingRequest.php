@@ -10,7 +10,7 @@ class UpdateSettingRequest extends FormRequest
 
     public function authorize()
     {
-        return $this->user()->can('update', Setting::class);
+        return $this->user()->isAdmin();
     }
 
     public function rules(): array
