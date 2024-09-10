@@ -23,7 +23,7 @@ class VacationController extends Controller
 
         return inertia('Vacation/Index', [
             'vacations' => $vacations,
-            'upcomingVacations' => Vacation::where('status', 'accepted')->where('star_at', '>=', now())->with('user:id,name')->get(),
+            'upcomingVacations' => Vacation::where('status', 'accepted')->where('start_at', '>=', now())->with('user:id,name')->get(),
             'statuses' => array_diff(Vacation::AVAILABLE_STATUSES, ['cancelled'])
         ]);
     }
