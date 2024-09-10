@@ -31,6 +31,9 @@ class MessageController extends Controller
      */
     public function store(StoreMessageRequest $request)
     {
+        //todo remove me
+        return back()->with('message', 'Przyłapałeś nas! Czat jest w trakcie przebudowy i został chwilow zablokowany, Przepraszamy!');
+
         $message = Auth::user()->messages()->create($request->validated() + ['conversation_id' => 2]);
         broadcast(new MessageCreated($message))->toOthers();
 

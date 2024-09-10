@@ -11,7 +11,7 @@ class AdminPanelController extends Controller
 {
     public function __invoke()
     {
-        if(Auth::user()->isAdmin()) {
+        if(!Auth::user()->isAdmin()) {
             return abort(403);
         }
 

@@ -38,6 +38,17 @@ Route::get('/dashboard', function () {
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+//todo remove me, it's temporary
+Route::get('/chat', function () {
+    return Inertia::render('Dashboard', [
+        'friend' => Auth::user(),
+        'currentUser' => Auth::user(),
+        'conversation' => Conversation::with(['messages' => function ($query) {
+            $query->orderBy('id', 'desc');
+        }, 'messages.user'])->find(2)
+    ]);
+})->middleware(['auth', 'verified'])->name('chat.index');
+
 Route::middleware('guest')->group(function () {
     Route::resource('articles', ArticleController::class)->only('show', 'index');
 });

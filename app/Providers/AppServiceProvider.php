@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
+use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
     public function processGateAdditionalActions(): void
     {
         Gate::before(function ($user, $ability) {
-            return $user->hasRole('head-admin');
+            return $user->hasRole(Role::HeadAdmin);
         });
 
         Gate::define('viewPulse', function (User $user) {

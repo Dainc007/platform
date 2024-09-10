@@ -12,6 +12,7 @@ class StoreVacationRequest extends FormRequest
             'date' => 'required|array|size:2',
             'date.0' => 'required|date',
             'date.1' => 'nullable|date',
+            'message' => 'nullable|string',
         ];
     }
 }

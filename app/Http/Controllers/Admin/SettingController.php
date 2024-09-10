@@ -16,7 +16,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->isAdmin()) {
+        if (!Auth::user()->isAdmin()) {
             return abort(403);
         }
         return inertia('Admin/Setting/Index');

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -17,7 +18,7 @@ class User extends Authenticatable
      * Roles should be ordered from most to least important.
      */
     public const AVAILABLE_ROLES = [
-        'head admin', 'admin', 'moderator'
+        Role::HeadAdmin, Role::Administrator, Role::Moderator
     ];
 
     /**

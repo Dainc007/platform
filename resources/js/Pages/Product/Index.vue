@@ -81,6 +81,9 @@ function formatPrice(price) {
                         </td>
                         <th scope="row"
                             class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                            <img class="w-10 h-10 rounded-full"
+                                 :src="'https://prd.place/400?id=' + product.id"
+                                 alt="Jese image">
                             <div class="ps-3">
                                 <div class="text-base font-semibold">{{ product.code }}</div>
                                 <div class="font-normal text-gray-500">Ostatnia modyfikacja: {{ product.updated_at}}</div>

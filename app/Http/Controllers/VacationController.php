@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Vacation;
 use App\Notifications\VacationStatusChanged;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 
 class VacationController extends Controller
 {
@@ -17,12 +18,13 @@ class VacationController extends Controller
         $user = Auth::user();
 
         $vacations = $user->isAdmin()
-            ? Vacation::where('status', 'pending')->get()
-            : $user->vacations;
+            ? Vacation::where('status', 'pending')->with('user:id,name')->get()
+            : $user->vacations()->orderBy('id', 'desc')->get();
 
         return inertia('Vacation/Index', [
             'vacations' => $vacations,
-            'statuses' => Vacation::AVAILABLE_STATUSES
+            'upcomingVacations' => Vacation::where('status', 'accepted')->where('star_at', '>=', now())->with('user:id,name')->get(),
+            'statuses' => array_diff(Vacation::AVAILABLE_STATUSES, ['cancelled'])
         ]);
     }
 
@@ -43,9 +45,10 @@ class VacationController extends Controller
         $request->user()->vacations()->create([
             'start_at' => $date[0],
             'end_at' => $date[1] ?? $date[0],
+            'message' => $request->validated('message') ?? '',
         ]);
 
-        return redirect()->back()->with('message', 'Vacation created.');
+        return redirect()->back();
 
     }
 
@@ -68,15 +71,15 @@ class VacationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateVacationRequest $request, Vacation $vacation)
+    public function update(UpdateVacationRequest $request, Vacation $vacation): \Illuminate\Http\RedirectResponse
     {
         $vacation->update($request->validated());
 
-        if($request->has('message')) {
-            $vacation->user()->notify(new VacationStatusChanged());
-        }
+//        if($request->has('message')) {
+//            $vacation->user()->notify(new VacationStatusChanged());
+//        }
 
-        return redirect()->back()->with('message', 'Vacation updated.');
+        return redirect()->back();
     }
 
     /**

@@ -78,6 +78,8 @@
     "vacation.date": "Data",
     "vacation.send": "Wyślij",
     "vacation.requester": "Pracownik",
+    "vacation.none": "Brak",
+    "vacation.message": "Dodatkowa Wiadomość",
 
     "textarea.placeholder": "Treść dodatkowej wiadomości...",
     "textarea.message": "Dodatkowa wiadomość (opcjonalnie)",
