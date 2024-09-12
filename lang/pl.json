@@ -32,6 +32,7 @@
     "nav.brands": "Marki",
     "nav.files": "Pliki",
     "nav.notes": "Notatki",
+    "nav.analytics": "Analityka",
 
     "brand.name": "Nazwa",
     "brand.header": "Dodawanie Marek",
@@ -62,5 +63,8 @@
     "actions.create": "Dodaj",
     "files": "Pliki",
 
-    "offer.type": "Typ Oferty"
+    "offer.type": "Typ Oferty",
+
+    "analytics.header": "Analityka",
+    "analytics.offer.comparison" : "Cenniki do porównania"
 }

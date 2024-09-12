@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ContractorController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\UserController;
+use App\Models\Brand;
 use App\Models\Conversation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
         'files' => FileController::class,
         'contractors' => ContractorController::class,
         'brands' => BrandController::class,
+        'analytics' => AnalyticsController::class,
     ]);
 });
 
