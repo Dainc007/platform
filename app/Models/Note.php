@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Note extends Model
 {
@@ -20,13 +21,18 @@ class Note extends Model
         return $this->morphTo();
     }
 
-    public function article()
+    public function article(): BelongsTo
     {
         return $this->belongsTo(Article::class, 'notable_id');
     }
 
-    public function employee()
+    public function employee(): BelongsTo
     {
         return $this->belongsTo(Employee::class, 'notable_id');
+    }
+
+    public function meeting(): BelongsTo
+    {
+        return $this->belongsTo(Meeting::class, 'notable_id');
     }
 }

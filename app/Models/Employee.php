@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\Model\HasNotes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
-    use HasFactory;
+    use HasFactory, HasNotes;
 
     protected $fillable = [
         'user_id',
@@ -20,10 +21,5 @@ class Employee extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function notes()
-    {
-        return $this->morphMany(Note::class, 'notable');
     }
 }
