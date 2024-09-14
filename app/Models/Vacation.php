@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\Model\BelongsToUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
 class Vacation extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, BelongsToUser;
 
     public const AVAILABLE_STATUSES = [
         'pending', 'accepted', 'rejected', 'cancelled'
@@ -30,9 +31,4 @@ class Vacation extends Model
         'start_at' => 'date:d-m-y',
         'end_at' => 'date:d-m-y',
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

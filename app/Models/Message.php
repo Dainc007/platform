@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\Model\BelongsToUser;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-    use HasFactory, BroadcastsEvents;
+    use HasFactory, BroadcastsEvents, BelongsToUser;
 
     protected $fillable = [
         'content',
@@ -28,10 +29,5 @@ class Message extends Model
     public function conversations()
     {
         return $this->belongsTo(Conversation::class);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
     }
 }

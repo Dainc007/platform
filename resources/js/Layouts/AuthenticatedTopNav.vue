@@ -32,7 +32,7 @@ const showingNavigationDropdown = ref(false);
                                 v-if="setting && setting.value === 1"
                                 :key="setting.id"
                                 :href="route(setting.name + '.index')"
-                                :active="route().current(setting.name)"
+                                :active="route().current(setting.name + '*')"
                             >
                                 {{ $t(`nav.${setting.name}`) }}
                             </NavLink>
