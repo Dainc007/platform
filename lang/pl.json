@@ -88,6 +88,8 @@
     "modal.send": "Wyślij",
 
     "dataPicker.cancel": "Anuluj",
-    "dataPicker.pick": "Wybierz"
+    "dataPicker.pick": "Wybierz",
+
+    "meeting.header": "Spotkania"
 
 }
