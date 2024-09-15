@@ -290,13 +290,13 @@ describe('edit page', function () {
     });
 });
 
-//describe('delete role', function () {
-//    test('can delete role', function () {
-//        livewire(EditRole::class, [
-//            'record' => $this->role->id
-//        ])
-//            ->callPageAction(DeleteAction::class);
-//
-//        $this->assertModelMissing($this->role);
-//    });
-//});
+describe('delete role', function () {
+    test('can delete role', function () {
+        livewire(EditRole::class, [
+            'record' => $this->role->id
+        ])
+            ->callAction(DeleteAction::class);
+
+        $this->assertModelMissing($this->role);
+    });
+});
