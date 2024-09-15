@@ -11,6 +11,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+
 class RoleResource extends Resource
 {
     protected static ?string $model = Role::class;
