@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class RoleSeeder extends Seeder
 {
@@ -19,7 +20,12 @@ class RoleSeeder extends Seeder
 
         $permissions = [
             'view panel',
+
+            'view any setting',
+            'update setting',
         ];
+
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         foreach ($permissions as $permissionName) {
             $permission = Permission::create([
@@ -29,5 +35,7 @@ class RoleSeeder extends Seeder
 
             $role->givePermissionTo($permission);
         }
+
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
 }

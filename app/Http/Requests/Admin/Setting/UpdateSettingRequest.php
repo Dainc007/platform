@@ -2,15 +2,14 @@
 
 namespace App\Http\Requests\Admin\Setting;
 
-use App\Models\Setting;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateSettingRequest extends FormRequest
 {
 
-    public function authorize()
+    public function authorize(): bool
     {
-        return $this->user()->isAdmin();
+        return $this->user()->can('update setting');
     }
 
     public function rules(): array
