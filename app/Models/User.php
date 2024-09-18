@@ -20,7 +20,7 @@ class User extends Authenticatable implements FilamentUser
      * Roles should be ordered from most to least important.
      */
     public const AVAILABLE_ROLES = [
-        Role::HeadAdmin, Role::Administrator, Role::Moderator
+        Role::HeadAdmin
     ];
 
     /**

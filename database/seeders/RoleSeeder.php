@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleSeeder extends Seeder
@@ -13,10 +13,21 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (User::AVAILABLE_ROLES as $role) {
-            if (!Role::where('name', $role)->exists()) {
-                Role::create(['name' => $role, 'guard_name' => 'web']);
-            }
+        $role = Role::create([
+            'name' => config('permission.default_role')
+        ]);
+
+        $permissions = [
+            'view panel',
+        ];
+
+        foreach ($permissions as $permissionName) {
+            $permission = Permission::create([
+                'name' => $permissionName,
+                'guard_name' => 'web'
+            ]);
+
+            $role->givePermissionTo($permission);
         }
     }
 }

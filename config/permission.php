@@ -183,4 +183,10 @@ return [
 
         'store' => 'default',
     ],
+
+    /*
+     * Name for the default (initial) role with permissions to the entire application
+     */
+
+    'default_role' => 'head admin'
 ];
