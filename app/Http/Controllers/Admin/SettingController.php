@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Setting\UpdateSettingRequest;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class SettingController extends Controller
 {
@@ -14,9 +15,7 @@ class SettingController extends Controller
      */
     public function index(Request $request)
     {
-        if (!$request->user()->can('view any setting')) {
-            abort(403);
-        }
+        Gate::authorize('view any setting', Setting::class);
 
         return inertia('Admin/Setting/Index');
     }
