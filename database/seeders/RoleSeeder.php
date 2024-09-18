@@ -23,6 +23,12 @@ class RoleSeeder extends Seeder
 
             'view any setting',
             'update setting',
+
+            'create article',
+            'update article',
+            'delete article',
+            'force delete article',
+            'restore article',
         ];
 
         app()[PermissionRegistrar::class]->forgetCachedPermissions();

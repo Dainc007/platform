@@ -4,10 +4,21 @@ namespace App\Policies;
 
 use App\Models\Article;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ArticlePolicy
 {
+    /**
+     * Perform pre-authorization checks.
+     */
+    public function before(User $user, string $ability): bool|null
+    {
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        return null;
+    }
+
     /**
      * Determine whether the user can view any models.
      */
@@ -29,7 +40,7 @@ class ArticlePolicy
      */
     public function create(User $user): bool
     {
-        return $user->isAdmin();
+        return $user->can('create article');
     }
 
     /**
@@ -37,7 +48,11 @@ class ArticlePolicy
      */
     public function update(User $user, Article $article): bool
     {
-        return $user->isAdmin() || $user->id === $article->user_id;
+        if ($user->can('update article')) {
+            return true;
+        }
+
+        return $user->id === $article->user_id;
     }
 
     /**
@@ -45,7 +60,12 @@ class ArticlePolicy
      */
     public function delete(User $user, Article $article): bool
     {
-        return $user->isAdmin() || $user->id === $article->user_id;
+        if ($user->can('delete article')) {
+            return true;
+        }
+
+
+        return $user->id === $article->user_id;
     }
 
     /**
@@ -53,7 +73,11 @@ class ArticlePolicy
      */
     public function restore(User $user, Article $article): bool
     {
-        return $user->isAdmin() || $user->id === $article->user_id;
+        if ($user->can('restore article')) {
+            return true;
+        }
+
+        return $user->id === $article->user_id;
     }
 
     /**
@@ -61,6 +85,10 @@ class ArticlePolicy
      */
     public function forceDelete(User $user, Article $article): bool
     {
-        return $user->isAdmin() || $user->id === $article->user_id;
+        if ($user->can('force delete article')) {
+            return true;
+        }
+
+        return $user->id === $article->user_id;
     }
 }
