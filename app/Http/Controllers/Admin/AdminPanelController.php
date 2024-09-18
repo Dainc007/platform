@@ -3,16 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Setting;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
 
 class AdminPanelController extends Controller
 {
-    public function __invoke()
+    public function __invoke(Request $request)
     {
-        if(!Auth::user()->isAdmin()) {
-            return abort(403);
+        if (!$request->user()->can('view any setting')) {
+            abort(403);
         }
 
         return inertia('Admin/Dashboard');
