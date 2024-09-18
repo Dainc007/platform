@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
                 'email' => 'test@example.com',
             ]);
 
-            $user->assignRole(User::AVAILABLE_ROLES);
+            $user->assignRole(config('permission.default_role'));
         }
 
          User::factory(100)->create();
