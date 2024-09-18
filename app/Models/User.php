@@ -59,8 +59,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function isAdmin(): bool
     {
-        return true;
-//        return $this->hasRole(['head admin', 'admin']);
+        return $this->hasRole(config('permission.default_role'));
     }
 
     public function articles()
