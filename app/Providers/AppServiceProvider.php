@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Setting;
 use App\Models\User;
+use App\Policies\Admin\SettingPolicy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -24,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->modelPreventActions();
         $this->processGateAdditionalActions();
+        $this->registerPolicies();
     }
 
     /**
@@ -50,5 +53,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('viewPulse', function (User $user) {
             return $user->isAdmin();
         });
+    }
+
+    private function registerPolicies(): void
+    {
+        Gate::policy(Setting::class, SettingPolicy::class);
     }
 }
