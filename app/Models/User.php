@@ -20,7 +20,7 @@ class User extends Authenticatable implements FilamentUser
      * Roles should be ordered from most to least important.
      */
     public const AVAILABLE_ROLES = [
-        Role::HeadAdmin, Role::Administrator, Role::Moderator
+        Role::HeadAdmin
     ];
 
     /**
@@ -59,7 +59,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function isAdmin(): bool
     {
-        return $this->hasRole(['head admin', 'admin']);
+        return $this->hasRole(config('permission.default_role'));
     }
 
     public function articles()
@@ -84,6 +84,6 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->isAdmin();
+        return $this->can('view panel');
     }
 }
