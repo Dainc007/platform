@@ -5,62 +5,46 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Meeting\StoreMeetingRequest;
 use App\Http\Requests\Meeting\UpdateMeetingRequest;
 use App\Models\Meeting;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class MeetingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        return inertia('Meeting/Index', [
+        $meetings = Meeting::query()
+            ->with('user:id,name')
+            ->whereDate('start_date', '>=', date('Y-m-d'))
+            ->when(!$request->user()->isAdmin(), function (Builder $query) {
+                return $query->where('id', '-1');
+            })
+            ->get([
+                'id',
+                'title',
+                'user_id',
+                'description',
+                'start_date',
+                'end_date',
+            ]);
 
+        return inertia('Meeting/Index', [
+            'meetings' => $meetings
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreMeetingRequest $request): RedirectResponse
     {
-        //
+        Meeting::create($request->getForInsert());
+
+        return redirect()->back();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreMeetingRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Meeting $meeting)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Meeting $meeting)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateMeetingRequest $request, Meeting $meeting)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Meeting $meeting)
     {
         //
