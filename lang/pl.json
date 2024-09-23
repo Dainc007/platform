@@ -61,6 +61,8 @@
     "search": "Szukaj...",
     "actions": "Akcje",
     "actions.create": "Dodaj",
+    "actions.import": "Importuj Plik",
+
     "files": "Pliki",
 
     "offer.type": "Typ Oferty",
