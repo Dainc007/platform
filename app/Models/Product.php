@@ -47,11 +47,4 @@ class Product extends Model
     {
         return $this->belongsTo(File::class);
     }
-
-    public function brandable(): MorphTo
-    {
-        return $this->morphTo();
-    }
-
-
 }

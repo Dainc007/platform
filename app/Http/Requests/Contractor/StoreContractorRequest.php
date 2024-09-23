@@ -11,7 +11,7 @@ class StoreContractorRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'file' => 'nullable|file|max:10240',
+            'file' => 'nullable|file|max:100240',
             'currency_id' => 'required_with:file',
             'brand_id' => 'required_with:file',
             'type' => 'required|string|in:' . implode(',', Product::AVAILABLE_TYPES),

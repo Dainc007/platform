@@ -2,21 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\FileExport;
 use App\Http\Requests\Analytics\CompareOffersRequest;
+use App\Jobs\ProcessImportJob;
 use App\Models\Brand;
+use App\Models\Contractor;
 use App\Models\File;
 use App\Models\Product;
+use App\Models\TemporaryProduct;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\FileImport;
 
 class AnalyticsController extends Controller
 {
     public function index(Request $request)
     {
+        $products = TemporaryProduct::paginate(10);
+
         return Inertia::render('Analytics/Index', [
+            'products' => $products,
             'brands' => Brand::orderBy('name', 'asc')->get(),
             'files' => Inertia::lazy(fn() => File::whereHas('products', function ($query) use ($request) {
                 $query->where('brand_id', $request->get('brand_id'));
@@ -24,25 +28,20 @@ class AnalyticsController extends Controller
         ]);
     }
 
+    public function create(Request $request)
+    {
+        return Inertia::render('Analytics/Import');
+    }
+
     public function store(CompareOffersRequest $request)
     {
-        $brandId = $request->get('brand_id');
-        $files = $request->get('files');
         $file = $request->file('file');
+        $path = $file->storeAs('uploads', $file->getClientOriginalName());
 
-        $products = Product::where('brand_id', $brandId)
-            ->whereIn('file_id', $files)
-            ->get();
-        $import = new FileImport;
+        (Contractor::firstOrCreate(['name' => 'Test Contractor']))->files()->create(['path' => $path]);
 
-        Excel::import($import, $file);
+        ProcessImportJob::dispatch($path);
 
-        $data = $import->data;
-
-        $diff = $products->diffAssoc($data);
-        dd($diff);
-//        $fileExcel =  (new FileExport($diff))->download('compare_offers.csv');
-//        $path = ($fileExcel->getFile()->getPath());
-//        return Excel::download(new FileExport($diff), 'testing.csv', \Maatwebsite\Excel\Excel::CSV);
+        return to_route('analytics.index')->with(['message' => 'Twój plik jest w trakcie przygotowywania.']);
     }
 }
