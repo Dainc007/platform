@@ -62,6 +62,9 @@
     "actions": "Akcje",
     "actions.create": "Dodaj",
     "actions.import": "Importuj Plik",
+    "actions.truncate": "Opróźnij Tabele",
+    "actions.export": "Eksportuj",
+
 
     "files": "Pliki",
 

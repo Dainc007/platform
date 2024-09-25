@@ -16,19 +16,20 @@ class ProcessImportJob implements ShouldQueue
 
 
     public int $timeout = 2400;
-    public int $skipHeaders;
-    public FileService $fileService;
-    public $brands;
-    public Brand $lastProcessedBrand;
-    public array $headers;
-    public int $chunkSize;
     public int $tries = 10;
-    public function __construct(string $filePath, int $skipHeaders = 1, int $chunkSize = 500)
+
+    public int $skipHeaders;
+    public int $chunkSize;
+    public string $filePath;
+    public array $headers;
+
+    public $brands;
+    public ?int $lastProcessedBrandId = null;
+
+    public function __construct(string $filePath, int $skipHeaders = 1, int $chunkSize = 2500)
     {
-        $this->fileService = new FileService($filePath);
-        $this->headers = $this->fileService->getHeaders();
+        $this->filePath = $filePath;
         $this->brands = Brand::orderBy('id')->pluck('name', 'id')->toArray();
-        $this->lastProcessedBrand = new Brand(['name' => 'test', 'id' => 999]);
 
         $this->skipHeaders = $skipHeaders;
         $this->chunkSize = $chunkSize;
@@ -39,7 +40,9 @@ class ProcessImportJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->fileService->getCollection()->skip($this->skipHeaders)->chunk($this->chunkSize)->each(function ($chunk) {
+        $fileService = new FileService($this->filePath);
+        $this->headers = $fileService->getHeaders();
+        $fileService->getCollection()->skip($this->skipHeaders)->chunk($this->chunkSize)->each(function ($chunk) {
             $records =  $chunk->map(function ($row) {
                 return $this->formatRow($row);
             });
@@ -60,16 +63,18 @@ class ProcessImportJob implements ShouldQueue
 
     private function formatBrandId(string $brandName): int
     {
-        if ($brandName != $this->lastProcessedBrand->name) {
-            if (in_array($brandName, $this->brands)) {
-                $key = array_search($brandName, $this->brands);
-            } else {
-                $key = (Brand::firstOrCreate(['name' => $brandName]))->id;
-                $this->brands = Brand::orderBy('id')->pluck('name', 'id')->toArray();
-            }
+        if($this->lastProcessedBrandId && $this->brands[$this->lastProcessedBrandId] == $brandName ){
+            return $this->lastProcessedBrandId;
         }
 
-        return $key ?? $this->lastProcessedBrand->id;
+        if (in_array($brandName, $this->brands)) {
+            $this->lastProcessedBrandId = array_search($brandName, $this->brands);
+        } else {
+            $this->lastProcessedBrandId = (Brand::firstOrCreate(['name' => $brandName]))->id;
+            $this->brands = Brand::orderBy('id')->pluck('name', 'id')->toArray();
+        }
+
+        return $this->lastProcessedBrandId;
     }
 
     private function formatPrice($price): int

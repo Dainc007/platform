@@ -16,6 +16,8 @@ class ProcessProductImportJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
+    public int $timeout = 2400;
+    public int $tries = 10;
 
     public array $records;
     public function __construct(array $records)

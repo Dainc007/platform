@@ -10,9 +10,7 @@ class CompareOffersRequest extends FormRequest
     public function rules(): array
     {
         return [
-//            'files' => ['required', 'array'],
-//            'brand_id' => ['required', 'integer', 'exists:brands,id'],
-            'file' => ['required', 'file'],
+            'file' => ['required', 'file', 'mimes:csv,txt', 'max:51200'],
         ];
     }
 }

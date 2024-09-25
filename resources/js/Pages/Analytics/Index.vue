@@ -1,4 +1,4 @@
-<script setup>
+<script setup xmlns="http://www.w3.org/1999/html">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {Link, router, useForm} from "@inertiajs/vue3";
 import {ref, watch} from 'vue';
@@ -11,77 +11,111 @@ defineProps({
     files: Object
 });
 
-const destroy = (id) => {
-    if (confirm('Are you sure?')) {
-        Inertia.delete(route('analytics.destroy', id))
-    }
-    return (destroy)
-}
+
+const search = ref('');
+const filter = ref('');
 
 const form = useForm({
     file: null,
-    files: null,
+    files: [],
     brand_id: null,
+    search: ''
 });
 
-const search = ref('');
+const exportForm = useForm({
+    products: []
+})
 
 watch(search, (search) => {
     router.get('/analytics', {search: search}, {preserveState: true, replace: true});
 });
+watch(filter, (filter) => {
+    router.get('/analytics', {filter: filter}, {preserveState: true, replace: true});
+});
+
+function exportProducts(form)  {
+    Inertia.post(route('analytics.export', form))
+}
+
+function truncate() {
+    if (confirm('Are you sure?')) {
+        return Inertia.delete(route('analytics.truncate'));
+
+    }
+}
 
 function reloadPage(brand_id) {
     router.reload({only: ['files'], data: {brand_id: brand_id}})
 }
+function reloadProducts(event, fileId) {
+    const isChecked = event.target.checked;
 
+    if (isChecked) {
+        if (!this.form.files.includes(fileId)) {
+            this.form.files.push(fileId);
+        }
+    } else {
+        this.form.files = this.form.files.filter(id => id !== fileId);
+    }
+    router.reload({only: ['products'], data: {files: this.form.files}})
+}
+function formatPrice(price) {
+    return (price / 100).toFixed(2).replace(".", ",");
+}
+
+function roundedNumber(number) {
+    return Math.round(number);
+}
 </script>
 
 <template>
     <AuthenticatedLayout>
         <div class="p-12">
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg sm:md:mx-56">
-                <h1 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">{{ $t('analytics.header') }}</h1>
-                <div>
-                    <label for="brand"
-                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{
-                            $t('contractor.brand')
-                        }}</label>
-                    <select
-                        @change="reloadPage(form.brand_id)"
-                        id="brand"
-                        v-model="form.brand_id"
-                        class="mt-1 block w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                    >
-                        <option v-for="brand in brands" :key="brand.id" :value="brand.id">
-                            {{ brand.name }}
-                        </option>
-                    </select>
-                    <div v-if="form.errors.brand_id" class="text-red-500">{{ form.errors.brand_id }}</div>
-                </div>
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg min-h-[500px] ">
+                <h1 class="text-white">Wybierz Markę</h1>
+                <div class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+                    <div>
+                        <select
+                            @change="reloadPage(form.brand_id)"
+                            id="brand"
+                            v-model="form.brand_id"
+                            class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
+                        >
+                            <option v-for="brand in brands" :key="brand.id" :value="brand.id">
+                                {{ brand.name }}
+                            </option>
+                        </select>
+                        <div v-if="form.errors.brand_id" class="text-red-500">{{ form.errors.brand_id }}</div>
+                    </div>
 
-                <div class="my-2">
-                    <label for="files"
-                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('analytics.offer.comparison') }}</label>
-                    <select multiple id="files" v-model="form.files"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option v-for="file in files" :key="file.id" :value="file.id">{{ file.path }}</option>
-                    </select>
-                    <div v-if="form.errors.files" class="text-red-500">{{ form.errors.files }}</div>
-                </div>
+                    <div>
+                        <button id="dropdownCheckboxButton" data-dropdown-toggle="dropdownCheckbox"
+                                class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
+                            <svg class="w-3 h-3 text-gray-500 dark:text-gray-400 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z"/>
+                            </svg>
+                            Pliki
+                            <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                        </button>
+                        <!-- Dropdown menu -->
+                        <div id="dropdownCheckbox" class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="top" style="position: absolute; inset: auto auto 0 0; margin: 0; transform: translate3d(522.5px, 3847.5px, 0px);">
+                            <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownCheckboxButton">
+                                <li v-for="file in files" :key="file.id" :value="file.id">
+                                    <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                        <input
+                                            @change="reloadProducts($event, file.id)"
+                                            :id="'checkbox-' + file.id" type="checkbox" :value="file.id" name="filter-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label :for="'checkbox-' + file.id" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
+                                            {{ file.path.replace('uploads/', '') }}
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
-                <button
-                    @click="form.post(route('analytics.store'))"
-                    type="submit"
-                    class="w-full py-2 px-4 mt-3 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
-                >
-                    {{ $t('contractor.submit') }}
-                </button>
-            </div>
-
-
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <div
-                    class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
                     <div>
                         <button id="dropdownActionContractorButton" data-dropdown-toggle="dropdownActionContractor"
                                 class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
@@ -105,9 +139,22 @@ function reloadPage(brand_id) {
                                         {{ $t('actions.import') }}
                                     </Link>
                                 </li>
+                                <li>
+                                    <a :href="route('analytics.export', form)"
+                                          class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        {{ $t('actions.export') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a @click="truncate"
+                                          class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        {{ $t('actions.truncate') }}
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
+
                     <label for="table-search" class="sr-only">{{ $t('search') }}</label>
                     <div class="relative">
                         <div
@@ -137,16 +184,22 @@ function reloadPage(brand_id) {
                         <th scope="col" class="px-6 py-3">
                             {{ $t('name') }}
                         </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            {{ $t('files') }}
+                        <th scope="col" class="px-6 py-3">
+                            cena partio
                         </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            {{ $t('actions') }}
+                        <th scope="col" class="px-6 py-3">
+                            cena oferty
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            różnica w cenie
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                                %
                         </th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="product in products.data" :key="product.id"
+                    <tr v-if="products" v-for="product in products.data" :key="product.id"
                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td class="w-4 p-4">
                             <div class="flex items-center">
@@ -159,23 +212,22 @@ function reloadPage(brand_id) {
                             class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                             <div>
                                 <div class="text-base font-semibold">{{ product.code }}</div>
-                                <div class="font-normal text-gray-500">{{ product.code }}</div>
+                                <div class="font-normal text-gray-500">{{ product.brand.name }}</div>
                             </div>
                         </th>
-                        <td class="px-6 py-4 text-center">
-                            <Link :title="Edytuj" :href="route('analytics.edit', product)"
-                                  class="m-1 p-1 text-gray-900 bg-white dark:bg-gray-800 dark:text-gray-200 hover:bg-gray-100
-                        dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:ring-4 focus:outline-none
-                        focus:ring-gray-100 dark:focus:ring-gray-700 font-medium rounded-lg text-xs px-2 py-1 text-center inline-flex items-center">
-                                <i class="mx-1 py-1 fa-solid fa-edit"></i> <!-- Ikona edycji -->
-                            </Link>
 
-                            <button @click="destroy(product.id)" title="Usuń"
-                                    :href="route('analytics.destroy', product)"
-                                    class="m-1 p-1 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs px-2 py-1 text-center inline-flex items-center">
-                                <i class="mx-1 py-1 fa-solid fa-trash"></i> <!-- Ikona usuwania -->
-                            </button>
-                        </td>
+                        <th scope="row">
+                            {{formatPrice(product.product_price)}}
+                        </th>
+                        <th scope="row">
+                            {{formatPrice(product.temp_product_price)}}
+                        </th>
+                        <th scope="row">
+                            {{formatPrice(product.price_difference)}}
+                        </th>
+                        <th scope="row" :class="{'text-green-500': product.price_difference_percentage > 0, 'text-red-500': product.price_difference_percentage < 0}">
+                            {{ roundedNumber(product.price_difference_percentage) }} %
+                        </th>
                     </tr>
                     </tbody>
                 </table>
@@ -183,9 +235,6 @@ function reloadPage(brand_id) {
                      aria-label="Table navigation">
                     <span
                         class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
-<!--                        Showing <span-->
-                        <!--                        class="font-semibold text-gray-900 dark:text-white">1-10</span> of <span-->
-                        <!--                        class="font-semibold text-gray-900 dark:text-white">1000</span>-->
                     </span>
                     <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
                         <Link

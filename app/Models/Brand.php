@@ -19,4 +19,9 @@ class Brand extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    public function temporaryProducts(): HasMany
+    {
+        return $this->hasMany(TemporaryProduct::class);
+    }
 }

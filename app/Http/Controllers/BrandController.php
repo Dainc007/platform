@@ -13,7 +13,9 @@ class BrandController extends Controller
     public function index(Request $request)
     {
         return inertia('Brand/Index', [
-            'brands' => Brand::where('name', 'LIKE', '%' . $request->input('search', '') . '%')->paginate(10)
+            'brands' => Brand::where('name', 'LIKE', '%' . $request->input('search', '') . '%')
+                ->orderBy('name', 'asc')
+                ->paginate(10)
         ]);
     }
 
@@ -52,10 +54,7 @@ class BrandController extends Controller
     {
         return redirect()->back()->with(['message' => 'Not Supported (sorry!).']);
 
-        return inertia('Brand/Edit', [
-                'brand' => $brand
-            ]
-        );
+//        return inertia('Brand/Edit', ['brand' => $brand]);
     }
 
     /**
