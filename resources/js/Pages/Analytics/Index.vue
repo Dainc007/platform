@@ -1,16 +1,15 @@
 <script setup xmlns="http://www.w3.org/1999/html">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {Link, router, useForm} from "@inertiajs/vue3";
-import {ref, watch} from 'vue';
-import {Inertia} from "@inertiajs/inertia";
+import { Link, router, useForm } from "@inertiajs/vue3";
+import { ref, watch } from 'vue';
+import { Inertia } from "@inertiajs/inertia";
 
 defineProps({
     products: Object,
-    brands: [],
+    brands: Array,
     currencies: Object,
     files: Object
 });
-
 
 const search = ref('');
 const filter = ref('');
@@ -24,41 +23,42 @@ const form = useForm({
 
 const exportForm = useForm({
     products: []
-})
+});
 
 watch(search, (search) => {
-    router.get('/analytics', {search: search}, {preserveState: true, replace: true});
+    router.get('/analytics', { search: search }, { preserveState: true, replace: true });
 });
 watch(filter, (filter) => {
-    router.get('/analytics', {filter: filter}, {preserveState: true, replace: true});
+    router.get('/analytics', { filter: filter }, { preserveState: true, replace: true });
 });
 
-function exportProducts(form)  {
-    Inertia.post(route('analytics.export', form))
+function exportProducts(form) {
+    Inertia.post(route('analytics.export', form));
 }
 
 function truncate() {
     if (confirm('Are you sure?')) {
         return Inertia.delete(route('analytics.truncate'));
-
     }
 }
 
 function reloadPage(brand_id) {
-    router.reload({only: ['files'], data: {brand_id: brand_id}})
+    router.reload({ only: ['files'], data: { brand_id: brand_id } });
 }
+
 function reloadProducts(event, fileId) {
     const isChecked = event.target.checked;
 
     if (isChecked) {
-        if (!this.form.files.includes(fileId)) {
-            this.form.files.push(fileId);
+        if (!form.files.includes(fileId)) {
+            form.files.push(fileId);
         }
     } else {
-        this.form.files = this.form.files.filter(id => id !== fileId);
+        form.files = form.files.filter(id => id !== fileId);
     }
-    router.reload({only: ['products'], data: {files: this.form.files}})
+    router.reload({ only: ['products'], data: { files: form.files } });
 }
+
 function formatPrice(price) {
     return (price / 100).toFixed(2).replace(".", ",");
 }
