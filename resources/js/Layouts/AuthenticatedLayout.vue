@@ -9,7 +9,14 @@
                 </div>
             </header>
             <FlashMessage></FlashMessage>
-            <!-- Page Content -->
+            <div v-if="props.auth.notifications.length > 0" id="toast-container" class="fixed right-4 top-4 space-y-4">
+            <Toast
+                v-for="notification in props.auth.notifications"
+                :key="notification.id"
+                :type="notification.data.type ? notification.data.type : 'success'"
+                :message="notification.data.message ? notification.data.message : ' '"
+            />
+        </div>
             <main>
                 <slot />
             </main>
@@ -23,6 +30,10 @@ import FlashMessage from "@/Components/FlashMessage.vue";
 
 import { onMounted } from 'vue'
 import { initFlowbite } from 'flowbite'
+import Toast from "@/Components/Toast.vue";
+import {usePage} from "@inertiajs/vue3";
+
+const { props } = usePage();
 
 // initialize components based on data attribute selectors
 onMounted(() => {

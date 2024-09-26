@@ -11,6 +11,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -72,6 +73,7 @@ Route::middleware('auth')->group(function () {
         'brands' => BrandController::class,
         'meetings' => MeetingController::class,
         'vacations' => VacationController::class,
+        'notifications' => NotificationController::class,
     ]);
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', AdminPanelController::class)->name('admin.dashboard');
