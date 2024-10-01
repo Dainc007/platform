@@ -12,51 +12,26 @@ defineProps({
 });
 
 const search = ref('');
-const filter = ref('');
+const selectedFiles = ref([]);
+const brand_id = ref('');
 
-const form = useForm({
-    file: null,
-    files: [],
-    brand_id: null,
-    search: ''
+watch([search, selectedFiles, brand_id], ([newSearch, newFiles, newBrandId]) => {
+    router.get('/analytics', {
+        search: newSearch,
+        brand_id: newBrandId,
+        files: newFiles
+    }, {
+        preserveState: true,
+        preserveScroll: true,
+        replace: true,
+        only: ['products', 'files']
+    });
 });
-
-const exportForm = useForm({
-    products: []
-});
-
-watch(search, (search) => {
-    router.get('/analytics', { search: search }, { preserveState: true, replace: true });
-});
-watch(filter, (filter) => {
-    router.get('/analytics', { filter: filter }, { preserveState: true, replace: true });
-});
-
-function exportProducts(form) {
-    Inertia.post(route('analytics.export', form));
-}
 
 function truncate() {
     if (confirm('Are you sure?')) {
         return Inertia.delete(route('analytics.truncate'));
     }
-}
-
-function reloadPage(brand_id) {
-    router.reload({ only: ['files'], data: { brand_id: brand_id } });
-}
-
-function reloadProducts(event, fileId) {
-    const isChecked = event.target.checked;
-
-    if (isChecked) {
-        if (!form.files.includes(fileId)) {
-            form.files.push(fileId);
-        }
-    } else {
-        form.files = form.files.filter(id => id !== fileId);
-    }
-    router.reload({ only: ['products'], data: { files: form.files } });
 }
 
 function formatPrice(price) {
@@ -70,22 +45,20 @@ function roundedNumber(number) {
 
 <template>
     <AuthenticatedLayout>
-        <div class="p-12">
+        <div class="p-12 text-white">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg min-h-[500px] ">
                 <h1 class="text-white">Wybierz Markę</h1>
                 <div class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
                     <div>
                         <select
-                            @change="reloadPage(form.brand_id)"
                             id="brand"
-                            v-model="form.brand_id"
+                            v-model="brand_id"
                             class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
                         >
                             <option v-for="brand in brands" :key="brand.id" :value="brand.id">
                                 {{ brand.name }}
                             </option>
                         </select>
-                        <div v-if="form.errors.brand_id" class="text-red-500">{{ form.errors.brand_id }}</div>
                     </div>
 
                     <div>
@@ -105,7 +78,7 @@ function roundedNumber(number) {
                                 <li v-for="file in files" :key="file.id" :value="file.id">
                                     <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                                         <input
-                                            @change="reloadProducts($event, file.id)"
+                                            v-model="selectedFiles"
                                             :id="'checkbox-' + file.id" type="checkbox" :value="file.id" name="filter-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                         <label :for="'checkbox-' + file.id" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
                                             {{ file.path.replace('uploads/', '') }}
@@ -140,7 +113,7 @@ function roundedNumber(number) {
                                     </Link>
                                 </li>
                                 <li>
-                                    <a :href="route('analytics.export', form)"
+                                    <a :href="route('analytics.export',{files: selectedFiles})"
                                           class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                         {{ $t('actions.export') }}
                                     </a>

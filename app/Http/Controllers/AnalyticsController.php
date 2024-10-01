@@ -18,14 +18,14 @@ class AnalyticsController extends Controller
 {
     public function index(Request $request)
     {
-        $results = $this->getResults($request)->paginate();
+        $products = $this->getResults($request) ?? TemporaryProduct::with(['brand:id,name']);
 
         return Inertia::render('Analytics/Index', [
-            'products' => Inertia::lazy(fn() => $results ?? TemporaryProduct::with(['brand:id,name'])->paginate()),
-            'brands' => Brand::orderBy('name', 'asc')->get(),
-            'files' => Inertia::lazy(fn() => File::whereHas('products', function ($query) use ($request) {
+            'brands' => fn () => Brand::orderBy('name', 'asc')->get(),
+            'products' => (fn () => ($products->paginate())),
+            'files' => fn () => File::whereHas('products', function ($query) use ($request) {
                 $query->where('brand_id', $request->get('brand_id'));
-            })->get())
+            })->get()
         ]);
     }
 
@@ -41,9 +41,7 @@ class AnalyticsController extends Controller
 
         (Contractor::firstOrCreate(['name' => 'Test Contractor']))->files()->create(['path' => $path]);
 
-        defer(function () use ($path) {
-            ProcessImportJob::dispatch($path)->onQueue('import');
-        });
+        ProcessImportJob::dispatch($path)->onQueue('import');
 
         return to_route('analytics.index')->with(['message' => 'Twój plik jest w trakcie przygotowywania.']);
     }
@@ -71,7 +69,6 @@ class AnalyticsController extends Controller
     {
         $files = $request->get('files') ?? [];
         $search = $request->input('search', '');
-
         return Product::where('products.code', 'LIKE', $search . '%')
             ->whereIn('file_id', $files)
             ->leftJoin('temporary_products', function ($join) {
