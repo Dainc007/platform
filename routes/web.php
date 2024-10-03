@@ -75,9 +75,7 @@ Route::middleware('auth')->group(function () {
     ]);
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', AdminPanelController::class)->name('admin.dashboard');
-        Route::resources([
-            'settings' => SettingController::class,
-        ]);
+        Route::resource('settings', SettingController::class)->only(['index', 'update']);
     });
 });
 

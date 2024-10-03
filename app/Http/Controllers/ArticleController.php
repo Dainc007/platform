@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 class ArticleController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource
      */
     public function index()
     {
@@ -74,6 +74,8 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
+        Gate::authorize('delete', $article);
+
         $article->delete();
 
         return back()->with(['message' => 'Article Deleted Successfully']);

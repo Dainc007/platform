@@ -56,16 +56,18 @@ const updateVacation = () => {
         onSuccess: () => closeModal(),
     });
 };
-
 </script>
 
 <template>
     <AuthenticatedLayout>
-        <div class="p-12">
-            <h1 class="text-white text-center mb-2 text-lg">
+        <template #header>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{$t('vacation.my')}}
                 <span   v-if="form.recentlySuccessful" class="text-lg text-gray-600 dark:text-green-400">{{$t('admin.saved')}}.</span>
-            </h1>
+            </h2>
+        </template>
+        <div class="p-12">
+
             <!--User Panel-->
             <div v-if="!$page.props.auth.isAdmin" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Kolumna z VueDatePicker i przyciskiem -->
@@ -80,7 +82,6 @@ const updateVacation = () => {
                         clearable="true"
                         :select-text="$t('dataPicker.pick')"
                         :cancel-text="$t('dataPicker.cancel')"
-                        :clear-text="123"
                         locale="pl"
                         class="w-full"
                     ></VueDatePicker>

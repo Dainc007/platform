@@ -4,13 +4,15 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\Role;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, Notifiable, HasRoles;
 
@@ -19,7 +21,7 @@ class User extends Authenticatable
      * Roles should be ordered from most to least important.
      */
     public const AVAILABLE_ROLES = [
-        Role::HeadAdmin, Role::Administrator, Role::Moderator
+        Role::HeadAdmin
     ];
 
     /**
@@ -58,7 +60,7 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->hasRole(['head admin', 'admin']);
+        return $this->hasRole(config('permission.default_role'));
     }
 
     public function articles()
@@ -84,5 +86,9 @@ class User extends Authenticatable
     public function meetings(): HasMany
     {
         return $this->hasMany(Meeting::class);
+
+      public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->can('view panel');
     }
 }
