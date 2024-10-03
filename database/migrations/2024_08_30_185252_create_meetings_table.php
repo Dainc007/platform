@@ -15,8 +15,8 @@ return new class extends Migration
         Schema::create('meetings', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
-            $table->timestamp('start_date');
-            $table->timestamp('end_date');
+            $table->timestamp('start_date')->nullable();
+            $table->timestamp('end_date')->nullable();
             $table->integer('hours_worked')->nullable();
             $table->string('status')->default('free');
             $table->timestamps();
