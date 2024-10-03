@@ -19,7 +19,6 @@
             </div>
             <VueDatePicker
                 no-today
-                range
                 :placeholder="'Kliknij tutaj aby wybrać datę'"
                 dark="true"
                 :enableTimePicker="false"
