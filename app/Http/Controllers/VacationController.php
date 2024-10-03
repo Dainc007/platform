@@ -42,9 +42,13 @@ class VacationController extends Controller
     public function store(StoreVacationRequest $request)
     {
         $date = $request->validated('date');
+        $end_at = $date[1] ?? $date[0];
+        $start_at_mysql = date('Y-m-d H:i:s', strtotime($date[0]));
+        $end_at_mysql = date('Y-m-d H:i:s', strtotime($end_at));
+
         $request->user()->vacations()->create([
-            'start_at' => $date[0],
-            'end_at' => $date[1] ?? $date[0],
+            'start_at' => $start_at_mysql,
+            'end_at' =>$end_at_mysql,
             'message' => $request->validated('message') ?? '',
         ]);
 

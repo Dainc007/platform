@@ -7,6 +7,7 @@ use App\Enums\Role;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -82,7 +83,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Vacation::class);
     }
 
-    public function canAccessPanel(Panel $panel): bool
+    public function meetings(): HasMany
+    {
+        return $this->hasMany(Meeting::class);
+
+      public function canAccessPanel(Panel $panel): bool
     {
         return $this->can('view panel');
     }

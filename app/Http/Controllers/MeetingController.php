@@ -5,64 +5,72 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Meeting\StoreMeetingRequest;
 use App\Http\Requests\Meeting\UpdateMeetingRequest;
 use App\Models\Meeting;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class MeetingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
         return inertia('Meeting/Index', [
-
+            'meetings' => $this->getAvailableMeetings($request),
+            'upcomingMeetings' => Meeting::where('start_date', '>=', now()->format('Y-m-d h:i'))->with(['notes' ,'user'])->orderBy('start_date')->paginate(5)
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreMeetingRequest $request): RedirectResponse
     {
-        //
+        $meeting = Meeting::create($request->getForInsert());
+
+        if($request->has('note')) {
+            $meeting->notes()->create([
+                'content' => $request->validated('note')
+            ]);
+        }
+
+        return redirect()->back()->with('message', 'Termin spotkania został zarezerwowany.');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreMeetingRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Meeting $meeting)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Meeting $meeting)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateMeetingRequest $request, Meeting $meeting)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Meeting $meeting)
     {
         //
+    }
+
+    private function getAvailableMeetings(Request $request): array
+    {
+        $firstAvailableMeetingHour = Carbon::createFromTime(Meeting::STARTING_HOUR, 0);
+        $lastAvailableMeetingHour = Carbon::createFromTime(Meeting::FINISHING_HOUR, 0);
+
+        $date = $request->has('date')
+            ? Carbon::parse($request->get('date'))->format('Y-m-d')
+            : today()->format('Y-m-d');
+
+        $availableMeetings = [];
+
+        $bookedMeetings = Meeting::where('start_date', 'LIKE', '%' . $date . '%')
+            ->where('status', 'booked')
+            ->pluck('start_date')
+            ->mapWithKeys(function ($date) {
+                $start = Carbon::parse($date)->format('H:i');
+                $end = Carbon::parse($date)->addMinutes(20)->format('H:i');
+                return [$start => $end];
+            })
+            ->toArray();
+
+        while ($firstAvailableMeetingHour->lt($lastAvailableMeetingHour)) {
+            $from = $firstAvailableMeetingHour->format('H:i');
+            $to   = $firstAvailableMeetingHour->copy()->addMinutes(Meeting::DURATION)->format('H:i');
+            $availableMeetings[$from] = $to;
+            $firstAvailableMeetingHour->addMinutes(Meeting::DURATION);
+        }
+
+        return array_diff($availableMeetings, $bookedMeetings);
     }
 }
