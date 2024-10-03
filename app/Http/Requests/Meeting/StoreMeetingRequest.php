@@ -25,36 +25,11 @@ class StoreMeetingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => [
-                'required',
-                'string',
-                'max:128',
-            ],
-            'description' => [
-                'nullable',
-                'string',
-                'max:512'
-            ],
-            'date' => [
-                'required',
-                'string',
-                'date_format:Y-m-d',
-                'after_or_equal:now'
-            ],
-            'start_date' => [
-                'required',
-                'string',
-                'date_format:Y-m-d H:i:s',
-                'after_or_equal:now',
-                new AvailableStartDate(),
-            ],
-            'end_date' => [
-                'required',
-                'string',
-                'date_format:Y-m-d H:i:s',
-                'after:start_date',
-                new AvailableEndDate(),
-            ],
+            'hoursWorked' => 'integer|min:0',
+            'date' => 'required|date|after_or_equal:today',
+            'note' => 'nullable|string',
+            'startDate' => 'required|date_format:Y-m-d H:i:s',
+            'endDate' => 'required|after:startDate|date_format:Y-m-d H:i:s',
         ];
     }
 
@@ -63,26 +38,21 @@ class StoreMeetingRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        [$startPeriod, $endPeriod] = explode(' - ', isset($this->period) ? $this->period : '');
-
-        $startDate = (new \DateTime($this->date .' '. $startPeriod));
-        $endDate = (new \DateTime($this->date .' '. $endPeriod));
-
         $this->merge([
             'date' => date('Y-m-d', strtotime($this->date)),
-            'start_date' => $startDate->format('Y-m-d H:i:s'),
-            'end_date' => $endDate->format('Y-m-d H:i:s'),
+            'startDate' => date('Y-m-d H:i:s', strtotime($this->hours['start_date'])),
+            'endDate' => date('Y-m-d H:i:s', strtotime($this->hours['end_date'])),
         ]);
     }
 
     public function getForInsert(): array
     {
         return [
-            'title' => $this->title,
-            'description' => $this?->description,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
+            'start_date' => $this->startDate,
+            'end_date' => $this->endDate,
+            'hours_worked' => $this->hoursWorked,
             'user_id' => $this->user()->id,
+            'status' => 'booked'
         ];
     }
 }

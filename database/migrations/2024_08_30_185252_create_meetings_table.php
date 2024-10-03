@@ -14,11 +14,11 @@ return new class extends Migration
     {
         Schema::create('meetings', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description')->nullable();
             $table->foreignIdFor(User::class);
             $table->timestamp('start_date');
             $table->timestamp('end_date');
+            $table->integer('hours_worked')->nullable();
+            $table->string('status')->default('free');
             $table->timestamps();
         });
     }
