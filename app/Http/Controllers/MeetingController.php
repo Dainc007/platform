@@ -23,7 +23,7 @@ class MeetingController extends Controller
     {
         $meeting = Meeting::create($request->getForInsert());
 
-        if($request->has('note')) {
+        if ($request->filled('note')) {
             $meeting->notes()->create([
                 'content' => $request->validated('note')
             ]);
