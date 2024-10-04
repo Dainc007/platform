@@ -35,8 +35,8 @@ class StoreMeetingRequest extends FormRequest
     {
         $this->merge([
             'date' => date('Y-m-d', strtotime($this->date)),
-            'startDate' => date('Y-m-d H:i:s', strtotime($this->hours['start_date'])),
-            'endDate' => date('Y-m-d H:i:s', strtotime($this->hours['end_date'])),
+            'startDate' => date('Y-m-d', strtotime($this->date)) . ' ' . date('H:i:s', strtotime($this->hours['start_date'])),
+            'endDate' => date('Y-m-d', strtotime($this->date)) . ' ' . date('H:i:s', strtotime($this->hours['end_date'])),
         ]);
     }
 

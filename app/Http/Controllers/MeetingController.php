@@ -6,7 +6,6 @@ use App\Http\Requests\Meeting\StoreMeetingRequest;
 use App\Http\Requests\Meeting\UpdateMeetingRequest;
 use App\Models\Meeting;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -30,7 +29,7 @@ class MeetingController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('message', 'Termin spotkania został zarezerwowany.');
+        return redirect()->back();
     }
 
     public function update(UpdateMeetingRequest $request, Meeting $meeting)
