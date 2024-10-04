@@ -87,7 +87,6 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(Meeting::class);
     }
-
       public function canAccessPanel(Panel $panel): bool
     {
         return $this->can('view panel');
