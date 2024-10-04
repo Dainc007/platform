@@ -1,9 +1,10 @@
 <template>
 <AuthenticatedLayout>
+    <h1 v-if="form.recentlySuccessful" class="text-white text-center mt-3 pt-3 font-semibold text-3xl w-full">Spotkanie zostało zaplanowane <span class="text-green-500">poprawnie</span></h1>
+
     <div class="p-12 grid grid-cols-1 md:grid-cols-3 gap-6">
         <section class="space-y-6 md:col-span-1">
             <h2 class="font-semibold text-center text-3xl text-white">Zaplanuj spotkanie</h2>
-            <span   v-if="form.recentlySuccessful" class="text-lg text-gray-600 dark:text-green-400">{{$t('admin.saved')}}.</span>
             <label for="date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Dzień
             </label>
@@ -18,7 +19,6 @@
                 </div>
             </div>
             <VueDatePicker
-                no-today
                 :placeholder="'Kliknij tutaj aby wybrać datę'"
                 dark="true"
                 :enableTimePicker="false"
