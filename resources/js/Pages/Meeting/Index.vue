@@ -119,7 +119,7 @@
                 autofocus
                 autocomplete="hoursWorked"
             />
-            <InputError class="mt-2" :message="$t('form.errors.hoursWorked')" />
+            <InputError class="mt-2" v-if="form.errors.hoursWorked" :message="$t('form.errors.hoursWorked')" />
 
             <TextArea
                 v-model="form.note"

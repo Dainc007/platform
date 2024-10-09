@@ -2,23 +2,24 @@
 
 namespace App\Notifications;
 
-use App\Models\Vacation;
+use App\Models\Meeting;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class VacationStatusChanged extends Notification
+class MeetingCreated extends Notification
 {
     use Queueable;
 
+
+    private Meeting $meeting;
     /**
      * Create a new notification instance.
      */
-    private Vacation $vacation;
-    public function __construct(Vacation $vacation)
+    public function __construct( Meeting $meeting)
     {
-        $this->vacation = $vacation;
+        $this->meeting = $meeting;
     }
 
     /**
@@ -37,13 +38,11 @@ class VacationStatusChanged extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Zmiana statusu wniosku urlopowego')
+            ->subject('Notification Subject')
             ->greeting('Witaj')
-            ->line('Status Twojego wniosku urlopowego uległ zmianie.')
-            ->line('Nowy status wniosku:' . $this->vacation->status)
-            ->lineIf($this->vacation->message, "Dodatkowe informacje: {$this->vacation->message}");
-
-
+            ->line($notifiable->name . ' zaplanował nowe spotkanie.')
+            ->line('godzina rozpoczęcia:' . $this->meeting->start_at)
+            ->lineIf($this->meeting->notes, "Dodatkowa notatka: {$this->meeting->notes->first()->content}");
     }
 
     /**

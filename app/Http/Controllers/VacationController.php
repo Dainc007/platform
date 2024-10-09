@@ -6,6 +6,8 @@ use App\Http\Requests\Vacation\StoreVacationRequest;
 use App\Http\Requests\Vacation\UpdateVacationRequest;
 use App\Models\User;
 use App\Models\Vacation;
+use App\Notifications\MeetingCreated;
+use App\Notifications\VacationRequestCreated;
 use App\Notifications\VacationStatusChanged;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
@@ -46,11 +48,16 @@ class VacationController extends Controller
         $start_at_mysql = date('Y-m-d H:i:s', strtotime($date[0]));
         $end_at_mysql = date('Y-m-d H:i:s', strtotime($end_at));
 
-        $request->user()->vacations()->create([
+        $user = $request->user();
+
+        $vacation = $user->vacations()->create([
             'start_at' => $start_at_mysql,
             'end_at' =>$end_at_mysql,
             'message' => $request->validated('message') ?? '',
         ]);
+
+        User::role('head admin')->firstOrFail()->notify(new VacationRequestCreated($vacation));
+
 
         return redirect()->back();
 
@@ -79,9 +86,7 @@ class VacationController extends Controller
     {
         $vacation->update($request->validated());
 
-//        if($request->has('message')) {
-//            $vacation->user()->notify(new VacationStatusChanged());
-//        }
+        $vacation->user->notify(new VacationStatusChanged($vacation));
 
         return redirect()->back();
     }
