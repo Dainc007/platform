@@ -1,5 +1,5 @@
 {
-    "user.name": "Nazwa",
+    "user.name": "Imię i Nazwisko",
     "user.email": "Email",
     "user.password": "Hasło",
     "user.password.confirm": "Potwierdź Hasło",
@@ -90,6 +90,8 @@
     "dataPicker.cancel": "Anuluj",
     "dataPicker.pick": "Wybierz",
 
-    "meeting.header": "Spotkania"
+    "meeting.header": "Spotkania",
+
+    "form.errors.hoursWorked": "To Pole musi być >= 0"
 
 }
