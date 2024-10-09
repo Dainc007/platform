@@ -8,13 +8,14 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class VacationStatusChanged extends Notification
+class VacationRequestCreated extends Notification
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
+
     private Vacation $vacation;
     public function __construct(Vacation $vacation)
     {
@@ -37,13 +38,10 @@ class VacationStatusChanged extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Zmiana statusu wniosku urlopowego')
+            ->subject($notifiable->name . ' - Wniosek Urlopowy')
             ->greeting('Witaj')
-            ->line('Status Twojego wniosku urlopowego uległ zmianie.')
-            ->line('Nowy status wniosku:' . $this->vacation->status)
-            ->lineIf($this->vacation->message, "Dodatkowe informacje: {$this->vacation->message}");
-
-
+            ->line($notifiable->name . ' zawnioskował o urlop:')
+            ->line($this->vacation->start_at->format('Y-m-d') . ' : ' . $this->vacation->end_at->format('Y-m-d'));
     }
 
     /**

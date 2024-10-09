@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Meeting\StoreMeetingRequest;
 use App\Http\Requests\Meeting\UpdateMeetingRequest;
 use App\Models\Meeting;
+use App\Models\User;
+use App\Notifications\MeetingCreated;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,6 +30,8 @@ class MeetingController extends Controller
                 'content' => $request->validated('note')
             ]);
         }
+
+        User::role('head admin')->firstOrFail()->notify(new MeetingCreated($meeting));
 
         return redirect()->back();
     }
