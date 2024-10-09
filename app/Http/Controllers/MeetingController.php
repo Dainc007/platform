@@ -15,7 +15,7 @@ class MeetingController extends Controller
     {
         return inertia('Meeting/Index', [
             'meetings' => $this->getAvailableMeetings($request),
-            'upcomingMeetings' => Meeting::where('start_date', '>=', now()->format('Y-m-d h:i'))->with(['notes' ,'user'])->orderBy('start_date')->paginate(5)
+            'upcomingMeetings' => Meeting::where('start_date', '>=', now()->format('Y-m-d h:i'))->with(['notes' ,'user'])->orderBy('start_date')->paginate(10)
         ]);
     }
 

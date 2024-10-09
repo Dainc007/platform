@@ -3,74 +3,6 @@
     <h1 v-if="form.recentlySuccessful" class="text-white text-center mt-3 pt-3 font-semibold text-3xl w-full">Spotkanie zostało zaplanowane <span class="text-green-500">poprawnie</span></h1>
 
     <div class="p-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <section class="space-y-6 md:col-span-1">
-            <h2 class="font-semibold text-center text-3xl text-white">Zaplanuj spotkanie</h2>
-            <label for="date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Dzień
-            </label>
-            <div class="hidden">
-                <div class="days">
-                    <div class="days-of-week grid grid-cols-7 mb-1 dow block flex-1 leading-9 border-0 rounded-lg cursor-default text-center text-gray-900 font-semibold text-sm"></div>
-                    <div class="datepicker-grid w-64 grid grid-cols-7 block flex-1 leading-9 border-0 rounded-lg cursor-default text-center text-gray-900 font-semibold text-sm h-6 leading-6 text-sm font-medium text-gray-500 dark:text-gray-400"></div>
-                </div>
-                <div class="calendar-weeks">
-                    <div class="days-of-week flex"><span class="dow h-6 leading-6 text-sm font-medium text-gray-500 dark:text-gray-400"></span></div>
-                    <div class="weeks week block flex-1 leading-9 border-0 rounded-lg cursor-default text-center text-gray-900 font-semibold text-sm"></div>
-                </div>
-            </div>
-            <VueDatePicker
-                :placeholder="'Kliknij tutaj aby wybrać datę'"
-                dark="true"
-                :enableTimePicker="false"
-                v-model="date"
-                clearable="true"
-                :select-text="$t('dataPicker.pick')"
-                :cancel-text="$t('dataPicker.cancel')"
-                :clear-text="123"
-                locale="pl"
-                class="w-full"
-            ></VueDatePicker>
-            <InputError class="mt-2" :message="form.errors.date" />
-
-            <label for="time" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Godzina Spotkania
-            </label>
-            <select
-                v-model="form.hours"
-                id="time"
-                class="mt-1 block w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            >
-                <option v-for="(value, key) in meetings" :key="key" :value="{ start_date: key, end_date: value }">
-                    {{ key }} => {{ value }}
-                </option>
-            </select>
-
-            <InputLabel for="hoursWorked" value="Przepracowane Godziny" />
-            <TextInput
-                name="hoursWorked"
-                id="hoursWorked"
-                type="text"
-                class="mt-1 block w-full"
-                v-model="form.hoursWorked"
-                required
-                autofocus
-                autocomplete="hoursWorked"
-            />
-            <InputError class="mt-2" :message="form.errors.hoursWorked" />
-
-            <TextArea
-                v-model="form.note"
-                name="note"
-                id="note"
-            ></TextArea>
-            <InputError class="mt-2" :message="form.errors.note" />
-            <SecondaryButton
-                :disabled="form.processing"
-                @click="submit(date)"
-                type="submit"
-            >Dodaj</SecondaryButton>
-        </section>
-
         <section class="space-y-6 md:col-span-2" v-if="$page.props.auth.isAdmin">
             <h2 class="font-semibold text-3xl text-white text-center">Nadchodzące Spotkania</h2>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -133,6 +65,73 @@
                     </ul>
                 </nav>
             </div>
+        </section>
+        <section class="space-y-6 md:col-span-1">
+            <h2 class="font-semibold text-center text-3xl text-white">Zaplanuj spotkanie</h2>
+            <label for="date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Dzień
+            </label>
+            <div class="hidden">
+                <div class="days">
+                    <div class="days-of-week grid grid-cols-7 mb-1 dow block flex-1 leading-9 border-0 rounded-lg cursor-default text-center text-gray-900 font-semibold text-sm"></div>
+                    <div class="datepicker-grid w-64 grid grid-cols-7 block flex-1 leading-9 border-0 rounded-lg cursor-default text-center text-gray-900 font-semibold text-sm h-6 leading-6 text-sm font-medium text-gray-500 dark:text-gray-400"></div>
+                </div>
+                <div class="calendar-weeks">
+                    <div class="days-of-week flex"><span class="dow h-6 leading-6 text-sm font-medium text-gray-500 dark:text-gray-400"></span></div>
+                    <div class="weeks week block flex-1 leading-9 border-0 rounded-lg cursor-default text-center text-gray-900 font-semibold text-sm"></div>
+                </div>
+            </div>
+            <VueDatePicker
+                :placeholder="'Kliknij tutaj aby wybrać datę'"
+                dark="true"
+                :enableTimePicker="false"
+                v-model="date"
+                clearable="true"
+                :select-text="$t('dataPicker.pick')"
+                :cancel-text="$t('dataPicker.cancel')"
+                :clear-text="123"
+                locale="pl"
+                class="w-full"
+            ></VueDatePicker>
+            <InputError class="mt-2" :message="form.errors.date" />
+
+            <label for="time" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Godzina Spotkania
+            </label>
+            <select
+                v-model="form.hours"
+                id="time"
+                class="mt-1 block w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            >
+                <option v-for="(value, key) in meetings" :key="key" :value="{ start_date: key, end_date: value }">
+                    {{ key }} => {{ value }}
+                </option>
+            </select>
+
+            <InputLabel for="hoursWorked" value="Przepracowane Godziny" />
+            <TextInput
+                name="hoursWorked"
+                id="hoursWorked"
+                type="text"
+                class="mt-1 block w-full"
+                v-model="form.hoursWorked"
+                required
+                autofocus
+                autocomplete="hoursWorked"
+            />
+            <InputError class="mt-2" :message="$t('form.errors.hoursWorked')" />
+
+            <TextArea
+                v-model="form.note"
+                name="note"
+                id="note"
+            ></TextArea>
+            <InputError class="mt-2" :message="form.errors.note" />
+            <SecondaryButton
+                :disabled="form.processing"
+                @click="submit(date)"
+                type="submit"
+            >Dodaj</SecondaryButton>
         </section>
     </div>
 </AuthenticatedLayout>
