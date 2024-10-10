@@ -20,7 +20,5 @@ class UserSeeder extends Seeder
 
             $user->assignRole(config('permission.default_role'));
         }
-
-         User::factory(100)->create();
     }
 }

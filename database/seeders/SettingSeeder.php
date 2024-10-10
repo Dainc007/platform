@@ -32,6 +32,7 @@ class SettingSeeder extends Seeder
             if (!Setting::where('name', $setting)->exists()) {
                 Setting::factory()->create([
                     'name' => $setting,
+                    'value' => in_array($setting, ['meetings', 'vacations']) ? 1 : 0,
                 ]);
             }
         }

@@ -22,20 +22,11 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Home', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register')
-    ]);
+    return redirect()->route('meetings.index');
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard', [
-        'friend' => Auth::user(),
-        'currentUser' => Auth::user(),
-        'conversation' => Conversation::with(['messages' => function ($query) {
-            $query->orderBy('id', 'desc');
-        }, 'messages.user'])->find(2)
-    ]);
+    return redirect()->route('meetings.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 //todo remove me, it's temporary
