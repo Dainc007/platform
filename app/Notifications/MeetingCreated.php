@@ -43,7 +43,7 @@ class MeetingCreated extends Notification
             ->subject($username . ' Zaplanował Spotkanie')
             ->greeting('Witaj')
             ->line($username . ' zaplanował nowe spotkanie.')
-            ->line('godzina rozpoczęcia: ' . $this->meeting->start_at);
+            ->line('godzina rozpoczęcia: ' . $this->meeting->start_date);
 
         if ($this->meeting->notes && $this->meeting->notes->isNotEmpty()) {
             $mailMessage->line("Dodatkowa notatka: {$this->meeting->notes?->first()->content}");

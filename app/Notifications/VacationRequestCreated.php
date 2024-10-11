@@ -42,7 +42,9 @@ class VacationRequestCreated extends Notification
             ->subject($username . ' - Wniosek Urlopowy')
             ->greeting('Witaj')
             ->line($username . ' zawnioskował o urlop:')
-            ->line($this->vacation->start_at->format('Y-m-d') . ' : ' . $this->vacation->end_at->format('Y-m-d'));
+            ->line($this->vacation->start_at->format('Y-m-d') . ' : ' . $this->vacation->end_at->format('Y-m-d'))
+            ->salutation('Pozdrawiam');
+
     }
 
     /**
