@@ -34,7 +34,7 @@
                                     {{ moment(meeting.start_date).format("D-M-Y") }}
                                 </div>
                                 <div class="text-base font-semibold">
-                                    {{ moment(meeting.start_date).format("h:mm") }}-{{ moment(meeting.end_date).format("h:mm") }}
+                                    {{ moment(meeting.start_date).format("HH:MM") }}-{{ moment(meeting.end_date).format("HH:MM") }}
                                 </div>
                             </div>
                         </td>
