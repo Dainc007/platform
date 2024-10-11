@@ -75,7 +75,6 @@ const updateVacation = () => {
                     <VueDatePicker
                         no-today
                         :placeholder="'Kliknij tutaj aby wybrać datę'"
-                        dark="true"
                         :enableTimePicker="false"
                         range
                         v-model="form.date"
