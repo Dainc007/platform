@@ -1,10 +1,10 @@
 <template>
 <AuthenticatedLayout>
-    <h1 v-if="form.recentlySuccessful" class="text-white text-center mt-3 pt-3 font-semibold text-3xl w-full">Spotkanie zostało zaplanowane <span class="text-green-500">poprawnie</span></h1>
+    <h1 v-if="form.recentlySuccessful" class="dark:text-white text-center mt-3 pt-3 font-semibold text-3xl w-full">Spotkanie zostało zaplanowane <span class="text-green-500">poprawnie</span></h1>
 
     <div class="p-12 grid grid-cols-1 md:grid-cols-3 gap-6">
         <section class="space-y-6 md:col-span-2" v-if="$page.props.auth.isAdmin">
-            <h2 class="font-semibold text-3xl text-white text-center">Nadchodzące Spotkania</h2>
+            <h2 class="font-semibold text-3xl dark:text-white text-center">Nadchodzące Spotkania</h2>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -53,21 +53,23 @@
                     </tr>
                     </tbody>
                 </table>
-                <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
+                <div class="text-green-500 bg-red-500/20">
+                </div>
+                <nav class=" m-2 flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
                     <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
                         <Link
                             v-for="(link, index) in upcomingMeetings.links"
                             :key="index"
                             :href="link.url"
                             class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                            v-html="link.label"
+                            v-html="$t(link.label)"
                         />
                     </ul>
                 </nav>
             </div>
         </section>
         <section class="space-y-6 md:col-span-1">
-            <h2 class="font-semibold text-center text-3xl text-white">Zaplanuj spotkanie</h2>
+            <h2 class="font-semibold text-center text-3xl dark:text-white">Zaplanuj spotkanie</h2>
             <label for="date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Dzień
             </label>
@@ -83,13 +85,11 @@
             </div>
             <VueDatePicker
                 :placeholder="'Kliknij tutaj aby wybrać datę'"
-                dark="true"
                 :enableTimePicker="false"
                 v-model="date"
                 clearable="true"
                 :select-text="$t('dataPicker.pick')"
                 :cancel-text="$t('dataPicker.cancel')"
-                :clear-text="123"
                 locale="pl"
                 class="w-full"
             ></VueDatePicker>

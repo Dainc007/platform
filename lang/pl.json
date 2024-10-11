@@ -94,6 +94,9 @@
 
     "form.errors.hoursWorked": "To Pole musi być >= 0",
 
-    "status.accepted": "Zaakceptowany"
+    "status.accepted": "Zaakceptowany",
+
+    "pagination.previous": "Poprzednia",
+    "pagination.next": "Następna"
 
 }
