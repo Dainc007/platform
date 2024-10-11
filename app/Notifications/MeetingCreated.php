@@ -37,15 +37,19 @@ class MeetingCreated extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        $username = $this->meeting->user->name;
+
         $mailMessage = (new MailMessage)
-            ->subject('Notification Subject')
+            ->subject($username . ' Zaplanował Spotkanie')
             ->greeting('Witaj')
-            ->line($notifiable->name . ' zaplanował nowe spotkanie.')
+            ->line($username . ' zaplanował nowe spotkanie.')
             ->line('godzina rozpoczęcia: ' . $this->meeting->start_at);
 
         if ($this->meeting->notes && $this->meeting->notes->isNotEmpty()) {
             $mailMessage->line("Dodatkowa notatka: {$this->meeting->notes?->first()->content}");
         }
+
+        $mailMessage->salutation('Pozdrawiam');
 
         return $mailMessage;
     }

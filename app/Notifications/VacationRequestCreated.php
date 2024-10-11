@@ -37,10 +37,11 @@ class VacationRequestCreated extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        $username = $this->vacation->user->name;
         return (new MailMessage)
-            ->subject($notifiable->name . ' - Wniosek Urlopowy')
+            ->subject($username . ' - Wniosek Urlopowy')
             ->greeting('Witaj')
-            ->line($notifiable->name . ' zawnioskował o urlop:')
+            ->line($username . ' zawnioskował o urlop:')
             ->line($this->vacation->start_at->format('Y-m-d') . ' : ' . $this->vacation->end_at->format('Y-m-d'));
     }
 
