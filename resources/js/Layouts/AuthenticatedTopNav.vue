@@ -69,11 +69,11 @@ const showingNavigationDropdown = ref(false);
                             </template>
 
                             <template #content>
-                                <template v-if="$page.props.auth.isAdmin">
-<!--                                    <DropdownLink :href="route('admin.dashboard')">{{$t('admin.panel')}}</DropdownLink>-->
-                                    <a class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out"
-                                       :href="route('pulse')">{{ $t('admin.pulse') }}</a>
-                                </template>
+<!--                                <template v-if="$page.props.auth.isAdmin">-->
+<!--&lt;!&ndash;                                    <DropdownLink :href="route('admin.dashboard')">{{$t('admin.panel')}}</DropdownLink>&ndash;&gt;-->
+<!--                                    <a class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out"-->
+<!--                                       :href="route('pulse')">{{ $t('admin.pulse') }}</a>-->
+<!--                                </template>-->
                                 <DropdownLink :href="route('profile.edit')">{{$t('profile')}}</DropdownLink>
                                 <DropdownLink :href="route('logout')" method="post" as="button">
                                     {{$t('logout')}}
@@ -144,10 +144,10 @@ const showingNavigationDropdown = ref(false);
                 </div>
 
                 <div class="mt-3 space-y-1">
-                    <template v-if="$page.props.auth.isAdmin">
-<!--                        <ResponsiveNavLink :href="route('admin.dashboard')">{{$t('admin.panel')}}</ResponsiveNavLink>-->
-                        <ResponsiveNavLink :href="route('pulse')">{{$t('admin.pulse')}}</ResponsiveNavLink>
-                    </template>
+<!--                    <template v-if="$page.props.auth.isAdmin">-->
+<!--&lt;!&ndash;                        <ResponsiveNavLink :href="route('admin.dashboard')">{{$t('admin.panel')}}</ResponsiveNavLink>&ndash;&gt;-->
+<!--                        <ResponsiveNavLink :href="route('pulse')">{{$t('admin.pulse')}}</ResponsiveNavLink>-->
+<!--                    </template>-->
                     <ResponsiveNavLink :href="route('profile.edit')">{{$t('profile')}}</ResponsiveNavLink>
                     <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                         {{$t('logout')}}
