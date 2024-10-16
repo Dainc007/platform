@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\File\CreateFile;
 use App\Actions\Product\CreateProduct;
+use App\Actions\Product\MassCreateProduct;
 use App\Http\Requests\File\StoreFileRequest;
 use App\Http\Requests\File\UpdateFileRequest;
 use App\Models\Contractor;
@@ -39,11 +40,12 @@ class FileController extends Controller
      */
     public function store(StoreFileRequest $request)
     {
-        $data = $request->validated();
-
         $file = CreateFile::handle($request->file('file'), Contractor::findOrFail($request['contractor_id']));
-
-        CreateProduct::fromExcelFile($data, $file);
+        $data = $request->validated();
+        $data['path'] = $file->path;
+        $data['file_id'] = $file->id;
+        unset($data['file']);
+        MassCreateProduct::fromCsvFile($data);
 
         return redirect()->back()->with('success', 'File uploaded successfully!');
     }

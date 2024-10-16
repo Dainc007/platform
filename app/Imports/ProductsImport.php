@@ -32,6 +32,7 @@ class ProductsImport implements ToModel, WithHeadingRow, WithChunkReading, Shoul
         return 100;
     }
 
+    //todo na tym sie wzoruj i sprawdź czy jest ok
     public function model(array $row)
     {
         $price = $row['price_offer'] ?? $row['price_net_eur'];

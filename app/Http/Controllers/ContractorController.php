@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\Contractor\CreateContractor;
 use App\Actions\File\CreateFile;
 use App\Actions\Product\CreateProduct;
+use App\Actions\Product\MassCreateProduct;
 use App\Http\Requests\Contractor\StoreContractorRequest;
 use App\Http\Requests\Contractor\UpdateContractorRequest;
 use App\Models\Brand;
@@ -44,7 +45,9 @@ class ContractorController extends Controller
 
         if($request->hasFile('file')) {
             $file = CreateFile::handle($request->validated('file'), $contractor);
-            CreateProduct::fromExcelFile($request->validated() + ['contractor_id' => $contractor->id], $file);
+            $data = $request->validated() + ['contractor_id' => $contractor->id, 'path' => $file->path, 'file_id' => $file->id];
+            unset($data['file']);
+            MassCreateProduct::fromCsvFile($data);
         }
 
         return redirect()->route('contractors.index')->with('success', 'Contractor added successfully!');

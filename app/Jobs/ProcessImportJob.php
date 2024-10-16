@@ -47,7 +47,7 @@ class ProcessImportJob implements ShouldQueue
                 return $this->formatRow($row);
             });
             $records = $records->toArray();
-            ProcessProductImportJob::dispatch($records)->onQueue('importProducts');
+            ProcessTemporaryProductImportJob::dispatch($records)->onQueue('importProducts');
         });
     }
 

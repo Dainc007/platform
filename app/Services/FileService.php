@@ -7,7 +7,6 @@ use Illuminate\Support\LazyCollection;
 
 class FileService
 {
-
     public string $path;
     public array $headers = [];
     public LazyCollection $collection;
@@ -32,16 +31,17 @@ class FileService
 
     public function loadCollection($separator = ';'): LazyCollection
     {
-        $this->collection = LazyCollection::make(function () use ($separator) {
-            $handle = fopen(storage_path('app/' . $this->path), 'r');
+        $path = storage_path('app/' . $this->path);
+        $handle = fopen($path, 'r');
+
+        $this->collection = LazyCollection::make(function () use ($separator, $handle) {
             while (($line = fgetcsv($handle, 4096)) !== false) {
-                $dataString = implode(", ", $line);
-                $row = explode($separator, $dataString);
-                yield $row;
+                $rowAsString = implode(", ", $line);
+                $rowAsArray = explode($separator, $rowAsString);
+                yield $rowAsArray;
             }
             fclose($handle);
         });
-
         $this->formatHeaders();
         return $this->collection;
     }
@@ -53,7 +53,9 @@ class FileService
     {
         $this->headers = array_map(function ($header) {
             $header = str_replace(' ', '_', $header);
-            return strtolower($header);
+            $header = strtolower($header);
+            $header = in_array($header, ['sku', 'reference number']) ? 'code' : $header;
+            return str_contains($header, 'price') ? 'price' : $header;
         }, $this->collection->first());
     }
 
