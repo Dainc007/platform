@@ -30,6 +30,10 @@ class ProcessTemporaryProductImportJob implements ShouldQueue
      */
     public function handle()
     {
-        return TemporaryProduct::upsert($this->records, ["code", 'brand_id'], ['price']);
+        return TemporaryProduct::upsert($this->records, [
+            'code', 'contractor_id', 'brand_id', 'type'
+        ], [
+            'code', 'price', 'currency_id', 'contractor_id', 'file_id', 'brand_id', 'quantity', 'type'
+        ]);
     }
 }

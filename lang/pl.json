@@ -71,5 +71,7 @@
     "offer.type": "Typ Oferty",
 
     "analytics.header": "Analityka",
-    "analytics.offer.comparison" : "Cenniki do porównania"
+    "analytics.offer.comparison" : "Cenniki do porównania",
+
+    "validation.required" : "To Pole jest wymagane"
 }

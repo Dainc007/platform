@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Contractor\CreateContractor;
+use App\Actions\File\CreateFile;
 use App\Http\Requests\Analytics\CompareOffersRequest;
+use App\Jobs\CreateAnalyticsFile;
 use App\Jobs\ProcessImportJob;
 use App\Models\Brand;
 use App\Models\Contractor;
@@ -12,6 +15,7 @@ use App\Models\TemporaryProduct;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class AnalyticsController extends Controller
@@ -29,19 +33,28 @@ class AnalyticsController extends Controller
         ]);
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        return Inertia::render('Analytics/Import');
+        return Inertia::render('Analytics/Import', [
+            'brands' => Brand::orderBy('name', 'asc')->get(),
+        ]);
     }
 
     public function store(CompareOffersRequest $request)
     {
-        $file = $request->file('file');
-        $path = $file->storeAs('uploads', $file->getClientOriginalName());
-
-        (Contractor::firstOrCreate(['name' => 'Test Contractor']))->files()->create(['path' => $path]);
-
-        ProcessImportJob::dispatch($path)->onQueue('import');
+        try {
+            $contractor = CreateContractor::handle('Analytics');
+            $file = CreateFile::handle(($request->file('file')), $contractor);
+            $data = $request->validated() + [
+                    'path' => $file->path,
+                    'file_id' => $file->id,
+                    'contractor_id' => $contractor->id,
+                ];
+            unset($data['file']);
+            ProcessImportJob::dispatch($data)->onQueue('analytics');
+        } catch (\Exception $e) {
+            Log::error('Error processing records: ' . $e->getMessage());
+        }
 
         return to_route('analytics.index')->with(['message' => 'Twój plik jest w trakcie przygotowywania.']);
     }
@@ -55,8 +68,9 @@ class AnalyticsController extends Controller
     public function export(Request $request)
     {
         $results = $this->getResults($request)->get()->toArray();
-        $service = new FileService('');
-        return $service->writeCsv($results);
+        CreateAnalyticsFile::dispatch($results)->onQueue('analytics');
+
+        return back()->with('message', 'Pllik w trakcie przygotowywania');
     }
 
     //todo fix this!
@@ -70,7 +84,7 @@ class AnalyticsController extends Controller
         $files = $request->get('files') ?? [];
         $search = $request->input('search', '');
         return Product::where('products.code', 'LIKE', $search . '%')
-            ->whereIn('file_id', $files)
+            ->whereIn('products.file_id', $files)
             ->leftJoin('temporary_products', function ($join) {
                 $join->on('products.code', '=', 'temporary_products.code')
                     ->on('products.brand_id', '=', 'temporary_products.brand_id');

@@ -14,9 +14,11 @@ class TemporaryProduct extends Model
         'code',
         'price',
         'currency_id',
+        'contractor_id',
         'file_id',
         'brand_id',
         'quantity',
+        'type'
     ];
 
     public function brand(): BelongsTo
