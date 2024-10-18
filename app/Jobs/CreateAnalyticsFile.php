@@ -4,6 +4,8 @@ namespace App\Jobs;
 
 use App\Actions\Contractor\CreateContractor;
 use App\Actions\File\CreateFile;
+use App\Models\Contractor;
+use App\Models\File;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
@@ -37,25 +39,27 @@ class CreateAnalyticsFile implements ShouldQueue
         $handle = fopen(Storage::path($path), 'w');
 
         $contractor = CreateContractor::handle('Analytics');
-        $file = CreateFile::handle($handle, $contractor);
-        $file->status = 'pending';
+        $file = new File([
+            'path' => $path,
+            'fileable_id' => $contractor->id,
+            'fileable_type' => Contractor::class,
+            'status'    => 'pending'
+        ]);
         $file->save();
-
         fputcsv($handle, ['code', 'brand', 'price', 'offer_price', 'difference', 'percentage' ]); // Nagłówki kolumn
 
         foreach ($this->collection as $key => $row) {
             $data = [
                 $row['code'],
                 $row['brand']['name'],
-                number_format($row['product_price'], 2),
-                number_format($row['temp_product_price'], 2),
-                number_format($row['price_difference'], 2),
+                number_format($row['product_price'] / 100, 2),
+                number_format($row['temp_product_price'] / 100, 2),
+                number_format($row['price_difference'] / 100, 2),
                 number_format($row['price_difference_percentage'], 2),
             ];
             fputcsv($handle, $data);
         }
         fclose($handle);
-
         $file->status = 'ready';
         $file->save();
     }

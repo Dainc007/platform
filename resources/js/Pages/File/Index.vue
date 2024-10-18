@@ -17,6 +17,10 @@ const destroy = (id) => {
     return (destroy)
 }
 
+const download = (id) => {
+    Inertia.get(route('files.show', id));
+}
+
 watch(search, (search) => {
     router.get('/files', { search: search }, { preserveState: true, replace: true });
 });
@@ -27,8 +31,7 @@ watch(search, (search) => {
     <AuthenticatedLayout>
         <div class="p-12">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <div
-                    class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+                <div class="flex items-center justify-between flex-wrap space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
                     <div>
                         <button id="dropdownActionFileButton" data-dropdown-toggle="dropdownActionFile"
                                 class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
@@ -54,8 +57,7 @@ watch(search, (search) => {
                     </div>
                     <label for="table-search" class="sr-only">Search</label>
                     <div class="relative">
-                        <div
-                            class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -63,12 +65,12 @@ watch(search, (search) => {
                             </svg>
                         </div>
                         <input type="text" id="table-search-files"
-                               class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-full md:w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                placeholder="Search for files"
                                v-model="search">
                     </div>
                 </div>
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="p-4">
@@ -81,7 +83,6 @@ watch(search, (search) => {
                         <th scope="col" class="px-6 py-3">
                             Name
                         </th>
-
                         <th scope="col" class="px-6 py-3 text-center">
                             Action
                         </th>
@@ -96,40 +97,29 @@ watch(search, (search) => {
                                 <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
                             </div>
                         </td>
-                        <th scope="row"
-                            class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                        <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                             <div class="ps-3">
                                 <div class="text-base font-semibold">{{ file.path }}</div>
                                 <div class="font-normal text-gray-500">{{file.path}}</div>
                             </div>
                         </th>
-
-
                         <td class="px-6 py-4 text-center">
-                            <button @click="destroy(file.id)" title="Usuń"  class="m-1 p-1 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs px-2 py-1 text-center inline-flex items-center" >
+                            <button @click="destroy(file.id)" title="Usuń" class="m-1 p-1 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs px-2 py-1 text-center inline-flex items-center">
                                 <i class="mx-1 py-1 fa-solid fa-trash"></i> <!-- Ikona usuwania -->
                             </button>
-
+                            <button v-if="file.status === 'ready'" @click="download(file.id)" title="Pobierz" class="m-1 p-1 text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-500 dark:hover:bg-blue-600 border border-blue-200 dark:border-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-100 dark:focus:ring-blue-700 font-medium rounded-lg text-xs px-2 py-1 text-center inline-flex items-center">
+                                <i class="mx-1 py-1 fa-solid fa-download"></i> <!-- Ikona pobierania -->
+                            </button>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
-                     aria-label="Table navigation">
-                    <span
-                        class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
-<!--                        Showing <span-->
-                        <!--                        class="font-semibold text-gray-900 dark:text-white">1-10</span> of <span-->
-                        <!--                        class="font-semibold text-gray-900 dark:text-white">1000</span>-->
-                    </span>
-                    <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-                        <Link
-                            v-if="files && files.links" v-for=" (link, index) in files.links"
-                            :key="index"
-                            :href="link.url"
-                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                            v-html="link.label"
-                        />
+                <nav class="flex items-center flex-wrap justify-between pt-4" aria-label="Table navigation">
+<span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
+<!-- Showing <span class="font-semibold text-gray-900 dark:text-white">1-10</span> of <span class="font-semibold text-gray-900 dark:text-white">1000</span> -->
+</span>
+                    <ul class="inline-flex -space-x-px text-sm h-8">
+                        <Link v-if="files && files.links" v-for="(link, index) in files.links" :key="index" :href="link.url" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" v-html="link.label"/>
                     </ul>
                 </nav>
             </div>

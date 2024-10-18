@@ -68,9 +68,13 @@ class AnalyticsController extends Controller
     public function export(Request $request)
     {
         $results = $this->getResults($request)->get()->toArray();
-        CreateAnalyticsFile::dispatch($results)->onQueue('analytics');
+        $message = 'Nie wybrano plików ani marki';
+        if(!empty($results)) {
+            CreateAnalyticsFile::dispatch($results)->onQueue('analytics');
+            $message = 'Pllik w trakcie przygotowywania';
+        }
 
-        return back()->with('message', 'Pllik w trakcie przygotowywania');
+        return back()->with('message', $message);
     }
 
     //todo fix this!
