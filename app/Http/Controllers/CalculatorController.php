@@ -6,6 +6,8 @@ use App\Http\Requests\StoreCalculatorRequest;
 use App\Http\Requests\UpdateCalculatorRequest;
 use App\Models\Calculator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Env;
+use Illuminate\Support\Facades\DB;
 
 class CalculatorController extends Controller
 {
@@ -14,10 +16,21 @@ class CalculatorController extends Controller
      */
     public function index(Request $request)
     {
+
+        $products = (DB::connection('second_db')
+            ->table('products')
+            ->where('categories_id', '=', 4)
+            ->where(function($query) {
+                $query->where('title', 'like', '%Sofar Solar%')
+                    ->orWhere('title', 'like', '%Hypontech%');
+            })
+            ->get());
+
         return inertia('Calculator/Index', [
             'installationTypes' => Calculator::INSTALLATION_TYPES,
             'panels'  => Calculator::PANELS,
             'montageSystemTypes' => Calculator::MONTAGE_SYSTEM_TYPES,
+            'products' => $products,
         ]);
 
     }

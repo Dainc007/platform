@@ -14,12 +14,42 @@ class Calculator extends Model
     ];
 
     const INSTALLATION_TYPES = [
-        "Instalacja fotowoltaiczna z magazynem energii",
-        "Instalacja fotowoltaiczna",
-        "Magazyn energii",
-        "Instalacja fotowoltaiczna z magazynem energii i magazynem ciepła",
-        "Instalacja fotowoltaiczna z magazynem ciepła",
-        "Magazyn energii z magazynem ciepła"
+        [
+            'title' => 'Instalacja fotowoltaiczna z magazynem energii',
+            'photovoltaics' => true,
+            'energyStorage' => true,
+            'heatStorage' => false,
+        ],
+        [
+            'title' => 'Instalacja fotowoltaiczna',
+            'photovoltaics' => true,
+            'energyStorage' => false,
+            'heatStorage' => false,
+        ],
+        [
+            'title' => 'Magazyn energii',
+            'photovoltaics' => false,
+            'energyStorage' => true,
+            'heatStorage' => false,
+        ],
+        [
+            'title' => 'Instalacja fotowoltaiczna z magazynem energii i magazynem ciepła',
+            'photovoltaics' => true,
+            'energyStorage' => true,
+            'heatStorage' => true,
+        ],
+        [
+            'title' => 'Instalacja fotowoltaiczna z magazynem ciepła',
+            'photovoltaics' => true,
+            'energyStorage' => false,
+            'heatStorage' => true,
+        ],
+        [
+            'title' => 'Magazyn energii z magazynem ciepła',
+            'photovoltaics' => false,
+            'energyStorage' => true,
+            'heatStorage' => true,
+        ]
     ];
 
     const PANELS  = [
@@ -111,7 +141,7 @@ class Calculator extends Model
         "GONT / PAPA",
         "SYSTEM KLEJONY",
         "DACH PŁASKI",
-        "" // wybierz / nie dotyczy
+        "Nie dotyczy"
     ];
 
 
