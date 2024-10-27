@@ -1,11 +1,11 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {router, useForm} from "@inertiajs/vue3";
-import {watch} from 'vue';
+import {useForm, usePage} from "@inertiajs/vue3";
+import {onMounted, watch} from 'vue';
 import Switcher from "@/Components/Switcher.vue";
 import Amount from "@/Components/Inputs/Amount.vue";
 
-defineProps({
+const props = defineProps({
     installationTypes: Array,
     panels: Array,
     montageSystemTypes: Array,
@@ -13,13 +13,18 @@ defineProps({
 });
 
 const form = useForm({
-    installationType: '',
+    installationType: 0,
+    inverter: 'ordinary',
+    setType: 'standard',
+
     isPhotovoltaics: false,
     isEnergyStorage: false,
     isHeatStorage: false,
-    setType: 'standard',
-    panel: 'Trina solar Vertex S+ Dual Glass N-Type Black Frame 1762 x 1134',
+
     panelType: 6,
+    product:'',
+    productsAmount:1,
+    fireProtectionAmount:0,
 
     montage: 'Dach',
     montageSystemType: 'BLACHODACHÓWKA',
@@ -30,19 +35,15 @@ const form = useForm({
     extraCommission: 0,
     finalCommission: 0,
 
-    isMyEnergyGrant: false,
     basicMontagePrice: 36594,
     minSellingPriceNetto: 0,
-    netto: 0,
     vatPercentage:8,
-    vat: 0,
-    brutto: 0,
 
+    isMyEnergyGrant: false,
     freshAirGrant:0,
     thermoDiscount:0,
     thermoDiscountPercentage:12,
-    thermoGrant: 0,
-    finalInvestment: 0,
+
 
     companyCar: 0,
     tunnelFormat: 'Mb',
@@ -64,47 +65,85 @@ const form = useForm({
     confirmOffer:false,
 });
 
+const displayForm = useForm({
+    panel: 'Trina solar Vertex S+ Dual Glass N-Type Black Frame 1762 x 1134',
+
+    netto: 0,
+    vat: 0,
+    brutto: 0,
+
+    thermoGrant: 0,
+    finalInvestment: 0,
+
+    extraCommission: 0,
+    finalCommission: 0,
+
+    isHeatStorage: false,
+    isEnergyStorage: false,
+    isPhotovoltaics: false,
+});
+
+onMounted(() => {
+    triggerCalculator();
+});
+
 function setCalculationType() {
-    form.isPhotovoltaics = form.installationType.photovoltaics;
-    form.isHeatStorage = form.installationType.heatStorage;
-    form.isEnergyStorage = form.installationType.energyStorage;
+    let installationType =     props.installationTypes[form.installationType];
+    displayForm.isPhotovoltaics = installationType.photovoltaics;
+    displayForm.isHeatStorage = installationType.heatStorage;
+    displayForm.isEnergyStorage = installationType.energyStorage;
 }
 
 function setPanelType() {
-    form.panel = form.setType === 'standard' ? 'Trina solar Vertex S+ Dual Glass N-Type Black Frame 1762 x 1134' :
+    displayForm.panel = form.setType === 'standard' ? 'Trina solar Vertex S+ Dual Glass N-Type Black Frame 1762 x 1134' :
         'Sunlink N-type Bifacial Black Frame 1722x1134';
 }
 
 function calculateCommission() {
-    form.finalCommission = form.extraCommission + form.commission;
-    form.minSellingPriceNetto = form.basicMontagePrice + form.constCommission;
+    displayForm.finalCommission = form.extraCommission + form.commission;
+    displayForm.minSellingPriceNetto = form.basicMontagePrice + form.constCommission;
 }
 
 function calculateThermoGrant() {
-    form.thermoGrant = form.freshAirGrant;
+    //na poczatku grant wynosi od 0 do 15k
+    displayForm.thermoGrant = form.freshAirGrant;
 
-    if (form.isMyEnergyGrant && form.isHeatStorage) {
-        form.thermoGrant += form.isPhotovoltaics ? 23000 : 16000;
+    if (form.isMyEnergyGrant || displayForm.isHeatStorage) {
+        displayForm.thermoGrant += displayForm.isPhotovoltaics ? 23000 : 16000;
     }
-    form.thermoDiscount = (form.brutto - form.thermoGrant) * (100 - form.thermoDiscountPercentage) / 100;
-    form.thermoGrant -= form.thermoDiscount;
+
+    displayForm.thermoDiscount = (displayForm.brutto - displayForm.thermoGrant) * form.thermoDiscountPercentage / 100;
+    displayForm.thermoGrant += displayForm.thermoDiscount;
+
 }
 
 function calculatePrice() {
-    form.netto = form.basicMontagePrice;
-    form.vat = form.netto * form.vatPercentage / 100;
-    form.brutto = form.netto + form.vat;
+    displayForm.netto = form.basicMontagePrice +
+        (form.homePlus ? 1000 : 0) +
+        (form.assistancePlus ? 500 : 0) +
+        (form.holidayPlus ? 800 : 0) +
+        (form.isPreFinancing ? 2500 : 0)
+    ;
+
+    displayForm.vat = displayForm.netto * form.vatPercentage / 100;
+    displayForm.brutto = displayForm.netto + displayForm.vat;
+}
+
+function triggerCalculator() {
+    setCalculationType();
+    setPanelType();
+    calculateCommission();
+    calculatePrice();
+    calculateThermoGrant();
+
+    displayForm.finalInvestment = displayForm.brutto - displayForm.thermoGrant;
+
 }
 
 watch(form, (form) => {
-        router.get('/calculators', { form: form }, { preserveState: true, replace: true, preserveScroll: true });
-        setCalculationType();
-        setPanelType();
-        calculateCommission();
-        calculatePrice();
-        calculateThermoGrant();
+        // router.get('/calculators', { form: form }, { preserveState: true, replace: true, preserveScroll: true });
+    triggerCalculator();
 
-    form.finalInvestment = form.brutto - form.thermoGrant;
 });
 </script>
 
@@ -122,7 +161,7 @@ watch(form, (form) => {
                             <div class="mb-5">
                                 <label for="installationType" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Rodzaj instalacji</label>
                                 <select v-model="form.installationType" id="installationType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    <option v-for="(installationType) in installationTypes"  :value="installationType">{{installationType.title}}</option>
+                                    <option v-for="(installationType) in installationTypes"  :value="installationType.id" :key="installationType.id">{{installationType.title}}</option>
                                 </select>
                             </div>
 
@@ -144,7 +183,7 @@ watch(form, (form) => {
                                 </fieldset>
                             </div>
                             <div>
-                                <input v-model="form.panel" disabled
+                                <input v-model="displayForm.panel" disabled
                                        type="text" id="panel" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
                             </div>
                             <div>
@@ -157,20 +196,20 @@ watch(form, (form) => {
                         </div>
 
                         <div class="grid gap-6 mb-6 lg:grid-cols-3">
-                            <select id="inverter" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option>Falownik zwykły</option>
-                                <option>Falownik hybrydowy</option>
+                            <select v-model="form.inverter" id="inverter" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="hybrid">Falownik hybrydowy</option>
+                                <option value="ordinary">Falownik zwykły</option>
                             </select>
 
                             <div>
-                                <select id="product"
+                                <select id="product" v-model="form.product"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    <option v-for="product in products">
+                                    <option v-for="product in products" :key="product.id" :value="product.netto">
                                         {{ product.title }}
                                     </option>
                                 </select>
                             </div>
-                            <Amount id="1" defaultValue="1"/>
+                            <Amount v-model="form.productsAmount" id="1" :defaultValue="1"/>
                         </div>
 
 
@@ -217,7 +256,7 @@ watch(form, (form) => {
                             </div>
 
                             <div>
-                                <Amount id="2" defaultValue="0"/>
+                                <Amount v-model="form.fireProtectionAmount" id="2" :defaultValue="0"/>
                             </div>
 
                         </div>
@@ -245,7 +284,7 @@ watch(form, (form) => {
                             </div>
 
                             <div>
-                                <Amount v-model="form.extraCabelAmount" id="3" defaultValue="0"/>
+                                <Amount v-model="form.extraCabelAmount" id="3" :defaultValue="0"/>
                             </div>
                         </div>
 
@@ -270,7 +309,7 @@ watch(form, (form) => {
                             </div>
 
                             <div>
-                                <Amount v-model="form.tunnelAmount" id="4" defaultValue="0"/>
+                                <Amount v-model="form.tunnelAmount" id="4" :defaultValue="0"/>
                             </div>
                         </div>
 
@@ -315,7 +354,7 @@ watch(form, (form) => {
                             </div>
 
                             <div>
-                                <Amount id="5" defaultValue="0"/>
+                                <Amount id="5" :defaultValue="0" v-model="form.energyStorageAmount"/>
                             </div>
                         </div>
 
@@ -345,7 +384,7 @@ watch(form, (form) => {
                             </div>
 
                             <div>
-                                <Amount id="6" defaultValue="1"/>
+                                <Amount id="6" :defaultValue="1" v-model="form.heatStorageAmount"/>
                             </div>
                         </div>
 
@@ -461,7 +500,7 @@ watch(form, (form) => {
                                             Prowizja Łącznie
                                         </th>
                                         <td class="px-6 py-4">
-                                            {{Number(form.finalCommission).toLocaleString()}} zł
+                                            {{Number(displayForm.finalCommission).toLocaleString()}} zł
                                         </td>
                                     </tr>
                                     <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
@@ -477,7 +516,7 @@ watch(form, (form) => {
                                             Cena minimalna sprzedaży netto
                                         </th>
                                         <td class="px-6 py-4">
-                                            {{ Number(form.minSellingPriceNetto).toLocaleString()}} zł
+                                            {{ Number(displayForm.minSellingPriceNetto).toLocaleString()}} zł
                                         </td>
                                     </tr>
                                     </tbody>
@@ -522,7 +561,7 @@ watch(form, (form) => {
                                         Suma netto
                                     </th>
                                     <td class="px-6 py-4">
-                                        {{ Number(form.netto).toLocaleString() }} zł
+                                        {{ Number(displayForm.netto).toLocaleString() }} zł
                                     </td>
                                 </tr>
                                 <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
@@ -530,7 +569,7 @@ watch(form, (form) => {
                                         VAT
                                     </th>
                                     <td class="px-6 py-4">
-                                        {{ Number(form.vat).toLocaleString() }} zł
+                                        {{ Number(displayForm.vat).toLocaleString() }} zł
                                     </td>
                                 </tr>
                                 <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
@@ -538,7 +577,7 @@ watch(form, (form) => {
                                         Suma brutto
                                     </th>
                                     <td class="px-6 py-4">
-                                        {{ Number(form.brutto).toLocaleString()}} zł
+                                        {{ Number(displayForm.brutto).toLocaleString()}} zł
                                     </td>
                                 </tr>
                                 <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
@@ -546,7 +585,7 @@ watch(form, (form) => {
                                         Ulga termomodernizacyjna
                                     </th>
                                     <td class="px-6 py-4">
-                                        {{ Number(form.thermoGrant).toLocaleString() }} zł
+                                        {{ Number(displayForm.thermoGrant).toLocaleString() }} zł
                                     </td>
                                 </tr>
                                 <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
@@ -554,7 +593,7 @@ watch(form, (form) => {
                                         Finalna wartość inwestycji
                                     </th>
                                     <td class="px-6 py-4">
-                                        {{Number(form.finalInvestment).toLocaleString()}} zł
+                                        {{Number(displayForm.finalInvestment).toLocaleString()}} zł
                                     </td>
                                 </tr>
                                 </tbody>

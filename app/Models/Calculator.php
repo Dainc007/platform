@@ -15,36 +15,42 @@ class Calculator extends Model
 
     const INSTALLATION_TYPES = [
         [
+            'id' => 0,
             'title' => 'Instalacja fotowoltaiczna z magazynem energii',
             'photovoltaics' => true,
             'energyStorage' => true,
             'heatStorage' => false,
         ],
         [
+            'id' => 1,
             'title' => 'Instalacja fotowoltaiczna',
             'photovoltaics' => true,
             'energyStorage' => false,
             'heatStorage' => false,
         ],
         [
+            'id' => 2,
             'title' => 'Magazyn energii',
             'photovoltaics' => false,
             'energyStorage' => true,
             'heatStorage' => false,
         ],
         [
+            'id' => 3,
             'title' => 'Instalacja fotowoltaiczna z magazynem energii i magazynem ciepła',
             'photovoltaics' => true,
             'energyStorage' => true,
             'heatStorage' => true,
         ],
         [
+            'id' => 4,
             'title' => 'Instalacja fotowoltaiczna z magazynem ciepła',
             'photovoltaics' => true,
             'energyStorage' => false,
             'heatStorage' => true,
         ],
         [
+            'id' => 5,
             'title' => 'Magazyn energii z magazynem ciepła',
             'photovoltaics' => false,
             'energyStorage' => true,

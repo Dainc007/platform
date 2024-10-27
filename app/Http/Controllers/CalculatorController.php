@@ -21,11 +21,10 @@ class CalculatorController extends Controller
             ->table('products')
             ->where('categories_id', '=', 4)
             ->where(function($query) {
-                $query->where('title', 'like', '%Sofar Solar%')
-                    ->orWhere('title', 'like', '%Hypontech%');
+                $query->where('title', 'like', '%Sofar Solar%');
+//                    ->orWhere('title', 'like', '%Hypontech%');
             })
             ->get());
-
         return inertia('Calculator/Index', [
             'installationTypes' => Calculator::INSTALLATION_TYPES,
             'panels'  => Calculator::PANELS,

@@ -8,7 +8,7 @@ const props = defineProps({
     },
 
     defaultValue: {
-        type: String
+        type: Number
     }
 });
 </script>
