@@ -1,15 +1,35 @@
 <script setup>
-
+import { ref, watch } from 'vue';
 
 const props = defineProps({
     id: {
         type: String,
         required: true,
     },
-
     defaultValue: {
-        type: Number
+        type: Number,
+        default: 0
     }
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+const value = ref(props.defaultValue);
+
+const increment = () => {
+    value.value++;
+    emit('update:modelValue', value.value);
+};
+
+const decrement = () => {
+    if (value.value > 0) {
+        value.value--;
+        emit('update:modelValue', value.value);
+    }
+};
+
+watch(() => props.defaultValue, (newValue) => {
+    value.value = newValue;
 });
 </script>
 
@@ -17,6 +37,7 @@ const props = defineProps({
     <div class="relative flex items-center max-w-[8rem]">
         <button type="button" :id="'decrement-button' + id"
                 :data-input-counter-decrement="'quantity-input' + id"
+                @click="decrement"
                 class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
             <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
@@ -28,10 +49,12 @@ const props = defineProps({
                data-input-counter aria-describedby="helper-text-explanation"
                class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                :placeholder="defaultValue" required
-               :value="defaultValue"
+               :value="value"
+               @input="event => emit('update:modelValue', event.target.value)"
         />
         <button type="button" :id="'increment-button' + id"
                 :data-input-counter-increment="'quantity-input' + id"
+                @click="increment"
                 class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
             <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
