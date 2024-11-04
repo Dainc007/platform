@@ -12,6 +12,7 @@ class Product extends Model
     use HasFactory;
 
     const AVAILABLE_TYPES = ['standard', 'stock'];
+    const TYPE_STOCK = 'stock';
 
     protected $fillable = [
         'code',
