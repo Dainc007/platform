@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\LazyCollection;
 
 class FileService
@@ -57,8 +56,5 @@ class FileService
             $header = in_array($header, ['sku', 'reference number']) ? 'code' : $header;
             return str_contains($header, 'price') ? 'price' : $header;
         }, $this->collection->first());
-
-        Log::info("File reading: {$this->path}");
-        Log::info("File headers: " . json_encode($this->headers));
     }
 }

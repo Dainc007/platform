@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class MassCreateProductJob implements ShouldQueue
 {
@@ -37,10 +38,9 @@ class MassCreateProductJob implements ShouldQueue
     {
         $fileService = new FileService($this->data['path']);
         $headers = $fileService->getHeaders();
-        $skipHeaders = 1;
         $chunkSize = 2500;
 
-        $fileService->getCollection()->skip($skipHeaders)->chunk($chunkSize)->each(
+        $fileService->getCollection()->chunk($chunkSize)->each(
             function ($chunk) use ($headers) {
                 $records = $chunk->map(function ($row) use ($headers) {
                     $this->processBaseOnType($row, $headers);
