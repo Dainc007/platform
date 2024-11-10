@@ -32,6 +32,18 @@ class MassCreateProductJob implements ShouldQueue
     }
 
     /**
+     * @param array $headers
+     * @param array $row
+     * @return int|mixed
+     */
+    public static function getQuantity(array $headers, array $row): mixed
+    {
+        $quantityIndex = array_search('qty', $headers);
+        $quantity = $quantityIndex !== false ? $row[$quantityIndex] : 1;
+        return $quantity;
+    }
+
+    /**
      * Execute the job.
      */
     public function handle(): void
@@ -62,7 +74,7 @@ class MassCreateProductJob implements ShouldQueue
             'contractor_id' => (int)$data['contractor_id'],
             'type' => $data['type'],
             'file_id' => $data['file_id'],
-            'quantity' => $row[array_search('qty', $headers)] ?? 1,
+            'quantity' =>  self::getQuantity($headers, $row),
         ];
     }
 
