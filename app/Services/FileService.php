@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Exception;
 use Illuminate\Support\LazyCollection;
 
 class FileService
@@ -23,15 +24,25 @@ class FileService
         return $this->headers;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getCollection(): LazyCollection
     {
         return $this->collection ?? $this->loadCollection();
     }
 
+    /**
+     * @throws Exception
+     */
     public function loadCollection($separator = ';'): LazyCollection
     {
         $path = storage_path('app/' . $this->path);
         $handle = fopen($path, 'r');
+
+        if(!$handle) {
+            throw new Exception('Unable to open file: ' . $path);
+        }
 
         $this->collection = LazyCollection::make(function () use ($separator, $handle) {
             while (($line = fgetcsv($handle, 4096)) !== false) {
