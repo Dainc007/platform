@@ -2,6 +2,10 @@
 <AuthenticatedLayout>
     <h1 v-if="form.recentlySuccessful" class="dark:text-white text-center mt-3 pt-3 font-semibold text-3xl w-full">Spotkanie zostało zaplanowane <span class="text-green-500">poprawnie</span></h1>
 
+    <MultiStepForm>
+
+    </MultiStepForm>
+
     <div class="p-12 grid grid-cols-1 md:grid-cols-3 gap-6">
         <section class="space-y-6 md:col-span-2" v-if="$page.props.auth.isAdmin">
             <h2 class="font-semibold text-3xl dark:text-white text-center">Nadchodzące Spotkania</h2>
@@ -68,11 +72,9 @@
                 </nav>
             </div>
         </section>
+
         <section class="space-y-6 md:col-span-1">
             <h2 class="font-semibold text-center text-3xl dark:text-white">Zaplanuj spotkanie</h2>
-            <label for="date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Dzień
-            </label>
             <div class="hidden">
                 <div class="days">
                     <div class="days-of-week grid grid-cols-7 mb-1 dow block flex-1 leading-9 border-0 rounded-lg cursor-default text-center text-gray-900 font-semibold text-sm"></div>
@@ -83,8 +85,7 @@
                     <div class="weeks week block flex-1 leading-9 border-0 rounded-lg cursor-default text-center text-gray-900 font-semibold text-sm"></div>
                 </div>
             </div>
-            <VueDatePicker
-                :placeholder="'Kliknij tutaj aby wybrać datę'"
+            <VueDatePicker v-show="showCalendar"
                 :enableTimePicker="false"
                 v-model="date"
                 clearable="true"
@@ -92,24 +93,26 @@
                 :cancel-text="$t('dataPicker.cancel')"
                 locale="pl"
                 class="w-full"
+                inline
+                @update:model-value="handleDate"
             ></VueDatePicker>
             <InputError class="mt-2" :message="form.errors.date" />
 
-            <label for="time" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label v-show="showTimeField" for="time" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Godzina Spotkania
             </label>
-            <select
+            <select v-show="showTimeField" @change="handleTime"
                 v-model="form.hours"
                 id="time"
                 class="mt-1 block w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
                 <option v-for="(value, key) in meetings" :key="key" :value="{ start_date: key, end_date: value }">
-                    {{ key }} => {{ value }}
+                    {{ key }}
                 </option>
             </select>
 
-            <InputLabel for="hoursWorked" value="Przepracowane Godziny" />
-            <TextInput
+            <InputLabel v-show="showExtraFields" for="hoursWorked" value="Przepracowane Godziny" />
+            <TextInput v-show="showExtraFields"
                 name="hoursWorked"
                 id="hoursWorked"
                 type="text"
@@ -121,13 +124,15 @@
             />
             <InputError class="mt-2" v-if="form.errors.hoursWorked" :message="$t('form.errors.hoursWorked')" />
 
-            <TextArea
-                v-model="form.note"
-                name="note"
-                id="note"
-            ></TextArea>
+            <div v-show="false">
+                           <TextArea
+                               v-model="form.note"
+                               name="note"
+                               id="note"
+                           />
+            </div>
             <InputError class="mt-2" :message="form.errors.note" />
-            <SecondaryButton
+            <SecondaryButton v-show="showConfirmButton"
                 :disabled="form.processing"
                 @click="submit(date)"
                 type="submit"
@@ -143,15 +148,18 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import VueDatePicker from "@vuepic/vue-datepicker";
 import {Link, router, useForm} from "@inertiajs/vue3";
 import {ref, watch} from "vue";
-import TextInput from "@/Components/TextInput.vue";
-import InputLabel from "@/Components/InputLabel.vue";
+
 import InputError from "@/Components/InputError.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import TextInput from "@/Components/TextInput.vue";
 import TextArea from "@/Components/TextArea.vue";
-import moment from "moment/moment.js";
+import MultiStepForm from "@/Components/Form/MultiStepForm.vue";
 
 
 const date = ref('');
+let showTimeField, showConfirmButton, showExtraFields = ref(false);
+let showCalendar = ref(true);
 
 const form = useForm({
    hoursWorked: null,
@@ -175,4 +183,16 @@ const submit = (date) => {
 watch(date, (date) => {
   router.get('/meetings', { date: date }, { preserveState: true, replace: true });
 });
+
+const handleDate = (modelData) => {
+    showTimeField = true;
+    showCalendar = false;
+}
+
+const handleTime = () => {
+    showTimeField = false;
+    showExtraFields = true;
+    showConfirmButton = true;
+}
+
 </script>

@@ -6,6 +6,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\MeetingController;
@@ -22,12 +23,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return redirect()->route('meetings.index');
-});
-
-Route::get('/dashboard', function () {
-    return redirect()->route('meetings.index');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return redirect()->route('dashboard.index');
+})->name('dashboard');
 
 //todo remove me, it's temporary
 Route::get('/chat', function () {
@@ -63,6 +60,7 @@ Route::middleware('auth')->group(function () {
         'brands' => BrandController::class,
         'meetings' => MeetingController::class,
         'vacations' => VacationController::class,
+        'dashboard' => DashboardController::class,
     ]);
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', AdminPanelController::class)->name('admin.dashboard');
