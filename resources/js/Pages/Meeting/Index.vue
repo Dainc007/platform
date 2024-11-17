@@ -2,9 +2,11 @@
 <AuthenticatedLayout>
     <h1 v-if="form.recentlySuccessful" class="dark:text-white text-center mt-3 pt-3 font-semibold text-3xl w-full">Spotkanie zostało zaplanowane <span class="text-green-500">poprawnie</span></h1>
 
-    <MultiStepForm>
-
-    </MultiStepForm>
+    <template #header>
+        <div class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            <MultiStepForm :steps="steps" :activeStep="activeStep" />
+        </div>
+    </template>
 
     <div class="p-12 grid grid-cols-1 md:grid-cols-3 gap-6">
         <section class="space-y-6 md:col-span-2" v-if="$page.props.auth.isAdmin">
@@ -87,14 +89,13 @@
             </div>
             <VueDatePicker v-show="showCalendar"
                 :enableTimePicker="false"
-                v-model="date"
+                v-model="form.date"
                 clearable="true"
                 :select-text="$t('dataPicker.pick')"
                 :cancel-text="$t('dataPicker.cancel')"
                 locale="pl"
                 class="w-full"
-                inline
-                @update:model-value="handleDate"
+                inline @date-update="handleDate"
             ></VueDatePicker>
             <InputError class="mt-2" :message="form.errors.date" />
 
@@ -124,7 +125,8 @@
             />
             <InputError class="mt-2" v-if="form.errors.hoursWorked" :message="$t('form.errors.hoursWorked')" />
 
-            <div v-show="false">
+
+            <div v-show="showExtraFields">
                            <TextArea
                                v-model="form.note"
                                name="note"
@@ -132,11 +134,27 @@
                            />
             </div>
             <InputError class="mt-2" :message="form.errors.note" />
-            <SecondaryButton v-show="showConfirmButton"
-                :disabled="form.processing"
-                @click="submit(date)"
-                type="submit"
-            >Dodaj</SecondaryButton>
+            <SecondaryButton v-show="showExtraFields"
+                             @click="goToConfirmation"
+                             :disabled="form.hoursWorked == null || form.hoursWorked <= 0 "
+            >Przejdź do Podsumowania
+            </SecondaryButton>
+            <div v-show="showConfirmButton">
+
+                <p>Pracownik: {{$page.props.auth.user.name}}</p>
+                <p>Start Spotkania: {{moment(form.date).format("D-M-Y HH:MM")}}</p>
+
+                <p>Przepracowane godziny {{form.hoursWorked}}</p>
+                <p v-show="form.note">Notatka {{form.note}}</p>
+
+                <SecondaryButton
+                    :disabled="form.processing"
+                    @click="submit(date)"
+                    type="submit"
+                >Potwierdź</SecondaryButton>
+            </div>
+
+
         </section>
     </div>
 </AuthenticatedLayout>
@@ -155,6 +173,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import TextArea from "@/Components/TextArea.vue";
 import MultiStepForm from "@/Components/Form/MultiStepForm.vue";
+import moment from "moment/moment";
 
 
 const date = ref('');
@@ -185,6 +204,7 @@ watch(date, (date) => {
 });
 
 const handleDate = (modelData) => {
+    form.date = modelData;
     showTimeField = true;
     showCalendar = false;
 }
@@ -192,7 +212,21 @@ const handleDate = (modelData) => {
 const handleTime = () => {
     showTimeField = false;
     showExtraFields = true;
-    showConfirmButton = true;
+    activeStep.value = 3;
 }
+
+const goToConfirmation = () => {
+    showExtraFields = false;
+    showConfirmButton = true;
+    activeStep.value = 4;
+}
+
+const activeStep = ref(2);
+const steps = [
+    { title: 'Operacja', description: '' },
+    { title: 'Data i czas', description: '' },
+    { title: 'Dane', description: '' },
+    { title: 'Potwierdzenie', description: '' }
+];
 
 </script>

@@ -9,9 +9,16 @@ import { ref} from "vue";
 import Modal from "@/Components/Modal.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextArea from "@/Components/TextArea.vue";
+import MultiStepForm from "@/Components/Form/MultiStepForm.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import TextInput from "@/Components/TextInput.vue";
 
 const form = useForm({
-    date: null,
+    hoursWorked: null,
+    note: null,
+    startDate: null,
+    endDate: null,
     status: null,
     vacation: null,
     message: ''
@@ -56,92 +63,154 @@ const updateVacation = () => {
         onSuccess: () => closeModal(),
     });
 };
+const handleStartDate = (modelData) => {
+    form.startDate = modelData;
+}
+
+const handleEndDate = (modelData) => {
+    form.endDate = modelData;
+    if (form.startDate) {
+        showCalendar = false;
+        showExtraFields = true;
+    }
+}
+
+let showTimeField, showConfirmButton, showExtraFields = ref(false);
+let showCalendar = ref(true);
+
+const activeStep = 2;
+const steps = [
+    { title: 'Operacja', description: '' },
+    { title: 'Data i czas', description: '' },
+    { title: 'Dane', description: '' },
+    { title: 'Potwierdzenie', description: '' }
+];
+
 </script>
 
 <template>
     <AuthenticatedLayout>
+
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{$t('vacation.my')}}
+            <div class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                <MultiStepForm :steps="steps" :activeStep="activeStep" />
                 <span   v-if="form.recentlySuccessful" class="text-lg text-gray-600 dark:text-green-400">{{$t('admin.saved')}}.</span>
-            </h2>
+            </div>
         </template>
+
+
+
         <div class="p-12">
+
+
 
             <!--User Panel-->
             <div v-if="!$page.props.auth.isAdmin" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Kolumna z VueDatePicker i przyciskiem -->
                 <div class="flex flex-col items-start space-y-4">
                     <VueDatePicker
+                        v-show="showCalendar"
                         no-today
-                        :placeholder="'Kliknij tutaj aby wybrać datę'"
+                        inline
                         :enableTimePicker="false"
-                        range
-                        v-model="form.date"
+                        v-model="form.startDate"
                         clearable="true"
                         :select-text="$t('dataPicker.pick')"
                         :cancel-text="$t('dataPicker.cancel')"
                         locale="pl"
                         class="w-full"
+                        @date-update="handleStartDate"
                     ></VueDatePicker>
-                    <PrimaryButton
-                        class="w-full flex justify-center"
-                        @click="!form.processing && form.post(route('vacations.store'))"
-                    >
-                        {{$t('vacation.apply')}}
-                    </PrimaryButton>
-                    <div v-if="form.errors.date" class="text-red-500">{{ form.errors.date }}</div>
+                    <div v-if="form.errors.startDate" class="text-red-500">{{ form.errors.startDate }}</div>
                 </div>
+
+                <div class="flex flex-col items-start space-y-4">
+                    <VueDatePicker
+                        v-show="showCalendar"
+                        no-today
+                        inline
+                        :enableTimePicker="false"
+                        v-model="form.endDate"
+                        clearable="true"
+                        :select-text="$t('dataPicker.pick')"
+                        :cancel-text="$t('dataPicker.cancel')"
+                        locale="pl"
+                        class="w-full"
+                        @date-update="handleEndDate"
+                    ></VueDatePicker>
+                </div>
+
+                <InputLabel v-show="showExtraFields" for="hoursWorked" value="Przepracowane Godziny" />
+                <TextInput v-show="showExtraFields"
+                           name="hoursWorked"
+                           id="hoursWorked"
+                           type="text"
+                           class="mt-1 block w-full"
+                           v-model="form.hoursWorked"
+                           required
+                           autofocus
+                           autocomplete="hoursWorked"
+                />
+                <InputError class="mt-2" v-if="form.errors.hoursWorked" :message="$t('form.errors.hoursWorked')" />
+
+                <div v-show="showExtraFields">
+                           <TextArea
+                               v-model="form.note"
+                               name="note"
+                               id="note"
+                           />
+                </div>
+                <InputError class="mt-2" :message="form.errors.note" />
 
                 <!-- Kolumna z tabelą -->
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="px-9">
-                                {{$t('vacation.date')}}
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                {{$t('vacation.status')}}
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                {{$t('vacation.message')}}
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for="vacation in vacations" v-if="vacations" :key="vacation.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                            <th scope="row"
-                                class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                <div class="ps-3">
-                                    <div class="text-base font-semibold">{{ vacation.start_at }} - {{ vacation.end_at }}</div>
-                                    <div :class="getStatusClass(vacation.status)">{{ $t('vacation.status.' + vacation.status)}}</div>
-                                </div>
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                <svg v-if="vacation.status === 'accepted'" class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-gray-800 dark:text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd" d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z" clip-rule="evenodd"/>
-                                </svg>
+<!--                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">-->
+<!--                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">-->
+<!--                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">-->
+<!--                        <tr>-->
+<!--                            <th scope="col" class="px-9">-->
+<!--                                {{$t('vacation.date')}}-->
+<!--                            </th>-->
+<!--                            <th scope="col" class="px-6 py-3">-->
+<!--                                {{$t('vacation.status')}}-->
+<!--                            </th>-->
+<!--                            <th scope="col" class="px-6 py-3">-->
+<!--                                {{$t('vacation.message')}}-->
+<!--                            </th>-->
+<!--                        </tr>-->
+<!--                        </thead>-->
+<!--                        <tbody>-->
+<!--                        <tr v-for="vacation in vacations" v-if="vacations" :key="vacation.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">-->
+<!--                            <th scope="row"-->
+<!--                                class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">-->
+<!--                                <div class="ps-3">-->
+<!--                                    <div class="text-base font-semibold">{{ vacation.start_at }} - {{ vacation.end_at }}</div>-->
+<!--                                    <div :class="getStatusClass(vacation.status)">{{ $t('vacation.status.' + vacation.status)}}</div>-->
+<!--                                </div>-->
+<!--                            </th>-->
+<!--                            <th scope="col" class="px-6 py-3">-->
+<!--                                <svg v-if="vacation.status === 'accepted'" class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-gray-800 dark:text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">-->
+<!--                                    <path fill-rule="evenodd" d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z" clip-rule="evenodd"/>-->
+<!--                                </svg>-->
 
-                                <svg v-if="vacation.status === 'rejected'" class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-gray-800 dark:text-red-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z" clip-rule="evenodd"/>
-                                </svg>
+<!--                                <svg v-if="vacation.status === 'rejected'" class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-gray-800 dark:text-red-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">-->
+<!--                                    <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z" clip-rule="evenodd"/>-->
+<!--                                </svg>-->
 
-                                <svg v-if="vacation.status === 'cancelled'" class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                </svg>
+<!--                                <svg v-if="vacation.status === 'cancelled'" class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">-->
+<!--                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>-->
+<!--                                </svg>-->
 
-                                <svg v-if="vacation.status === 'pending'" class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-gray-800 dark:text-white animate-spin-slow" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M18.5 4h-13m13 16h-13M8 20v-3.333a2 2 0 0 1 .4-1.2L10 12.6a1 1 0 0 0 0-1.2L8.4 8.533a2 2 0 0 1-.4-1.2V4h8v3.333a2 2 0 0 1-.4 1.2L13.957 11.4a1 1 0 0 0 0 1.2l1.643 2.867a2 2 0 0 1 .4 1.2V20H8Z"/>
-                                </svg>
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                {{vacation.message ?? $t('vacation.none')}}
-                            </th>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+<!--                                <svg v-if="vacation.status === 'pending'" class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-gray-800 dark:text-white animate-spin-slow" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">-->
+<!--                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M18.5 4h-13m13 16h-13M8 20v-3.333a2 2 0 0 1 .4-1.2L10 12.6a1 1 0 0 0 0-1.2L8.4 8.533a2 2 0 0 1-.4-1.2V4h8v3.333a2 2 0 0 1-.4 1.2L13.957 11.4a1 1 0 0 0 0 1.2l1.643 2.867a2 2 0 0 1 .4 1.2V20H8Z"/>-->
+<!--                                </svg>-->
+<!--                            </th>-->
+<!--                            <th scope="col" class="px-6 py-3">-->
+<!--                                {{vacation.message ?? $t('vacation.none')}}-->
+<!--                            </th>-->
+<!--                        </tr>-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+<!--                </div>-->
             </div>
             <!--Admin Panel-->
             <div v-if="$page.props.auth.isAdmin" class="grid grid-cols-1 md:grid-cols-2 gap-6">
