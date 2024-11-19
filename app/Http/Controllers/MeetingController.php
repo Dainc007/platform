@@ -33,7 +33,7 @@ class MeetingController extends Controller
 
         User::role('head admin')->firstOrFail()->notify(new MeetingCreated($meeting));
 
-        return redirect()->back();
+        return redirect()->to('dashboard');
     }
 
     public function update(UpdateMeetingRequest $request, Meeting $meeting)

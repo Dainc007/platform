@@ -4,9 +4,27 @@
 
     <template #header>
         <div class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            <MultiStepForm :steps="steps" :activeStep="activeStep" />
+            <ul id="steps" class="steps">
+                <li class="step step-primary">Operacje</li>
+                <li class="step">Data</li>
+                <li class="step">Dane</li>
+                <li class="step">Potwierdzenie</li>
+            </ul>
         </div>
     </template>
+
+    <div v-show="activeStep === 1">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="overflow-hidden shadow-sm sm:rounded-lg my-2 mx-auto">
+                <Link :href="route('meetings.index')" class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 text-center">
+                    Spotkania
+                </Link>
+                <Link :href="route('vacations.index')" class="block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center">
+                    Wniosek o dni wolne
+                </Link>
+            </div>
+        </div>
+    </div>
 
     <div class="p-12 grid grid-cols-1 md:grid-cols-3 gap-6">
         <section class="space-y-6 md:col-span-2" v-if="$page.props.auth.isAdmin">
@@ -75,8 +93,7 @@
             </div>
         </section>
 
-        <section class="space-y-6 md:col-span-1">
-            <h2 class="font-semibold text-center text-3xl dark:text-white">Zaplanuj spotkanie</h2>
+        <section class="md:col-span-1">
             <div class="hidden">
                 <div class="days">
                     <div class="days-of-week grid grid-cols-7 mb-1 dow block flex-1 leading-9 border-0 rounded-lg cursor-default text-center text-gray-900 font-semibold text-sm"></div>
@@ -87,75 +104,141 @@
                     <div class="weeks week block flex-1 leading-9 border-0 rounded-lg cursor-default text-center text-gray-900 font-semibold text-sm"></div>
                 </div>
             </div>
-            <VueDatePicker v-show="showCalendar"
+            <Link v-show="activeStep === 2 && subStep === 1" :href="route('dashboard')">
+                <i class="fas fa-arrow-left text-blue-500"> Cofnij</i>
+            </Link>
+            <VueDatePicker v-show="activeStep === 2 && subStep === 1"
                 :enableTimePicker="false"
                 v-model="form.date"
                 clearable="true"
                 :select-text="$t('dataPicker.pick')"
                 :cancel-text="$t('dataPicker.cancel')"
                 locale="pl"
-                class="w-full"
+                           :min-date="new Date()"
+                class="w-full mt-3"
                 inline @date-update="handleDate"
+                           :disabled-dates="disablePastDates"
             ></VueDatePicker>
             <InputError class="mt-2" :message="form.errors.date" />
-
-            <label v-show="showTimeField" for="time" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Godzina Spotkania
-            </label>
-            <select v-show="showTimeField" @change="handleTime"
-                v-model="form.hours"
-                id="time"
-                class="mt-1 block w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            >
-                <option v-for="(value, key) in meetings" :key="key" :value="{ start_date: key, end_date: value }">
-                    {{ key }}
-                </option>
-            </select>
-
-            <InputLabel v-show="showExtraFields" for="hoursWorked" value="Przepracowane Godziny" />
-            <TextInput v-show="showExtraFields"
-                name="hoursWorked"
-                id="hoursWorked"
-                type="text"
-                class="mt-1 block w-full"
-                v-model="form.hoursWorked"
-                required
-                autofocus
-                autocomplete="hoursWorked"
-            />
-            <InputError class="mt-2" v-if="form.errors.hoursWorked" :message="$t('form.errors.hoursWorked')" />
-
-
-            <div v-show="showExtraFields">
-                           <TextArea
-                               v-model="form.note"
-                               name="note"
-                               id="note"
-                           />
-            </div>
-            <InputError class="mt-2" :message="form.errors.note" />
-            <SecondaryButton v-show="showExtraFields"
-                             @click="goToConfirmation"
-                             :disabled="form.hoursWorked == null || form.hoursWorked <= 0 "
-            >Przejdź do Podsumowania
-            </SecondaryButton>
-            <div v-show="showConfirmButton">
-
-                <p>Pracownik: {{$page.props.auth.user.name}}</p>
-                <p>Start Spotkania: {{moment(form.date).format("D-M-Y HH:MM")}}</p>
-
-                <p>Przepracowane godziny {{form.hoursWorked}}</p>
-                <p v-show="form.note">Notatka {{form.note}}</p>
-
-                <SecondaryButton
-                    :disabled="form.processing"
-                    @click="submit(date)"
-                    type="submit"
-                >Potwierdź</SecondaryButton>
-            </div>
-
-
         </section>
+
+        <div v-show="activeStep === 1">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="overflow-hidden shadow-sm sm:rounded-lg my-2 mx-auto">
+                    <Link :href="route('meetings.index')" class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 text-center">
+                        Spotkania
+                    </Link>
+                    <Link :href="route('vacations.index')" class="block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center">
+                        Wniosek o dni wolne
+                    </Link>
+                </div>
+            </div>
+        </div>
+
+        <div v-show="activeStep === 1">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="overflow-hidden shadow-sm sm:rounded-lg my-2 mx-auto">
+                    <Link :href="route('meetings.index')" class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 text-center">
+                        Spotkania
+                    </Link>
+                    <Link :href="route('vacations.index')" class="block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center">
+                        Wniosek o dni wolne
+                    </Link>
+                </div>
+            </div>
+        </div>
+
+        <div v-show="activeStep === 1">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="overflow-hidden shadow-sm sm:rounded-lg my-2 mx-auto">
+                    <Link :href="route('meetings.index')" class="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 text-center">
+                        Spotkania
+                    </Link>
+                    <Link :href="route('vacations.index')" class="block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center">
+                        Wniosek o dni wolne
+                    </Link>
+                </div>
+            </div>
+        </div>
+
+        <div v-show="activeStep === 2 && subStep === 2">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="overflow-hidden shadow-sm sm:rounded-lg my-2 mx-auto">
+                    <i class="fas fa-arrow-left text-blue-500" @click="subStep -= 1;"> Cofnij</i>
+                    <InputLabel class="mt-3" for="time" value="Godzina Spotkania"/>
+                    <select
+                        @change="handleTime"
+                        v-model="form.hours"
+                        id="time"
+                        class="mt-1 block w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    >
+                        <option v-for="(value, key) in meetings" :key="key"
+                                :value="{ start_date: key, end_date: value }">
+                            {{ key }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div v-show="activeStep === 3 && subStep === 1">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="overflow-hidden shadow-sm sm:rounded-lg my-2 mx-auto">
+                    <i class="fas fa-arrow-left text-blue-500" @click="subStep = 2; activeStep = 2;"> Cofnij</i>
+
+                    <InputLabel class="mt-3" for="hoursWorked" value="Przepracowane Godziny"/>
+                    <TextInput
+                        name="hoursWorked"
+                        id="hoursWorked"
+                        type="text"
+                        class="mt-1 block w-full"
+                        v-model="form.hoursWorked"
+                        required
+                        autofocus
+                        autocomplete="hoursWorked"
+                    />
+                    <InputError class="mt-2" v-if="form.errors.hoursWorked" :message="$t('form.errors.hoursWorked')"/>
+
+                    <TextArea
+                        v-model="form.note"
+                        name="note"
+                        id="note"
+                    />
+                    <InputError class="mt-2" :message="form.errors.note"/>
+                    <SecondaryButton
+                        class="my-2"
+                        @click="nextStep"
+                        :disabled="form.hoursWorked == null || form.hoursWorked <= 0 "
+                    >Przejdź do Podsumowania
+                    </SecondaryButton>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div v-show="activeStep === 4">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="overflow-hidden shadow-sm sm:rounded-lg my-2 mx-auto p-3">
+                    <i class="fas fa-arrow-left text-blue-500" @click="prevStep"> Cofnij</i>
+                    <p class="text-gray-700 font-semibold">Pracownik: {{$page.props.auth.user.name}}</p>
+                    <p class="text-gray-600">Start Spotkania: {{moment(form.date).format("D-M-Y")}}</p>
+                    <p class="text-gray-600" v-if="form.hours">Godzina: {{form.hours.start_date}}</p>
+                    <p class="text-gray-600">Przepracowane godziny: {{form.hoursWorked}}</p>
+                    <p v-show="form.note" class="text-gray-600">Notatka: {{form.note}}</p>
+
+                    <SecondaryButton
+                        :disabled="form.processing"
+                        @click="submit(date)"
+                        type="submit"
+                        class="mt-4 bg-blue-500 py-2 px-4 rounded hover:bg-blue-400 hover:text-white disabled:opacity-50"
+                    >
+                        Potwierdź
+                    </SecondaryButton>
+                </div>
+            </div>
+        </div>
+
     </div>
 </AuthenticatedLayout>
 </template>
@@ -176,9 +259,27 @@ import MultiStepForm from "@/Components/Form/MultiStepForm.vue";
 import moment from "moment/moment";
 
 
-const date = ref('');
-let showTimeField, showConfirmButton, showExtraFields = ref(false);
-let showCalendar = ref(true);
+const date = ref(new Date());
+const activeStep = ref(2);
+const subStep = ref(1);
+
+function prevStep() {
+    activeStep.value -= 1;
+}
+
+function nextStep() {
+    activeStep.value += 1;
+    subStep.value = 1;
+}
+
+const handleDate = (modelData) => {
+    form.date = modelData;
+    subStep.value += 1;
+}
+
+const handleTime = (modelData) => {
+    nextStep();
+}
 
 const form = useForm({
    hoursWorked: null,
@@ -202,31 +303,5 @@ const submit = (date) => {
 watch(date, (date) => {
   router.get('/meetings', { date: date }, { preserveState: true, replace: true });
 });
-
-const handleDate = (modelData) => {
-    form.date = modelData;
-    showTimeField = true;
-    showCalendar = false;
-}
-
-const handleTime = () => {
-    showTimeField = false;
-    showExtraFields = true;
-    activeStep.value = 3;
-}
-
-const goToConfirmation = () => {
-    showExtraFields = false;
-    showConfirmButton = true;
-    activeStep.value = 4;
-}
-
-const activeStep = ref(2);
-const steps = [
-    { title: 'Operacja', description: '' },
-    { title: 'Data i czas', description: '' },
-    { title: 'Dane', description: '' },
-    { title: 'Potwierdzenie', description: '' }
-];
 
 </script>
