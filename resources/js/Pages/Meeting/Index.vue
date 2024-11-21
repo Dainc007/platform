@@ -4,12 +4,60 @@
 
     <template #header>
         <div class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            <ul id="steps" class="steps">
-                <li class="step step-primary">Operacje</li>
-                <li class="step">Data</li>
-                <li class="step">Dane</li>
-                <li class="step">Potwierdzenie</li>
-            </ul>
+            <Link v-show="activeStep === 2 && subStep === 1" :href="route('dashboard')">
+                <i class="fas fa-arrow-left text-blue-500"> Cofnij</i>
+            </Link>
+            <i  v-show="activeStep === 2 && subStep === 2"  class="fas fa-arrow-left text-blue-500" @click="subStep -= 1;"> Cofnij</i>
+            <i v-show="activeStep === 3 && subStep === 1" class="fas fa-arrow-left text-blue-500" @click="subStep = 2; activeStep = 2;"> Cofnij</i>
+            <i v-show="activeStep === 4" class="fas fa-arrow-left text-blue-500" @click="prevStep"> Cofnij</i>
+
+          <ol v-if="!$page.props.auth.isAdmin" class=" mt-3 items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse">
+              <li :class="['flex items-center dark:text-blue-500 space-x-2.5 rtl:space-x-reverse', { 'text-blue-600': activeStep === 1 }]">
+                  <span
+            class="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-blue-500">
+            1
+        </span>
+              <span>
+            <h3 class="font-medium leading-tight">Operacja</h3>
+        </span>
+            </li>
+              <li :class="['flex items-center dark:text-blue-500 space-x-2.5 rtl:space-x-reverse', { 'text-blue-600': activeStep === 2 }]">
+        <span
+            class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
+            2
+        </span>
+              <span>
+            <h3 class="font-medium leading-tight">Data (spotkania i wniosek o dni wolne)</h3>
+        </span>
+            </li>
+              <li :class="['flex items-center dark:text-blue-500 space-x-2.5 rtl:space-x-reverse', { 'text-blue-600': activeStep === 3 }]">
+        <span
+            class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
+            3
+        </span>
+              <span>
+            <h3 class="font-medium leading-tight">Dane</h3>
+        </span>
+            </li>
+              <li :class="['flex items-center dark:text-blue-500 space-x-2.5 rtl:space-x-reverse', { 'text-blue-600': activeStep === 4 }]">
+        <span
+            class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
+            4
+        </span>
+                  <span>
+            <h3 class="font-medium leading-tight">Potwierdzenie</h3>
+        </span>
+              </li>
+          </ol>
+
+
+
+            <!--            <ul id="steps" class="steps">-->
+<!--                <li class="step step-primary">Operacje</li>-->
+<!--                <li class="step">Data</li>-->
+<!--                <li class="step">Dane</li>-->
+<!--                <li class="step">Potwierdzenie</li>-->
+<!--            </ul>-->
         </div>
     </template>
 
@@ -26,10 +74,10 @@
         </div>
     </div>
 
-    <div class="p-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="p-12 grid grid-cols-1 ">
         <section class="space-y-6 md:col-span-2" v-if="$page.props.auth.isAdmin">
             <h2 class="font-semibold text-3xl dark:text-white text-center">Nadchodzące Spotkania</h2>
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <div class="relative shadow-md sm:rounded-lg overflow-x-auto">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -45,10 +93,23 @@
                         <th scope="col" class="px-6 py-3 text-center">
                             notatka
                         </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            akcje
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="meeting in upcomingMeetings.data" v-if="upcomingMeetings.data.length" :key="meeting.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <tr
+                                v-for="meeting in upcomingMeetings.data"
+                                v-if="upcomingMeetings.data.length"
+                                :key="meeting.id"
+                                :class="{
+                                        'bg-green-100': meeting.status === 'done',
+                                        'bg-orange-100': meeting.status === 'cancelled',
+                                        'bg-white': meeting.status !== 'done' && meeting.status !== 'cancelled',
+                                        'border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-200 dark:hover:bg-gray-600': true
+                                        }"
+                            >
                         <td class="px-6 py-4 text-center">
                             {{ meeting.user.name }}
                         </td>
@@ -68,11 +129,25 @@
                         <td class="px-6 py-4 text-center">
                             <template v-if="meeting.notes">
                                 <div class="max-h-24 overflow-y-auto">
-<span v-for="note in meeting.notes" :key="note.id">
-{{ note.content }}
-</span>
+                                    <span v-for="note in meeting.notes" :key="note.id">
+                                    {{ note.content }}
+                                    </span>
                                 </div>
                             </template>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <svg v-show="meeting.status !== 'done'" @click="handleUpdateMeeting(meeting, 'done')"
+                                                         class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd" d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z" clip-rule="evenodd"/>
+                            </svg>
+
+                            <svg v-show="meeting.status !== 'cancelled'" @click="handleUpdateMeeting(meeting, 'cancelled')"
+                                 class="w-6 h-6 text-red-600 dark:text-white"
+                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                 fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                      stroke-width="2" d="M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                            </svg>
                         </td>
                     </tr>
                     </tbody>
@@ -104,10 +179,8 @@
                     <div class="weeks week block flex-1 leading-9 border-0 rounded-lg cursor-default text-center text-gray-900 font-semibold text-sm"></div>
                 </div>
             </div>
-            <Link v-show="activeStep === 2 && subStep === 1" :href="route('dashboard')">
-                <i class="fas fa-arrow-left text-blue-500"> Cofnij</i>
-            </Link>
-            <VueDatePicker v-show="activeStep === 2 && subStep === 1"
+
+            <VueDatePicker v-if="!$page.props.auth.isAdmin" v-show="activeStep === 2 && subStep === 1"
                 :enableTimePicker="false"
                 v-model="form.date"
                 clearable="true"
@@ -164,7 +237,6 @@
         <div v-show="activeStep === 2 && subStep === 2">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="overflow-hidden shadow-sm sm:rounded-lg my-2 mx-auto">
-                    <i class="fas fa-arrow-left text-blue-500" @click="subStep -= 1;"> Cofnij</i>
                     <InputLabel class="mt-3" for="time" value="Godzina Spotkania"/>
                     <select
                         @change="handleTime"
@@ -184,8 +256,6 @@
         <div v-show="activeStep === 3 && subStep === 1">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="overflow-hidden shadow-sm sm:rounded-lg my-2 mx-auto">
-                    <i class="fas fa-arrow-left text-blue-500" @click="subStep = 2; activeStep = 2;"> Cofnij</i>
-
                     <InputLabel class="mt-3" for="hoursWorked" value="Przepracowane Godziny"/>
                     <TextInput
                         name="hoursWorked"
@@ -220,7 +290,6 @@
         <div v-show="activeStep === 4">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="overflow-hidden shadow-sm sm:rounded-lg my-2 mx-auto p-3">
-                    <i class="fas fa-arrow-left text-blue-500" @click="prevStep"> Cofnij</i>
                     <p class="text-gray-700 font-semibold">Pracownik: {{$page.props.auth.user.name}}</p>
                     <p class="text-gray-600">Start Spotkania: {{moment(form.date).format("D-M-Y")}}</p>
                     <p class="text-gray-600" v-if="form.hours">Godzina: {{form.hours.start_date}}</p>
@@ -263,6 +332,13 @@ const date = ref(new Date());
 const activeStep = ref(2);
 const subStep = ref(1);
 
+function handleUpdateMeeting(meeting, status){
+    if (updateMeeting.processing) {
+        return;
+    }
+    updateMeeting.status = status;
+    updateMeeting.put(route('meetings.update', meeting), {        preserveScroll: true});
+}
 function prevStep() {
     activeStep.value -= 1;
 }
@@ -286,6 +362,10 @@ const form = useForm({
     date: date,
     note: null,
     hours: null
+});
+
+const updateMeeting = useForm( {
+    status: ''
 });
 
 defineProps({

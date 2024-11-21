@@ -20,8 +20,8 @@ class VacationController extends Controller
         $user = Auth::user();
 
         $vacations = $user->isAdmin()
-            ? Vacation::where('status', 'pending')->with('user:id,name')->get()
-            : $user->vacations()->orderBy('id', 'desc')->get();
+            ? Vacation::with('user:id,name')->orderBy('id', 'desc')->paginate()
+            : $user->vacations()->orderBy('id', 'desc')->paginate();
 
         return inertia('Vacation/Index', [
             'vacations' => $vacations,
@@ -43,10 +43,10 @@ class VacationController extends Controller
      */
     public function store(StoreVacationRequest $request)
     {
-        $date = $request->validated('date');
-        $end_at = $date[1] ?? $date[0];
-        $start_at_mysql = date('Y-m-d H:i:s', strtotime($date[0]));
-        $end_at_mysql = date('Y-m-d H:i:s', strtotime($end_at));
+        $data = $request->validated();
+
+        $start_at_mysql = date('Y-m-d H:i:s', strtotime($data['startDate']));
+        $end_at_mysql = date('Y-m-d H:i:s', strtotime($data['endDate']));
 
         $user = $request->user();
 
@@ -54,13 +54,18 @@ class VacationController extends Controller
             'start_at' => $start_at_mysql,
             'end_at' =>$end_at_mysql,
             'message' => $request->validated('message') ?? '',
+            'hours_worked' => $data['hours_worked'] ?? 0,
         ]);
+
+        if ($request->filled('note')) {
+            $vacation->notes()->create([
+                'content' => $request->validated('note')
+            ]);
+        }
 
         User::role('head admin')->firstOrFail()->notify(new VacationRequestCreated($vacation));
 
-
-        return redirect()->back();
-
+        return redirect()->to('dashboard');
     }
 
     /**

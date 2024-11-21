@@ -15,9 +15,11 @@ class MeetingController extends Controller
 {
     public function index(Request $request)
     {
+
         return inertia('Meeting/Index', [
             'meetings' => $this->getAvailableMeetings($request),
-            'upcomingMeetings' => Meeting::where('start_date', '>=', now()->format('Y-m-d h:i'))->with(['notes' ,'user'])->orderBy('start_date')->paginate(10)
+//            'upcomingMeetings' => Meeting::where('start_date', '>=', now()->format('Y-m-d h:i'))->with(['notes' ,'user'])->orderBy('start_date')->paginate(10)
+            'upcomingMeetings' => Meeting::with(['notes' ,'user'])->orderBy('start_date', 'desc')->paginate(10)
         ]);
     }
 
@@ -38,7 +40,7 @@ class MeetingController extends Controller
 
     public function update(UpdateMeetingRequest $request, Meeting $meeting)
     {
-        //
+        $meeting->update($request->validated());
     }
 
     public function destroy(Meeting $meeting)
