@@ -251,7 +251,7 @@ function nextStep() {
                         </thead>
                         <tbody>
                         <tr v-for="vacation in vacations.data" v-if="vacations" :key="vacation.id"
-                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-200 dark:hover:bg-gray-600"
+                            class="border-b hover:bg-blue-200"
                             :class="{
                                         'bg-green-100': vacation.status === 'accepted',
                                         'bg-red-100': vacation.status === 'rejected',

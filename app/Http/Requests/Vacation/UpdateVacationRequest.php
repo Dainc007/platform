@@ -25,4 +25,19 @@ class UpdateVacationRequest extends FormRequest
             'end_at' => ['nullable', 'date', 'after_or_equal:start_at'],
         ];
     }
+
+    public function validated($key = null, $default = null)
+    {
+        $validated = parent::validated();
+
+        if (is_null($validated['start_at'])) {
+            unset($validated['start_at']);
+        }
+
+        if (is_null($validated['end_at'])) {
+            unset($validated['end_at']);
+        }
+
+        return $validated;
+    }
 }
