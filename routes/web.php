@@ -1,19 +1,15 @@
 <?php
 
 use App\Http\Controllers\AnalyticsController;
-use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\ConversationController;
-use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\FtpController;
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\UserController;
-use App\Models\Brand;
+
 use App\Models\Conversation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -53,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
         'contractors' => ContractorController::class,
         'brands' => BrandController::class,
         'analytics' => AnalyticsController::class,
+        'ftp' => FtpController::class,
     ]);
 });
 
