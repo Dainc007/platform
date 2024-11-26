@@ -57,6 +57,9 @@ const showingNavigationDropdown = ref(false);
                         <NavLink :href="route('analytics.index')" :active="route().current('analytics*')">
                             {{$t('nav.analytics')}}
                         </NavLink>
+                        <NavLink :href="route('ftp.index')" :active="route().current('ftp*')">
+                                FTP
+                        </NavLink>
 <!--                        <NavLink :href="route('notes.index')" :active="route().current('notes*')">-->
 <!--                            {{$t('nav.notes')}}-->
 <!--                        </NavLink>-->
@@ -169,6 +172,9 @@ const showingNavigationDropdown = ref(false);
               </ResponsiveNavLink>
                 <ResponsiveNavLink :href="route('files.index')" :active="route().current('files*')">
                     {{$t('nav.analytics')}}
+                </ResponsiveNavLink>
+                <ResponsiveNavLink :href="route('ftp.index')" :active="route().current('ftp*')">
+                    FTP
                 </ResponsiveNavLink>
 <!--                <ResponsiveNavLink :href="route('notes.index')" :active="route().current('notes*')">-->
 <!--                    {{$t('nav.notes')}}-->
