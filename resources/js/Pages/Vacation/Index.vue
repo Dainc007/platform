@@ -13,6 +13,7 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import moment from "moment";
+import {Inertia} from "@inertiajs/inertia";
 
 const form = useForm({
     hoursWorked: null,
@@ -38,6 +39,13 @@ const reply = (vacation) => {
     form.vacation = vacation;
     form.status = vacation.status;
 };
+
+const destroy = (id) => {
+    if(confirm('Jesteś pewien?')) {
+        Inertia.delete(route('vacations.destroy', id))
+    }
+    return (destroy)
+}
 
 const response = ref(false);
 let model = ref(null);
@@ -124,20 +132,19 @@ function nextStep() {
                     <li :class="['flex items-center dark:text-blue-500 space-x-2.5 rtl:space-x-reverse', { 'text-blue-600': activeStep === 3 }]">
         <span
             class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-            4
+            3
         </span>
                         <span>
-            <h3 class="font-medium leading-tight">Potwierdzenie</h3>
+            <h3 class="font-medium leading-tight">Dane</h3>
         </span>
                     </li>
                     <li :class="['flex items-center dark:text-blue-500 space-x-2.5 rtl:space-x-reverse', { 'text-blue-600': activeStep === 4 }]">
         <span
             class="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
-            3
+            4
         </span>
                         <span>
-            <h3 class="font-medium leading-tight">Payment info</h3>
-            <p class="text-sm">Step details here</p>
+            <h3 class="font-medium leading-tight">Potwierdzenie</h3>
         </span>
                     </li>
                 </ol>
@@ -294,14 +301,17 @@ function nextStep() {
                                 </svg>
                             </th>
                             <th class="px-6 py-4">
-                                <button @click="reply(vacation)">
-                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                                         viewBox="0 0 24 24">
-                                        <path
-                                            d="M14.502 7.046h-2.5v-.928a2.122 2.122 0 0 0-1.199-1.954 1.827 1.827 0 0 0-1.984.311L3.71 8.965a2.2 2.2 0 0 0 0 3.24L8.82 16.7a1.829 1.829 0 0 0 1.985.31 2.121 2.121 0 0 0 1.199-1.959v-.928h1a2.025 2.025 0 0 1 1.999 2.047V19a1 1 0 0 0 1.275.961 6.59 6.59 0 0 0 4.662-7.22 6.593 6.593 0 0 0-6.437-5.695Z"/>
-                                    </svg>
-                                </button>
+                                <div class="flex space-x-2">
+                                    <button @click="reply(vacation)" class="p-2 dark:bg-gray-800 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M14.502 7.046h-2.5v-.928a2.122 2.122 0 0 0-1.199-1.954 1.827 1.827 0 0 0-1.984.311L3.71 8.965a2.2 2.2 0 0 0 0 3.24L8.82 16.7a1.829 1.829 0 0 0 1.985.31 2.121 2.121 0 0 0 1.199-1.959v-.928h1a2.025 2.025 0 0 1 1.999 2.047V19a1 1 0 0 0 1.275.961 6.59 6.59 0 0 0 4.662-7.22 6.593 6.593 0 0 0-6.437-5.695Z"/>
+                                        </svg>
+                                    </button>
+
+                                    <button @click="destroy(vacation.id)" title="Usuń" class="p-2 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs inline-flex items-center">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
                             </th>
                         </tr>
                         </tbody>

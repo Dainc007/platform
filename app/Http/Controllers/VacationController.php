@@ -101,6 +101,9 @@ class VacationController extends Controller
      */
     public function destroy(Vacation $vacation)
     {
-        //
+
+        $vacation->delete();
+
+        return back()->with(['message' => 'Rekord został usunięty']);
     }
 }
