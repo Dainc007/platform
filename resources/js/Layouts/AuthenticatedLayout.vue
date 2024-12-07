@@ -35,7 +35,6 @@ import {usePage} from "@inertiajs/vue3";
 
 const { props } = usePage();
 
-// initialize components based on data attribute selectors
 onMounted(() => {
     initFlowbite();
 })

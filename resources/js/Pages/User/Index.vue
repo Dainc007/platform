@@ -3,7 +3,6 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
 import DataTable from "@/Components/Table/DataTable.vue";
 import Search from "@/Components/Table/Search.vue";
-import ActionDropdown from "@/Components/Table/ActionDropdown.vue";
 
 defineProps({
     users: Array,
@@ -18,8 +17,7 @@ defineProps({
         <div class="p-12">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <DataTable :rows="users" :columns="columns" :values="values">
-                    <ActionDropdown></ActionDropdown>
-                    <Search :model="'users'"></Search>
+                    <Search :model="'users'"/>
                 </DataTable>
             </div>
         </div>

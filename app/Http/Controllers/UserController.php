@@ -10,7 +10,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::whereAny(['name', 'email'], 'LIKE', '%' . $request->input('search', '') . '%')->paginate(10)->through(function ($item) {
+        $users = User::whereAny(['name', 'email'], 'LIKE', '%' . $request->input('search', '') . '%')->paginate(5)->through(function ($item) {
         return  [
             'id'   => $item->id,
             'name' => $item->name,
@@ -20,7 +20,7 @@ class UserController extends Controller
 
         return inertia('User/Index', [
             'users' => $users,
-            'columns' => ['name', 'status']]
+            'columns' => ['users.name', 'users.status']]
         );
     }
 
@@ -32,5 +32,12 @@ class UserController extends Controller
     public function show()
     {
         return back()->with(['message' => 'Feature Not Supported']);
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+
+        return back()->with(['message' => 'Deleted']);
     }
 }

@@ -7,19 +7,17 @@ defineProps({
 </script>
 
 <template>
-    <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
-         aria-label="Table navigation">
-
+    <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between p-4" aria-label="Table navigation">
         <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
             <Link
-                v-for=" (link, index) in links"
+                v-for="(link, index) in links"
                 :key="index"
                 :href="link.url"
                 :class="[
-                    'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 border border-gray-300 dark:border-gray-700 dark:text-gray-400',
-                    link.active ? 'bg-white text-white' : 'bg-white hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white'
-                ]"
-                v-html="link.label"
+'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 border border-gray-300 dark:border-gray-700 dark:text-gray-400',
+link.active ? 'bg-blue-500 text-white dark:bg-blue-700 dark:text-white' : 'bg-white hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white'
+]"
+                v-html="$t(link.label)"
                 preserve-scroll
             />
         </ul>
