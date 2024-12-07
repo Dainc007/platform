@@ -63,5 +63,13 @@
     "modal.send": "Send",
 
     "dataPicker.cancel": "Cancel",
-    "dataPicker.pick": "Pick"
+    "dataPicker.pick": "Pick",
+
+    "startSearching": "Search for...",
+    "confirm.deletion": "Are you Sure you want to delete this record?",
+
+    "users.name": "Name",
+    "users.status": "Status",
+
+    "brands.name": "Name"
 }

@@ -92,6 +92,16 @@
 
     "meeting.header": "Spotkania",
 
-    "form.errors.hoursWorked": "To Pole musi być >= 0"
+    "form.errors.hoursWorked": "To Pole musi być >= 0",
 
+    "pagination.previous": "Wstecz",
+    "pagination.next": "Następna",
+
+    "startSearching": "Wyszukaj...",
+    "confirm.deletion": "Jesteś pewien, że chcesz to zrobić?",
+
+    "users.name": "Imię i Nazwisko",
+    "users.status": "Dostępność",
+
+    "brands.name": "Marka"
 }

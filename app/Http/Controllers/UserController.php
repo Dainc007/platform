@@ -5,22 +5,26 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::whereAny(['name', 'email'], 'LIKE', '%' . $request->input('search', '') . '%')->paginate(5)->through(function ($item) {
-        return  [
-            'id'   => $item->id,
-            'name' => $item->name,
-            'email' => $item->email
-        ];
-    });
-
-        return inertia('User/Index', [
-            'users' => $users,
-            'columns' => ['users.name', 'users.status']]
+        return Inertia::render('User/Index', [
+                'columns' => [
+                    'users.name',
+                    'users.status'
+                ],
+                'users' => User::whereAny(['name', 'email'], 'LIKE', '%' . $request->input('search', '') . '%')
+                    ->paginate(5)->through(function ($item) {
+                        return [
+                            'id' => $item->id,
+                            'name' => $item->name,
+                            'email' => $item->email
+                        ];
+                    }),
+            ]
         );
     }
 

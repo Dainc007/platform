@@ -32,7 +32,7 @@
 <!--            </td>-->
             <th scope="row"
                 class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                <img class="w-10 h-10 rounded-full"
+                <img v-if="hasImage" class="w-10 h-10 rounded-full"
                      :src="'https://i.pravatar.cc/150?u=' + row.id"
                      alt="Jese image">
                 <div class="ps-3">
@@ -40,7 +40,7 @@
                     <div class="font-normal text-gray-500">{{row.email}}</div>
                 </div>
             </th>
-            <td class="px-6 py-4">
+            <td v-if="hasImage" class="px-6 py-4">
                 <div v-if="Math.random() >= 0.5" class="flex items-center">
                     <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
                     Online
@@ -68,6 +68,7 @@ import TableEditButton from "@/Components/Table/Button/TableEditButton.vue";
 
 defineProps({
     rows: Object,
-    columns: Array
+    columns: Array,
+    hasImage:false
 });
 </script>

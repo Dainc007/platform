@@ -6,14 +6,23 @@ use App\Http\Requests\Brand\StoreBrandRequest;
 use App\Http\Requests\Brand\UpdateBrandRequest;
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 
 class BrandController extends Controller
 {
     public function index(Request $request)
     {
-        return inertia('Brand/Index', [
-            'brands' => Brand::where('name', 'LIKE', '%' . $request->input('search', '') . '%')->paginate(10)
+        return Inertia::render('Brand/Index', [
+            'columns' => [
+                'brands.name',
+            ],
+            'brands' => Brand::where('name', 'LIKE', '%' . $request->input('search', '') . '%')->paginate(10)->through(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                ];
+            })
         ]);
     }
 
@@ -22,7 +31,7 @@ class BrandController extends Controller
      */
     public function create()
     {
-        return inertia('Brand/Create');
+        return Inertia::render('Brand/Create');
     }
 
     /**
@@ -30,10 +39,10 @@ class BrandController extends Controller
      */
     public function store(StoreBrandRequest $request)
     {
-        Brand::updateOrCreate($request->validated(), $request->validated());
+        $data = $request->validated();
+        Brand::updateOrCreate($data, $data);
 
         return redirect()->back()->with(['message' => 'Marka została dodana poprawnie.']);
-
     }
 
     /**
@@ -52,7 +61,7 @@ class BrandController extends Controller
     {
         return redirect()->back()->with(['message' => 'Not Supported (sorry!).']);
 
-        return inertia('Brand/Edit', [
+        return Inertia::render('Brand/Edit', [
                 'brand' => $brand
             ]
         );
