@@ -7,7 +7,7 @@ defineProps({
 </script>
 
 <template>
-    <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between p-4" aria-label="Table navigation">
+    <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between p-4 dark:bg-gray-800" aria-label="Table navigation">
         <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
             <Link
                 v-for="(link, index) in links"

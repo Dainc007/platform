@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 p-4 bg-white dark:bg-gray-900">
+    <div class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 p-4 bg-white dark:bg-gray-800">
         <slot/>
     </div>
 
@@ -49,6 +49,9 @@
                     <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
                     Online
                 </div>
+            </td>
+            <td v-if="row.phone_number">
+                {{row.phone_number}}
             </td>
             <td class="px-6 py-4">
                 <TableEditButton :id="row.id"/>

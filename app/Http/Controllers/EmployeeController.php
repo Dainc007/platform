@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Employee\StoreEmployeeRequest;
 use App\Http\Requests\Employee\UpdateEmployeeRequest;
 use App\Models\Employee;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 
 class EmployeeController extends Controller
@@ -15,9 +17,27 @@ class EmployeeController extends Controller
      */
     public function index(Request $request)
     {
-        $employees = Employee::whereAny(['firstname', 'lastname', 'phone_number', 'email'], 'LIKE', '%' . $request->input('search', '') . '%')->paginate(10);
-
-        return inertia('Employee/Index', ['employees' => $employees]);
+        return Inertia::render('Employee/Index', [
+                'columns' => [
+                    'employees.name',
+//                    'employees.email',
+                    'employees.status',
+                    'employees.phone_number',
+                ],
+                'employees' => Employee::whereAny(['firstname', 'lastname', 'phone_number', 'email'], 'LIKE', '%' . $request->input('search', '') . '%')->paginate(10)
+                    ->through(function ($item) {
+                        return [
+                            'id' => $item->id,
+                            'user_id' => $item->user_id,
+                            'email' => $item->email,
+                            'firstname' => $item->firstname,
+                            'lastname' => $item->lastname,
+                            'phone_number' => $item->phone_number,
+                            'name' => $item->firstname . ' ' . $item->lastname,
+                        ];
+                    }),
+            ]
+        );
     }
 
     /**
@@ -49,7 +69,7 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
-        //
+        return back()->with(['message' => 'Feature Not Supported']);
     }
 
     /**
@@ -63,8 +83,10 @@ class EmployeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Employee $employee)
+    public function destroy(Employee $model)
     {
-        //
+        $model->delete();
+
+        return back()->with(['message' => 'Deleted']);
     }
 }

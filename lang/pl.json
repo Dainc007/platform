@@ -103,5 +103,11 @@
     "users.name": "Imię i Nazwisko",
     "users.status": "Dostępność",
 
-    "brands.name": "Marka"
+    "brands.name": "Marka",
+
+    "employees.name": "Imię i Nazwisko",
+    "employees.email": "Adres Mailowy",
+    "employees.phone_number": "Numer Telefonu",
+    "employees.status": "Dostępność"
+
 }
