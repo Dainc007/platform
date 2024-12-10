@@ -11,6 +11,7 @@ class CompareOffersRequest extends FormRequest
     {
         return [
             'file' => ['required', 'file', 'mimes:csv,txt', 'max:51200'],
+            'files' => ['required', 'array'],
             'brand_id' => ['required', 'exists:brands,id'],
             'currency_id' => ['required', 'exists:currencies,id'],
         ];

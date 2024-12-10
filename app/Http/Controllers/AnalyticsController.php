@@ -22,14 +22,15 @@ class AnalyticsController extends Controller
 {
     public function index(Request $request)
     {
-        $products = $this->getResults($request) ?? TemporaryProduct::with(['brand:id,name']);
+        if($request->has('brand_id')) {
+            $files = File::whereHas('products', function ($query) use ($request) {
+                $query->where('brand_id', $request->get('brand_id'));
+            })->get();
+        }
 
         return Inertia::render('Analytics/Index', [
             'brands' => fn () => Brand::orderBy('name', 'asc')->get(),
-            'products' => (fn () => ($products->paginate())),
-            'files' => fn () => File::whereHas('products', function ($query) use ($request) {
-                $query->where('brand_id', $request->get('brand_id'));
-            })->get()
+            'files' => fn () => $files ?? []
         ]);
     }
 
@@ -65,9 +66,9 @@ class AnalyticsController extends Controller
         return back()->with(['message' => 'Tabela została wyczyszczona']);
     }
 
-    public function export(Request $request)
+    public function export()
     {
-        $results = $this->getResults($request)->get()->toArray();
+        $results = $this->getResults()->get()->toArray();
         $message = 'Nie wybrano plików ani marki';
         if(!empty($results)) {
             CreateAnalyticsFile::dispatch($results)->onQueue('analytics');
@@ -83,12 +84,10 @@ class AnalyticsController extends Controller
         return $this->export();
     }
 
-    private function getResults(Request $request)
+    private function getResults()
     {
-        $files = $request->get('files') ?? [];
-        $search = $request->input('search', '');
-        return Product::where('products.code', 'LIKE', $search . '%')
-            ->whereIn('products.file_id', $files)
+        $files = [25, 26];
+        return TemporaryProduct::whereIn('products.file_id', $files)
             ->leftJoin('temporary_products', function ($join) {
                 $join->on('products.code', '=', 'temporary_products.code')
                     ->on('products.brand_id', '=', 'temporary_products.brand_id');
@@ -100,9 +99,7 @@ class AnalyticsController extends Controller
                 'temporary_products.price as temp_product_price',
                 DB::raw('(products.price - temporary_products.price)  as price_difference'),
                 DB::raw('((products.price - temporary_products.price) / products.price) * 100 as price_difference_percentage')
-            )
-            ->whereNotNull('temporary_products.id')
-            ->with('brand:id,name');
+            );
     }
 
 }
