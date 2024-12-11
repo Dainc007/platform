@@ -157,6 +157,7 @@ function nextStep() {
             <div v-if="!$page.props.auth.isAdmin" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Kolumna z VueDatePicker i przyciskiem -->
                 <div class="flex flex-col items-start space-y-4">
+                    <h2 class="text-center text-blue-500 font-semibold text-xl">Urlop od</h2>
                     <VueDatePicker
                         v-show="activeStep === 2 && subStep === 1"
                         no-today
@@ -174,6 +175,7 @@ function nextStep() {
                 </div>
 
                 <div class="flex flex-col items-start space-y-4">
+                    <h2 class="text-center text-blue-500 font-semibold text-xl">Urlop do</h2>
                     <VueDatePicker
                         v-show="activeStep === 2 && subStep === 1"
                         no-today
