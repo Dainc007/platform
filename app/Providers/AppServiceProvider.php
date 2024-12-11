@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Policies\Admin\SettingPolicy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
         $this->modelPreventActions();
         $this->processGateAdditionalActions();
         $this->registerPolicies();
+        $this->logMissingTranslationKeys();
     }
 
     /**
@@ -58,5 +61,12 @@ class AppServiceProvider extends ServiceProvider
     private function registerPolicies(): void
     {
         Gate::policy(Setting::class, SettingPolicy::class);
+    }
+
+    private function logMissingTranslationKeys(): void
+    {
+        Lang::handleMissingKeysUsing(function ($key, $replace, $locale, $fallback) {
+           Log::error("Missing translation key: {$key} in locale: {$locale}");
+        });
     }
 }
