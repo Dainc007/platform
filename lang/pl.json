@@ -73,5 +73,6 @@
     "analytics.header": "Analityka",
     "analytics.offer.comparison" : "Cenniki do porównania",
 
-    "validation.required" : "To Pole jest wymagane"
+    "validation.required" : "To Pole jest wymagane",
+    "validation.mimes": "Nieprawidłowy format pliku"
 }
