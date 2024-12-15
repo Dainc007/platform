@@ -15,22 +15,24 @@ const getFilesForm = useForm({
     brand_id: null
 });
 
-
 const analyseForm = useForm({
     brand_id: null,
     files: selectedFiles,
-    file:null,
-    currency_id: null
+    currency_id: null,
+    file:''
 });
 
 const submit = () => {
     analyseForm.files = selectedFiles;
     analyseForm.brand_id = getFilesForm.brand_id;
     analyseForm.post(route('analytics.store'), {
+        forceFormData: true,
         onSuccess: () => {
+            console.log(analyseForm);
             analyseForm.reset();
         },
         onError: (errors) => {
+            console.log(analyseForm);
             analyseForm.errors = errors;
         }
     });
@@ -50,7 +52,7 @@ const handleFileUpload = (event) => {
                     <label for="brand" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('contractor.brand') }}</label>
                     <select
                         :disabled="getFilesForm.processing"
-                        @change="getFilesForm.get(route('analytics.index'), {preserveState: true})"
+                        @change="getFilesForm.get(route('analytics.index'), {preserveState: true}); selectedFiles = []"
                         v-model="getFilesForm.brand_id"
                         id="brand_id"
                         class="mt-1 block w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
@@ -61,9 +63,10 @@ const handleFileUpload = (event) => {
                     </select>
                 </div>
             </form>
-            <form @submit.prevent="submit">
+            <form @submit.prevent="submit" enctype="multipart/form-data">
                 <div v-if="getFilesForm.brand_id" class="bg-white divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
                     <ul class="overflow-y-auto max-h-24 p-3 text-sm text-gray-700 dark:text-gray-200">
+                        <p v-if="getFilesForm.processing" class="text-green-500 text-lg w-full"> <i class="fa fa-spin fa-spinner"></i> Zaczekaj, ładuję cenniki</p>
                         <li v-for="file in files" :key="file.id" :value="file.id">
                             <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                                 <input
@@ -83,8 +86,7 @@ const handleFileUpload = (event) => {
                 </div>
 
                 <div class="my-5">
-                    <label for="file"
-                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('contractor.file') }}</label>
+                    <label for="file" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('contractor.file') }}</label>
                     <input
                         type="file"
                         id="file"
@@ -95,8 +97,7 @@ const handleFileUpload = (event) => {
                 </div>
 
                 <div class="my-5">
-                    <label for="currency"
-                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('contractor.currency') }}</label>
+                    <label for="currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('contractor.currency') }}</label>
                     <select
                         id="currency_id"
                         v-model="analyseForm.currency_id"
@@ -108,11 +109,10 @@ const handleFileUpload = (event) => {
                     </select>
                     <div v-if="analyseForm.errors.currency_id" class="text-red-500">{{ analyseForm.errors.currency_id }}</div>
                 </div>
-
-                <button v-if="analyseForm.file && getFilesForm.brand_id && selectedFiles.length > 0"
-                    type="submit"
+                <button v-if="analyseForm && getFilesForm.brand_id && selectedFiles.length > 0"
+                        type="submit"
                         @click="submit"
-                    class="w-full py-2 px-4 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+                        class="w-full py-2 px-4 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
                 >
                     {{ $t('contractor.submit') }}
                 </button>

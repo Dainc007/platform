@@ -107,8 +107,9 @@ watch(search, (search) => {
                             <button @click="destroy(file.id)" title="Usuń" class="m-1 p-1 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs px-2 py-1 text-center inline-flex items-center">
                                 <i class="mx-1 py-1 fa-solid fa-trash"></i> <!-- Ikona usuwania -->
                             </button>
-                            <button @click="download(file.id)" title="Pobierz" class="m-1 p-1 text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-500 dark:hover:bg-blue-600 border border-blue-200 dark:border-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-100 dark:focus:ring-blue-700 font-medium rounded-lg text-xs px-2 py-1 text-center inline-flex items-center">
-                                <i class="mx-1 py-1 fa-solid fa-download"></i> <!-- Ikona pobierania -->
+                            <button :disabled="file.status === 'pending'"  @click="download(file.id)" title="Pobierz" class="m-1 p-1 text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-500 dark:hover:bg-blue-600 border border-blue-200 dark:border-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-100 dark:focus:ring-blue-700 font-medium rounded-lg text-xs px-2 py-1 text-center inline-flex items-center">
+                                <i v-if="file.status === 'pending'" class="fa fa-spinner fa-spin text-blue-500"></i>
+                                <i v-else class="mx-1 py-1 fa-solid fa-download"></i> <!-- Ikona pobierania -->
                             </button>
                         </td>
                     </tr>

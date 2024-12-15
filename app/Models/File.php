@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Observers\FileObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[ObservedBy([FileObserver::class])]
 class File extends Model
 {
     use HasFactory;

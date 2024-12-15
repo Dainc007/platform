@@ -21,7 +21,10 @@ class FileController extends Controller
     public function index(Request $request)
     {
         return inertia('File/Index', [
-            'files' => File::where('path', 'LIKE', '%' . $request->input('search', '') . '%')->paginate(10)
+            'files' => File::where('path', 'LIKE', '%' . $request->input('search', '') . '%')
+                ->orderBy('updated_at', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10)
         ]);
 
     }
