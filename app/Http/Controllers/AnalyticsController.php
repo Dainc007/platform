@@ -26,7 +26,8 @@ class AnalyticsController extends Controller
 
         return Inertia::render('Analytics/Index', [
             'brands' => fn () => Brand::orderBy('name', 'asc')->get(),
-            'files' => fn () => $files ?? []
+            'files' => fn () => $files ?? [],
+            'analytics' => File::where('fileable_id', 42)->where('path', 'like', 'public/202%')->orderBy('created_at', 'desc')->paginate(10),
         ]);
     }
 

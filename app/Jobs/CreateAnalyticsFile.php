@@ -38,7 +38,7 @@ class CreateAnalyticsFile implements ShouldQueue
     {
         try {
             $brandName = $this->brand->name;
-            $fileName = now()->format('Y-m-d_H-i-s') . '.csv';
+            $fileName = now()->format('Y-m-d_H-i-s') . "($brandName)" . '.csv';
             $path = 'public/' . $fileName;
 
             Storage::put($path, '');

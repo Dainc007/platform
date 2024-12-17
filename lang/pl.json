@@ -74,5 +74,8 @@
     "analytics.offer.comparison" : "Cenniki do porównania",
 
     "validation.required" : "To Pole jest wymagane",
-    "validation.mimes": "Nieprawidłowy format pliku"
+    "validation.mimes": "Nieprawidłowy format pliku",
+
+    "pagination.previous": "Poprzednia",
+    "pagination.next": "Następna"
 }
