@@ -97,6 +97,8 @@
     "status.accepted": "Zaakceptowany",
 
     "pagination.previous": "Poprzednia",
-    "pagination.next": "Następna"
+    "pagination.next": "Następna",
+
+    "validation.after_or_equal": "To pole nie może być mniejsze od poprzedniego"
 
 }

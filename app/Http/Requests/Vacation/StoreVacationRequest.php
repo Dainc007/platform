@@ -9,10 +9,9 @@ class StoreVacationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'startDate' => 'required',
-            'endDate' => 'required|date',
+            'startDate' => 'required|date',
+            'endDate' => 'required|date|after_or_equal:startDate',
             'message' => 'nullable|string',
-            'hours_worked' => 'nullable|integer',
             'note' => 'nullable|string',
         ];
     }

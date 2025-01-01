@@ -25,8 +25,7 @@ class Vacation extends Model
         'start_at',
         'end_at',
         'status',
-        'message',
-        'hours_worked',
+        'message'
     ];
 
     protected $casts = [

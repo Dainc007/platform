@@ -41,6 +41,8 @@ class VacationStatusChanged extends Notification
             ->greeting('Witaj')
             ->line('Status Twojego wniosku urlopowego uległ zmianie.')
             ->line('Nowy status wniosku:' . __('vacation.status.'. $this->vacation->status))
+            ->line('Pierwszy dzień urlopu : ' . $this->vacation->start_at->format('d-m-Y'))
+            ->line('Ostatni dzień urlopu: ' . $this->vacation->end_at->format('d-m-Y'))
             ->lineIf($this->vacation->message, "Dodatkowe informacje: {$this->vacation->message}")
             ->salutation('Pozdrawiam');
     }

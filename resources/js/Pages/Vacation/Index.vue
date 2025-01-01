@@ -157,7 +157,9 @@ function nextStep() {
             <div v-if="!$page.props.auth.isAdmin" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Kolumna z VueDatePicker i przyciskiem -->
                 <div class="flex flex-col items-start space-y-4">
-                    <h2 class="text-center text-blue-500 font-semibold text-xl">Urlop od</h2>
+                    <h2 v-show="activeStep !== 4" class="text-center text-blue-500 font-semibold text-xl">
+                        Urlop od <span v-if="form.startDate">{{ moment(form.startDate).format("DD-MM-Y") }}</span>
+                    </h2>
                     <VueDatePicker
                         v-show="activeStep === 2 && subStep === 1"
                         no-today
@@ -175,7 +177,9 @@ function nextStep() {
                 </div>
 
                 <div class="flex flex-col items-start space-y-4">
-                    <h2 class="text-center text-blue-500 font-semibold text-xl">Urlop do</h2>
+                    <h2 v-show="activeStep !== 4"  class="text-center text-blue-500 font-semibold text-xl">
+                        Urlop do <span v-if="form.endDate">{{ moment(form.endDate).format("DD-MM-Y") }}</span>
+                    </h2>
                     <VueDatePicker
                         v-show="activeStep === 2 && subStep === 1"
                         no-today
@@ -192,19 +196,6 @@ function nextStep() {
                 </div>
 
                 <div class="flex flex-col items-start space-y-4" v-show="activeStep === 3 && subStep === 1">
-                    <InputLabel for="hoursWorked" value="Przepracowane Godziny"/>
-                    <TextInput
-                        name="hoursWorked"
-                        id="hoursWorked"
-                        type="text"
-                        class="mt-1 block w-full"
-                        v-model="form.hoursWorked"
-                        required
-                        autofocus
-                        autocomplete="hoursWorked"
-                    />
-                    <InputError class="mt-2" v-if="form.errors.hoursWorked" :message="$t('form.errors.hoursWorked')"/>
-
                     <TextArea
                         v-model="form.note"
                         name="note"
@@ -215,16 +206,15 @@ function nextStep() {
                     <SecondaryButton
                         class="my-2"
                         @click="nextStep"
-                        :disabled="form.hoursWorked == null || form.hoursWorked <= 0 "
                     >Przejdź do Podsumowania
                     </SecondaryButton>
                 </div>
 
                 <div v-show="activeStep === 4" class="overflow-hidden shadow-sm sm:rounded-lg my-2 mx-auto p-3">
                     <p class="text-gray-700 font-semibold">Pracownik: {{$page.props.auth.user.name}}</p>
-                    <p class="text-gray-600">Start Urlopu: {{moment(form.startDate).format("D-M-Y")}}</p>
-                    <p class="text-gray-600">Ostatni dzień urlopu: {{moment(form.endDate).format("D-M-Y")}}</p>
-                    <p class="text-gray-600">Przepracowane godziny: {{form.hoursWorked}}</p>
+                    <p class="text-gray-600">Start Urlopu: {{moment(form.startDate).format("DD-MM-Y")}}</p>
+                    <p class="text-gray-600">Ostatni dzień urlopu: {{moment(form.endDate).format("DD-MM-Y")}}</p>
+                    <div v-if="form.errors.endDate" class="text-red-500">{{ $t(form.errors.endDate) }}</div>
                     <p v-show="form.note" class="text-gray-600">Notatka: {{form.note}}</p>
 
                     <SecondaryButton
