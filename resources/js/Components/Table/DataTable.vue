@@ -60,7 +60,7 @@
         </tr>
         </tbody>
     </table>
-    <Pagination :links="rows.links"></Pagination>
+    <Pagination :links="rows.links" :currentPage="rows.current_page" :perPage="rows.per_page" :total="rows.total" />
 </template>
 
 <script setup>
