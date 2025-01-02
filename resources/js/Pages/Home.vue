@@ -4,25 +4,25 @@
       <!--Nav-->
       <div class="w-full container mx-auto">
         <div class="w-full flex items-center justify-between">
-          <a class="flex items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl lg:text-4xl" href="#">
+          <Link class="flex items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl lg:text-4xl" :href="route('home')">
             DH<span class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-pink-500 to-purple-500">platform</span>
-          </a>
+          </Link>
 
           <div class="flex w-1/2 justify-end content-center">
 
-            <a v-if="$page.props.auth.user"
+            <Link v-if="$page.props.auth.user"
                class="font-bold inline-block text-blue-300 no-underline hover:text-pink-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
                :href="route('dashboard')"
-            >{{$t('chat')}}</a>
+            >{{$t('chat')}}</Link>
             <div v-else>
-              <a class="font-bold inline-block text-blue-300 no-underline hover:text-pink-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
+              <Link class="font-bold inline-block text-blue-300 no-underline hover:text-pink-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
                  :href="route('login')">
                   {{$t('login')}}
-              </a>
-              <a class=" font-bold inline-block text-blue-300 no-underline hover:text-pink-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
+              </Link>
+              <Link class=" font-bold inline-block text-blue-300 no-underline hover:text-pink-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
                  :href="route('register')">
                   {{$t('register')}}
-              </a>
+              </Link>
             </div>
             <a class="inline-block text-blue-300 no-underline hover:text-pink-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out" href="https://twitter.com/intent/tweet?url=#">
               <svg class="fill-current h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
@@ -83,7 +83,7 @@
 
         <!--Right Col-->
         <div class="w-full xl:w-3/5 p-12 overflow-hidden">
-          <img class="mx-auto w-full md:w-4/5 transform -rotate-6 transition hover:scale-105 duration-700 ease-in-out hover:rotate-6" src="home/macbook.svg" />
+          <img class="mx-auto w-full md:w-4/5 transform -rotate-6 transition hover:scale-105 duration-700 ease-in-out hover:rotate-6" src="home/macbook.svg"  alt="terminal"/>
         </div>
 
 <!--        <div class="mx-auto md:pt-16">-->
@@ -108,4 +108,5 @@
 
 </template>
 <script setup>
+import {Link} from '@inertiajs/vue3';
 </script>
