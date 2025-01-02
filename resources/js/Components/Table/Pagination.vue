@@ -2,12 +2,23 @@
 import {  Link } from '@inertiajs/vue3';
 
 defineProps({
-    links: Object
+    links: Object,
+    perPage: Number,
+    total:Number,
+    currentPage:Number
 });
 </script>
 
 <template>
     <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between p-4 dark:bg-gray-800" aria-label="Table navigation">
+        <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
+            {{$t('pagination.showing')}}
+            <span class="font-semibold text-gray-900 dark:text-white">
+                {{(currentPage - 1) * perPage + 1 }}  - {{currentPage * perPage}}</span> {{$t('pagination.of')}}
+            <span class="font-semibold text-gray-900 dark:text-white">
+                {{ total}} {{$t('pagination.records')}}
+            </span>
+        </span>
         <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
             <Link
                 v-for="(link, index) in links"

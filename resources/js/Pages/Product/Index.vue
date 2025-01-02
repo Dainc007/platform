@@ -2,6 +2,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {Link, router} from "@inertiajs/vue3";
 import { ref, watch } from 'vue';
+import Pagination from "@/Components/Table/Pagination.vue";
 
 defineProps({
     products: Array,
@@ -104,24 +105,7 @@ function formatPrice(price) {
                     </tr>
                     </tbody>
                 </table>
-                <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
-                     aria-label="Table navigation">
-                    <span
-                        class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
-<!--                        Showing <span-->
-                        <!--                        class="font-semibold text-gray-900 dark:text-white">1-10</span> of <span-->
-                        <!--                        class="font-semibold text-gray-900 dark:text-white">1000</span>-->
-                    </span>
-                    <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-                        <Link
-                            v-for=" (link, index) in products.links"
-                            :key="index"
-                            :href="link.url"
-                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                            v-html="link.label"
-                        />
-                    </ul>
-                </nav>
+                <Pagination :links="products.links" :currentPage="products.current_page" :perPage="products.per_page" :total="products.total" />
             </div>
         </div>
     </AuthenticatedLayout>

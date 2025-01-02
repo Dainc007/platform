@@ -71,5 +71,8 @@
     "users.name": "Name",
     "users.status": "Status",
 
-    "brands.name": "Name"
+    "brands.name": "Name",
+
+    "pagination.previous": "Previous",
+    "pagination.next": "Next"
 }

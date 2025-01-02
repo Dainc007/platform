@@ -96,6 +96,9 @@
 
     "pagination.previous": "Wstecz",
     "pagination.next": "Następna",
+    "pagination.of": "z",
+    "pagination.showing": "Wyświetla",
+    "pagination.records": "Rekordów",
 
     "startSearching": "Wyszukaj...",
     "confirm.deletion": "Jesteś pewien, że chcesz to zrobić?",
