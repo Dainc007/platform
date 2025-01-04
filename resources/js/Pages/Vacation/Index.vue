@@ -155,10 +155,10 @@ function nextStep() {
 
         <div class="p-12">
             <!--User Panel-->
-            <div v-if="!$page.props.auth.isAdmin" class="grid sm:grid-cols-1 lg:grid-cols-4 md:grid-cols-2">
+            <div v-if="!$page.props.auth.isAdmin" class="flex flex-col lg:flex-row justify-center space-y-4 lg:space-y-0 lg:space-x-4">
                 <!-- Kolumna z VueDatePicker i przyciskiem -->
-                <div class="flex flex-col  mx-auto space-y-4">
-                    <h2 v-show="activeStep !== 4" class="text-center text-blue-500 font-semibold text-xl">
+                <div class="flex flex-col space-y-4">
+                    <h2 v-show="activeStep !== 4" class="text-center text-blue-500 font-semibold" style="font-size: 2rem; line-height: 2rem">
                         Urlop od <span v-if="form.startDate">{{ moment(form.startDate).format("DD-MM-Y") }}</span>
                     </h2>
                     <VueDatePicker
@@ -177,8 +177,8 @@ function nextStep() {
                     <div v-if="form.errors.startDate" class="text-red-500">{{ form.errors.startDate }}</div>
                 </div>
 
-                <div class="flex flex-col mx-auto space-y-4">
-                    <h2 v-show="activeStep !== 4"  class="text-center text-blue-500 font-semibold text-xl">
+                <div class="flex flex-col space-y-4">
+                    <h2 v-show="activeStep !== 4"  class="text-center text-blue-500 font-semibold" style="font-size: 2rem; line-height: 2rem">
                         Urlop do <span v-if="form.endDate">{{ moment(form.endDate).format("DD-MM-Y") }}</span>
                     </h2>
                     <VueDatePicker
