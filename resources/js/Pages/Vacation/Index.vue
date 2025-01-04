@@ -195,38 +195,39 @@ function nextStep() {
                         @date-update="handleEndDate"
                     ></VueDatePicker>
                 </div>
+            </div>
 
-                <div class="flex flex-col items-start space-y-4" v-show="activeStep === 3 && subStep === 1">
+            <div class="flex flex-col space-y-4 w-full col-span-full"
+                 v-show="activeStep === 3 && subStep === 1">
                     <TextArea
                         v-model="form.note"
                         name="note"
                         id="note"
                     />
-                    <InputError class="mt-2" :message="form.errors.note"/>
+                <InputError class="mt-2" :message="form.errors.note"/>
 
-                    <SecondaryButton
-                        class="my-2"
-                        @click="nextStep"
-                    >Przejdź do Podsumowania
-                    </SecondaryButton>
-                </div>
+                <SecondaryButton
+                    class="my-2"
+                    @click="nextStep"
+                >Przejdź do Podsumowania
+                </SecondaryButton>
+            </div>
 
-                <div v-show="activeStep === 4" class="overflow-hidden shadow-sm sm:rounded-lg my-2 mx-auto p-3">
-                    <p class="text-gray-700 font-semibold">Pracownik: {{$page.props.auth.user.name}}</p>
-                    <p class="text-gray-600">Start Urlopu: {{moment(form.startDate).format("DD-MM-Y")}}</p>
-                    <p class="text-gray-600">Ostatni dzień urlopu: {{moment(form.endDate).format("DD-MM-Y")}}</p>
-                    <div v-if="form.errors.endDate" class="text-red-500">{{ $t(form.errors.endDate) }}</div>
-                    <p v-show="form.note" class="text-gray-600">Notatka: {{form.note}}</p>
+            <div v-show="activeStep === 4" class="overflow-hidden shadow-sm sm:rounded-lg my-2 mx-auto p-3 text-center">
+                <p class="text-gray-700 font-semibold">Pracownik: {{$page.props.auth.user.name}}</p>
+                <p class="text-gray-600">Start Urlopu: {{moment(form.startDate).format("DD-MM-Y")}}</p>
+                <p class="text-gray-600">Ostatni dzień urlopu: {{moment(form.endDate).format("DD-MM-Y")}}</p>
+                <div v-if="form.errors.endDate" class="text-red-500">{{ $t(form.errors.endDate) }}</div>
+                <p v-show="form.note" class="text-gray-600">Notatka: {{form.note}}</p>
 
-                    <SecondaryButton
-                        :disabled="form.processing"
-                        @click="!form.processing && form.post(route('vacations.store'))"
-                        type="submit"
-                        class="mt-4 bg-blue-500 py-2 px-4 rounded hover:bg-blue-400 hover:text-white disabled:opacity-50"
-                    >
-                        Potwierdź
-                    </SecondaryButton>
-                </div>
+                <SecondaryButton
+                    :disabled="form.processing"
+                    @click="!form.processing && form.post(route('vacations.store'))"
+                    type="submit"
+                    class="mt-4 bg-blue-500 py-2 px-4 rounded hover:bg-blue-400 hover:text-white disabled:opacity-50"
+                >
+                    Potwierdź
+                </SecondaryButton>
             </div>
             <!--Admin Panel-->
             <div v-if="$page.props.auth.isAdmin" class="grid grid-cols-1">
