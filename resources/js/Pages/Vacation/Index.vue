@@ -10,8 +10,6 @@ import Modal from "@/Components/Modal.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextArea from "@/Components/TextArea.vue";
 import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import TextInput from "@/Components/TextInput.vue";
 import moment from "moment";
 import {Inertia} from "@inertiajs/inertia";
 
@@ -38,7 +36,10 @@ const reply = (vacation) => {
     response.value = true;
     form.vacation = vacation;
     form.status = vacation.status;
+    activeVacation.value = vacation;
 };
+
+const activeVacation = ref(Object);
 
 const destroy = (id) => {
     if(confirm('Jesteś pewien?')) {
@@ -154,9 +155,9 @@ function nextStep() {
 
         <div class="p-12">
             <!--User Panel-->
-            <div v-if="!$page.props.auth.isAdmin" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div v-if="!$page.props.auth.isAdmin" class="grid sm:grid-cols-1 lg:grid-cols-4 md:grid-cols-2">
                 <!-- Kolumna z VueDatePicker i przyciskiem -->
-                <div class="flex flex-col items-start space-y-4">
+                <div class="flex flex-col  mx-auto space-y-4">
                     <h2 v-show="activeStep !== 4" class="text-center text-blue-500 font-semibold text-xl">
                         Urlop od <span v-if="form.startDate">{{ moment(form.startDate).format("DD-MM-Y") }}</span>
                     </h2>
@@ -176,7 +177,7 @@ function nextStep() {
                     <div v-if="form.errors.startDate" class="text-red-500">{{ form.errors.startDate }}</div>
                 </div>
 
-                <div class="flex flex-col items-start space-y-4">
+                <div class="flex flex-col mx-auto space-y-4">
                     <h2 v-show="activeStep !== 4"  class="text-center text-blue-500 font-semibold text-xl">
                         Urlop do <span v-if="form.endDate">{{ moment(form.endDate).format("DD-MM-Y") }}</span>
                     </h2>
@@ -325,7 +326,11 @@ function nextStep() {
             </div>
             <!--Answer modal Panel-->
             <Modal :show="response" @close="closeModal">
+
                 <div class="p-6">
+                    <h4 class="font-semibold text-xl text-blue-500 text-center">
+                       Urlop od {{ activeVacation.start_at }} do {{ activeVacation.end_at }}
+                    </h4>
                     <select
                         id="status"
                         v-model="form.status"
@@ -335,7 +340,6 @@ function nextStep() {
                             {{$t('vacation.status.' + status)}}
                         </option>
                     </select>
-
                     <input id="newStartDate"
                            v-model="form.startDate"
                            class=" mt-1 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
