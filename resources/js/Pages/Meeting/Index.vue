@@ -181,15 +181,16 @@
             </div>
 
             <VueDatePicker v-if="!$page.props.auth.isAdmin" v-show="activeStep === 2 && subStep === 1"
-                :enableTimePicker="false"
-                v-model="form.date"
-                clearable="true"
-                :select-text="$t('dataPicker.pick')"
-                :cancel-text="$t('dataPicker.cancel')"
-                locale="pl"
+                           :max-date="addDays(new Date(), 30)"
+                           :enableTimePicker="false"
+                           v-model="form.date"
+                           clearable="true"
+                           :select-text="$t('dataPicker.pick')"
+                           :cancel-text="$t('dataPicker.cancel')"
+                           locale="pl"
                            :min-date="new Date()"
-                class="w-full mt-3"
-                inline @date-update="handleDate"
+                           class="w-full mt-3"
+                           inline @date-update="handleDate"
                            :disabled-dates="disablePastDates"
             ></VueDatePicker>
             <InputError class="mt-2" :message="form.errors.date" />
@@ -326,6 +327,7 @@ import TextInput from "@/Components/TextInput.vue";
 import TextArea from "@/Components/TextArea.vue";
 import MultiStepForm from "@/Components/Form/MultiStepForm.vue";
 import moment from "moment/moment";
+import {addDays} from "date-fns";
 
 
 const date = ref(new Date());
