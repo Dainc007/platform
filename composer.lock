@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bea8437685af7307320fd79b8713a2e3",
+    "content-hash": "a35a8ea1b84f09bef803984c0ae663ab",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -3071,16 +3071,16 @@
         },
         {
             "name": "laravel/sanctum",
-            "version": "v4.0.2",
+            "version": "v4.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sanctum.git",
-                "reference": "9cfc0ce80cabad5334efff73ec856339e8ec1ac1"
+                "reference": "698064236a46df016e64a7eb059b1414e0b281df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sanctum/zipball/9cfc0ce80cabad5334efff73ec856339e8ec1ac1",
-                "reference": "9cfc0ce80cabad5334efff73ec856339e8ec1ac1",
+                "url": "https://api.github.com/repos/laravel/sanctum/zipball/698064236a46df016e64a7eb059b1414e0b281df",
+                "reference": "698064236a46df016e64a7eb059b1414e0b281df",
                 "shasum": ""
             },
             "require": {
@@ -3131,7 +3131,7 @@
                 "issues": "https://github.com/laravel/sanctum/issues",
                 "source": "https://github.com/laravel/sanctum"
             },
-            "time": "2024-04-10T19:39:58+00:00"
+            "time": "2024-12-11T16:40:21+00:00"
         },
         {
             "name": "laravel/serializable-closure",
@@ -5287,6 +5287,56 @@
                 }
             ],
             "time": "2024-07-20T21:41:07+00:00"
+        },
+        {
+            "name": "programic/laravel-distance-matrix",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/programic/laravel-distance-matrix.git",
+                "reference": "2933a902ca65353d1bdd36ea0c904aa361df8b71"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/programic/laravel-distance-matrix/zipball/2933a902ca65353d1bdd36ea0c904aa361df8b71",
+                "reference": "2933a902ca65353d1bdd36ea0c904aa361df8b71",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^5.0|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "php": "^7.0|^8.0"
+            },
+            "type": "package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Programic\\DistanceMatrix\\DistanceMatrixServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Programic\\DistanceMatrix\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Programic",
+                    "email": "development@programic.com",
+                    "homepage": "https://programic.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Using Google Distance Matrix in Laravel",
+            "support": {
+                "issues": "https://github.com/programic/laravel-distance-matrix/issues",
+                "source": "https://github.com/programic/laravel-distance-matrix/tree/v1.2.0"
+            },
+            "time": "2024-10-09T09:23:37+00:00"
         },
         {
             "name": "psr/cache",

@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'google' => [
+        'distance' => [
+            'key' => env('GOOGLE_MAPS_DISTANCE_API_KEY'),
+        ]
+    ]
+
 ];

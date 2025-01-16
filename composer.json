@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.5",
         "maatwebsite/excel": "^3.1",
+        "programic/laravel-distance-matrix": "^1.2",
         "spatie/laravel-permission": "^6.9",
         "tightenco/ziggy": "^2.2"
     },
