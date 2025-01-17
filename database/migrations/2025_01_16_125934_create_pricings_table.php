@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('pricings', function (Blueprint $table) {
             $table->id();
+            $table->integer('distance_limit')->default(0); //if set to 0 that means
+            $table->integer('price_without_tax')->default(0);
+            $table->integer('price_with_tax')->default(0);
+            $table->integer('tax_rate')->default(0);
+            $table->integer('tax')->default(0);
+            $table->unsignedInteger('currency_id')->index();
             $table->timestamps();
         });
     }

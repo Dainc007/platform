@@ -18,7 +18,10 @@ class CarTypeResource extends Resource
 {
     protected static ?string $model = CarType::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-truck';
+
+    protected static ?string $navigationLabel = 'Rodzaje Samochodów';
+
 
     public static function form(Form $form): Form
     {

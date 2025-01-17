@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PricingResource\Pages;
-use App\Filament\Resources\PricingResource\RelationManagers;
-use App\Models\Pricing;
+use App\Filament\Resources\CarrierResource\Pages;
+use App\Filament\Resources\CarrierResource\RelationManagers;
+use App\Models\Carrier;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,28 +13,30 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class PricingResource extends Resource
+class CarrierResource extends Resource
 {
-    protected static ?string $model = Pricing::class;
+    protected static ?string $model = Carrier::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
+    protected static ?string $navigationIcon = 'heroicon-o-briefcase';
 
-    protected static ?string $navigationLabel = 'Cenniki';
+    protected static ?string $navigationLabel = 'Przewoźnicy';
 
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
-            ]);
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
             ])
             ->filters([
                 //
@@ -59,9 +61,9 @@ class PricingResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPricings::route('/'),
-            'create' => Pages\CreatePricing::route('/create'),
-            'edit' => Pages\EditPricing::route('/{record}/edit'),
+            'index' => Pages\ListCarriers::route('/'),
+            'create' => Pages\CreateCarrier::route('/create'),
+            'edit' => Pages\EditCarrier::route('/{record}/edit'),
         ];
     }
 }

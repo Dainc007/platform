@@ -29,7 +29,6 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             VacationSeeder::class,
             SettingSeeder::class,
-            CarType::class
         ]);
     }
 }

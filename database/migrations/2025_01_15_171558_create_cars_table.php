@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cars', function (Blueprint $table) {
             $table->id();
             $table->foreignId('car_type_id')->constrained()->cascadeOnDelete();
-            $table->integer('payload');
+            $table->integer('payload')->default(0);
             $table->timestamps();
         });
     }

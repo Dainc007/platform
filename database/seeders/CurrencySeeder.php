@@ -15,8 +15,10 @@ class CurrencySeeder extends Seeder
     {
         //Currency::factory(10)->create();
 
-        foreach (Currency::AVAILABLE_CURRENCIES as $name => $code) {
-            Currency::updateOrCreate(['code' => $code], ['name' => $name, 'code' => $code]);
+        if(Currency::count() === 0) {
+            foreach (Currency::AVAILABLE_CURRENCIES as $name => $code) {
+                Currency::updateOrCreate(['code' => $code], ['name' => $name, 'code' => $code]);
+            }
         }
     }
 }
