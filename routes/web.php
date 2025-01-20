@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\MeetingDateController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProductController;
@@ -61,6 +62,7 @@ Route::middleware('auth')->group(function () {
         'meetings' => MeetingController::class,
         'vacations' => VacationController::class,
         'dashboard' => DashboardController::class,
+        'meetingDates' => MeetingDateController::class,
     ]);
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', AdminPanelController::class)->name('admin.dashboard');

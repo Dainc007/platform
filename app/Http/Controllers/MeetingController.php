@@ -5,21 +5,27 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Meeting\StoreMeetingRequest;
 use App\Http\Requests\Meeting\UpdateMeetingRequest;
 use App\Models\Meeting;
+use App\Models\MeetingDate;
 use App\Models\User;
 use App\Notifications\MeetingCreated;
+use App\Services\MeetingService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class MeetingController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, MeetingService $meetingService)
     {
+        $date = $request->has('date')
+            ? Carbon::parse($request->get('date'))->format('Y-m-d')
+            : today()->format('Y-m-d');
 
-        return inertia('Meeting/Index', [
-            'meetings' => $this->getAvailableMeetings($request),
-//            'upcomingMeetings' => Meeting::where('start_date', '>=', now()->format('Y-m-d h:i'))->with(['notes' ,'user'])->orderBy('start_date')->paginate(10)
-            'upcomingMeetings' => Meeting::with(['notes' ,'user'])->orderBy('start_date', 'desc')->paginate(10)
+        return Inertia::render('Meeting/Index', [
+            'meetings' => fn () => ($meetingService->getAvailableMeetings($date)),
+            'upcomingMeetings' => Meeting::with(['notes' ,'user'])->orderBy('start_date', 'desc')->paginate(10),
+            'disabledDates' => MeetingDate::where('date', '>=', today()->format('Y-m-d'))->where('is_enabled', false)->pluck('date')->toArray() ?? [],
         ]);
     }
 
@@ -46,36 +52,5 @@ class MeetingController extends Controller
     public function destroy(Meeting $meeting)
     {
         //
-    }
-
-    private function getAvailableMeetings(Request $request): array
-    {
-        $firstAvailableMeetingHour = Carbon::createFromTime(Meeting::STARTING_HOUR, 0);
-        $lastAvailableMeetingHour = Carbon::createFromTime(Meeting::FINISHING_HOUR, 0);
-
-        $date = $request->has('date')
-            ? Carbon::parse($request->get('date'))->format('Y-m-d')
-            : today()->format('Y-m-d');
-
-        $availableMeetings = [];
-
-        $bookedMeetings = Meeting::where('start_date', 'LIKE', '%' . $date . '%')
-            ->where('status', 'booked')
-            ->pluck('start_date')
-            ->mapWithKeys(function ($date) {
-                $start = Carbon::parse($date)->format('H:i');
-                $end = Carbon::parse($date)->addMinutes(20)->format('H:i');
-                return [$start => $end];
-            })
-            ->toArray();
-
-        while ($firstAvailableMeetingHour->lt($lastAvailableMeetingHour)) {
-            $from = $firstAvailableMeetingHour->format('H:i');
-            $to   = $firstAvailableMeetingHour->copy()->addMinutes(Meeting::DURATION)->format('H:i');
-            $availableMeetings[$from] = $to;
-            $firstAvailableMeetingHour->addMinutes(Meeting::DURATION);
-        }
-
-        return array_diff($availableMeetings, $bookedMeetings);
     }
 }
