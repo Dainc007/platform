@@ -319,8 +319,12 @@ function nextStep() {
                             v-for="(link, index) in vacations.links"
                             :key="index"
                             :href="link.url"
-                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                             v-html="$t(link.label)"
+                            preserve-scroll
+                            :class="[
+'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 border border-gray-300 dark:border-gray-700 dark:text-gray-400',
+link.active ? 'bg-blue-500 text-white dark:bg-blue-700 dark:text-white' : 'bg-white hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white'
+]"
                         />
                     </ul>
                 </nav>
