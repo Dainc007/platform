@@ -15,6 +15,6 @@ class ShippingCalculator
 
     public function calculateShippingCost($data): int
     {
-        return rand(1,1000);
+
     }
 }
