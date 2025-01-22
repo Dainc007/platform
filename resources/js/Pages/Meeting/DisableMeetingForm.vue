@@ -50,7 +50,8 @@ const checkDisabledHours = (key) => {
 
 const updateHours = (key, isChecked) => {
     form.date = disableDateForm.date;
-
+    form.isChecked = isChecked;
+    form.hour = key;
     if (isChecked) {
         form.disabled_hours = form.disabled_hours.filter(hour => hour !== key);
     } else {
@@ -65,6 +66,8 @@ const updateHours = (key, isChecked) => {
 const form = useForm({
     date: disableDateForm.date,
     is_enabled: Boolean,
+    isChecked: null,
+    hour: null,
     disabled_hours: []
 })
 

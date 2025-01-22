@@ -8,6 +8,7 @@ use App\Models\MeetingDate;
 use App\Services\MeetingService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MeetingDateController extends Controller
 {
@@ -40,24 +41,34 @@ class MeetingDateController extends Controller
      */
     public function store(StoreMeetingDateRequest $request): void
     {
-        $model = MeetingDate::firstOrCreate([
-            'date' => $request->validated('date'),
-        ]);
-        if($request->has('is_enabled')) {
-            $model->is_enabled = $request->validated('is_enabled');
+        try {
+            $model = MeetingDate::firstOrCreate([
+                'date' => $request->validated('date'),
+            ]);
+            if($request->has('is_enabled')) {
+                $model->is_enabled = $request->validated('is_enabled');
+            }
+
+            $modelDisabledHours = json_decode($model->disabled_hours, true) ?? [];
+            $formDisabledHours = json_decode($request->validated('disabled_hours'), true) ?? [];
+
+            if ($request->has('disabled_hours')) {
+                if ($request->input('isChecked') === true) {
+                    $hourToRemove = $request->input('hour');
+                    $modelDisabledHours = array_filter($modelDisabledHours, function ($value) use ($hourToRemove) {
+                        return $value !== $hourToRemove;
+                    });
+                }
+                $merged = array_unique(array_merge($modelDisabledHours, $formDisabledHours));
+                $model->disabled_hours = $merged;
+            }
+
+            $model->save();
+
+            MeetingDate::where('date', '<', now()->format('Y-m-d'))->delete();
+        }catch (\Exception $e){
+            Log::error('Błąd podczas zapisywania MeetingDate: ' . $e->getMessage());
         }
-
-        $modelDisabledHours = json_decode($model->disabled_hours, true) ?? [];
-        $formDisabledHours = json_decode($request->validated('disabled_hours'), true) ?? [];
-
-        if($request->has('disabled_hours')) {
-            $merged = array_unique(array_merge($modelDisabledHours, $formDisabledHours));
-            $model->disabled_hours = $merged;
-        }
-
-        $model->save();
-
-        MeetingDate::where('date', '<', now()->format('Y-m-d'))->delete();
     }
 
     /**

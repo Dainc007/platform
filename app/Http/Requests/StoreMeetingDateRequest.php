@@ -14,6 +14,8 @@ class StoreMeetingDateRequest extends FormRequest
             'date' => 'required|date',
             'is_enabled' => 'boolean',
             'disabled_hours' => 'nullable',
+            'isChecked' => 'boolean|nullable',
+            'hour' => 'nullable|string',
         ];
     }
 
