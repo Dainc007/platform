@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Meeting;
 use App\Models\MeetingDate;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class MeetingService
 {
@@ -26,11 +27,11 @@ class MeetingService
             ->toArray();
 
         $disabledHours = json_decode(MeetingDate::where('date', $date)->value('disabled_hours') ?? '[]', true);
-
+        $isAdmin = Auth::user()->isAdmin();
         while ($firstAvailableMeetingHour->lt($lastAvailableMeetingHour)) {
             $from = $firstAvailableMeetingHour->format('H:i');
             $to   = $firstAvailableMeetingHour->copy()->addMinutes(Meeting::DURATION)->format('H:i');
-            if(!in_array($from, $disabledHours)) {
+            if($isAdmin || !in_array($from, $disabledHours)) {
                 $availableMeetings[$from] = $to;
             }
             $firstAvailableMeetingHour->addMinutes(Meeting::DURATION);

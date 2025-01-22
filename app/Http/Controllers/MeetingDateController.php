@@ -56,6 +56,8 @@ class MeetingDateController extends Controller
         }
 
         $model->save();
+
+        MeetingDate::where('date', '<', now()->format('Y-m-d'))->delete();
     }
 
     /**
