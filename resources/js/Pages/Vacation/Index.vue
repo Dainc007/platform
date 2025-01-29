@@ -148,7 +148,7 @@ function nextStep() {
         </template>
 
 
-        <div class="px-12 py-6 grid grid-cols-1 ">
+        <div class="px-12 py-6 grid grid-cols-1">
             <!--User Panel-->
             <section v-if="!$page.props.auth.isAdmin" class="mx-auto pb-6">
                 <Link v-show="activeStep === 2 && subStep === 1" :href="route('dashboard')">
@@ -198,7 +198,7 @@ function nextStep() {
                 </div>
             </div>
 
-            <div class="flex flex-col space-y-4 w-full col-span-full mt-4"
+            <div class="flex flex-col space-y-4 w-full col-span-full mt-4 max-w-7xl mx-auto sm:px-6 lg:px-8"
                  v-show="activeStep === 3 && subStep === 1">
                     <TextArea
                         v-model="form.note"
