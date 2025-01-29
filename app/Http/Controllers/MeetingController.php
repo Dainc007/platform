@@ -51,6 +51,8 @@ class MeetingController extends Controller
 
     public function destroy(Meeting $meeting)
     {
-        //
+        $meeting->delete();
+
+        return back()->with(['message' => 'Rekord został usunięty']);
     }
 }

@@ -6,11 +6,9 @@ use App\Http\Requests\Vacation\StoreVacationRequest;
 use App\Http\Requests\Vacation\UpdateVacationRequest;
 use App\Models\User;
 use App\Models\Vacation;
-use App\Notifications\MeetingCreated;
 use App\Notifications\VacationRequestCreated;
 use App\Notifications\VacationStatusChanged;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
 
 class VacationController extends Controller
 {

@@ -82,7 +82,10 @@
                                 notatka
                             </th>
                             <th scope="col" class="px-6 py-3 text-center">
-                                akcje
+                                Status
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-center">
+                                Usuwanie
                             </th>
                         </tr>
                         </thead>
@@ -143,6 +146,11 @@
                                           stroke-width="2" d="M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                 </svg>
                             </td>
+                            <td>
+                                <button @click="destroy(meeting.id)" title="Usuń" class="p-2 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs inline-flex items-center">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -163,7 +171,7 @@
                 </div>
             </section>
 
-            <section class="mx-auto">
+            <section class="mx-auto" v-if="!$page.props.auth.isAdmin">
                 <Link v-show="activeStep === 2 && subStep === 1" :href="route('dashboard')">
                     <i class="fas fa-arrow-left text-blue-500 text-xl"> Cofnij</i>
                 </Link>
@@ -338,6 +346,7 @@ import TextInput from "@/Components/TextInput.vue";
 import TextArea from "@/Components/TextArea.vue";
 import moment from "moment/moment";
 import {addDays} from "date-fns";
+import {Inertia} from "@inertiajs/inertia";
 
 
 const date = ref(new Date());
@@ -399,6 +408,13 @@ const submit = (date) => {
         onSuccess: () => form.reset(),
     });
 };
+
+const destroy = (id) => {
+    if(confirm('Jesteś pewien?')) {
+        Inertia.delete(route('meetings.destroy', id))
+    }
+    return (destroy)
+}
 
 watch(date, (date) => {
     router.get('/meetings', {date: date}, {preserveState: true, replace: true});

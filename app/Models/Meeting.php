@@ -20,7 +20,7 @@ class Meeting extends Model
     ];
 
     const STARTING_HOUR = 8;
-    const FINISHING_HOUR = 16;
+    const FINISHING_HOUR = 24;
     const DURATION = 20;
 
     public const AVAILABLE_STATUSES = [
