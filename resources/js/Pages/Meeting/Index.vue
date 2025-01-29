@@ -5,15 +5,6 @@
 
         <template #header>
             <div class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                <Link v-show="activeStep === 2 && subStep === 1" :href="route('dashboard')">
-                    <i class="fas fa-arrow-left text-blue-500"> Cofnij</i>
-                </Link>
-                <i v-show="activeStep === 2 && subStep === 2" class="fas fa-arrow-left text-blue-500"
-                   @click="subStep -= 1;"> Cofnij</i>
-                <i v-show="activeStep === 3 && subStep === 1" class="fas fa-arrow-left text-blue-500"
-                   @click="subStep = 2; activeStep = 2;"> Cofnij</i>
-                <i v-show="activeStep === 4" class="fas fa-arrow-left text-blue-500" @click="prevStep"> Cofnij</i>
-
                 <ol v-if="!$page.props.auth.isAdmin"
                     class=" mt-3 items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse">
                     <li :class="['flex items-center dark:text-blue-500 space-x-2.5 rtl:space-x-reverse', { 'text-blue-600': activeStep === 1 }]">
@@ -172,7 +163,13 @@
                 </div>
             </section>
 
-            <section class="md:col-span-1">
+            <section class="mx-auto">
+                <Link v-show="activeStep === 2 && subStep === 1" :href="route('dashboard')">
+                    <i class="fas fa-arrow-left text-blue-500 text-xl"> Cofnij</i>
+                </Link>
+                <i v-show="activeStep === 2 && subStep === 2" class="fas fa-arrow-left text-blue-500 text-xl" @click="subStep -= 1;"> Cofnij</i>
+                <i v-show="activeStep === 3 && subStep === 1" class="fas fa-arrow-left text-blue-500 text-xl" @click="subStep = 2; activeStep = 2;"> Cofnij</i>
+                <i v-show="activeStep === 4" class="fas fa-arrow-left text-blue-500 text-xl" @click="prevStep"> Cofnij</i>
                 <div class="hidden">
                     <div class="days">
                         <div
