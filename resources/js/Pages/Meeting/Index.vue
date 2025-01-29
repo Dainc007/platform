@@ -95,17 +95,17 @@
                             v-if="upcomingMeetings.data.length"
                             :key="meeting.id"
                             :class="{
-                                        'bg-green-100': meeting.status === 'done',
-                                        'bg-orange-100': meeting.status === 'cancelled',
-                                        'bg-white': meeting.status !== 'done' && meeting.status !== 'cancelled',
-                                        'border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-200 dark:hover:bg-gray-600': true
-                                        }"
+                'bg-green-100': meeting.status === 'done',
+                'bg-orange-100': meeting.status === 'cancelled',
+                'bg-white': meeting.status !== 'done' && meeting.status !== 'cancelled',
+                'border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-200 dark:hover:bg-gray-600': true
+                }"
                         >
                             <td class="px-6 py-4 text-center">
                                 {{ meeting.user.name }}
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <div class="ps-3">
+                                <div class="ps-3 text-center">
                                     <div class="font-normal text-gray-500">
                                         {{ moment(meeting.start_date).format("D-M-Y") }}
                                     </div>
@@ -121,16 +121,16 @@
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <template v-if="meeting.notes">
-                                    <div class="max-h-24 overflow-y-auto">
-                                    <span v-for="note in meeting.notes" :key="note.id">
-                                    {{ note.content }}
-                                    </span>
+                                    <div class="max-h-24 overflow-y-auto text-center">
+                <span v-for="note in meeting.notes" :key="note.id">
+                    {{ note.content }}
+                </span>
                                     </div>
                                 </template>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <svg v-show="meeting.status !== 'done'" @click="handleUpdateMeeting(meeting, 'done')"
-                                     class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-green-500" aria-hidden="true"
+                                     class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-green-500 mx-auto" aria-hidden="true"
                                      xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                     <path fill-rule="evenodd"
                                           d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
@@ -139,14 +139,14 @@
 
                                 <svg v-show="meeting.status !== 'cancelled'"
                                      @click="handleUpdateMeeting(meeting, 'cancelled')"
-                                     class="w-6 h-6 text-red-600 dark:text-white"
+                                     class="w-6 h-6 text-red-600 dark:text-white mx-auto"
                                      aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                      fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                           stroke-width="2" d="M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                 </svg>
                             </td>
-                            <td>
+                            <td class="px-6 py-4 text-center">
                                 <button @click="destroy(meeting.id)" title="Usuń" class="p-2 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs inline-flex items-center">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
