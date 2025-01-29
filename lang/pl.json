@@ -3,6 +3,7 @@
     "user.email": "Email",
     "user.password": "Hasło",
     "user.password.confirm": "Potwierdź Hasło",
+    "user.phone_number": "Numer Telefonu",
 
     "profile": "Profil",
 

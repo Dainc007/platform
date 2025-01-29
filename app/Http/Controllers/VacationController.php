@@ -15,6 +15,7 @@ class VacationController extends Controller
 
     public function index()
     {
+        dd(__('vacation.status.'. 'accepted'));
         $user = Auth::user();
 
         $vacations = $user->isAdmin()

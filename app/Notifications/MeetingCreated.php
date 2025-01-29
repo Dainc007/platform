@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Meeting;
+use App\Services\SmsService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -14,12 +15,15 @@ class MeetingCreated extends Notification
 
 
     private Meeting $meeting;
+    private SmsService $smsService;
     /**
      * Create a new notification instance.
      */
     public function __construct( Meeting $meeting)
     {
         $this->meeting = $meeting;
+        $this->smsService = new SmsService();
+
     }
 
     /**
@@ -37,7 +41,13 @@ class MeetingCreated extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $username = $this->meeting->user->name;
+        $user = $this->meeting->user;
+        if($number = $user->phone_number)
+        {
+            $this->smsService->sendSMS($number, 'Czekaj na wiadomość zwrotna z potwierdzeniem lub odrzuceniem  wybranego przez ciebie terminu.');
+        }
+
+        $username = $user->name;
 
         $mailMessage = (new MailMessage)
             ->subject($username . ' Zaplanował Spotkanie')

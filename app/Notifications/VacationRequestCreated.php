@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Vacation;
+use App\Services\SmsService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -17,9 +18,12 @@ class VacationRequestCreated extends Notification
      */
 
     private Vacation $vacation;
+    private SmsService $smsService;
+
     public function __construct(Vacation $vacation)
     {
         $this->vacation = $vacation;
+        $this->smsService = new SmsService();
     }
 
     /**
@@ -37,7 +41,14 @@ class VacationRequestCreated extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $username = $this->vacation->user->name;
+        $user = $this->vacation->user;
+
+        if($number = $user->phone_number)
+        {
+            $this->smsService->sendSMS($number, 'Czekaj na wiadomość zwrotna z potwierdzeniem lub odrzuceniem  wybranego przez ciebie terminu.');
+        }
+
+        $username = $user->name;
         return (new MailMessage)
             ->subject($username . ' - Wniosek Urlopowy')
             ->greeting('Witaj')

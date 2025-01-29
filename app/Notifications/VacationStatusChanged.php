@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Vacation;
+use App\Services\SmsService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -16,9 +17,11 @@ class VacationStatusChanged extends Notification
      * Create a new notification instance.
      */
     private Vacation $vacation;
+    private SmsService $smsService;
     public function __construct(Vacation $vacation)
     {
         $this->vacation = $vacation;
+        $this->smsService = new SmsService();
     }
 
     /**
@@ -36,13 +39,22 @@ class VacationStatusChanged extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        if($notifiable->phone_number)
+        {
+            $status =  __('vacation.status.'. $this->vacation->status);
+            $firstDay = $this->vacation->start_at->format('d-m-Y');
+            $lastDay = $this->vacation->end_at->format('d-m-Y');
+            $message = "$status wniosek o dni wolne $firstDay $lastDay";
+            $this->smsService->sendSMS($notifiable->phone_number, $message);
+        }
+
         return (new MailMessage)
             ->subject('Zmiana statusu wniosku urlopowego')
             ->greeting('Witaj')
             ->line('Status Twojego wniosku urlopowego uległ zmianie.')
-            ->line('Nowy status wniosku:' . __('vacation.status.'. $this->vacation->status))
-            ->line('Pierwszy dzień urlopu : ' . $this->vacation->start_at->format('d-m-Y'))
-            ->line('Ostatni dzień urlopu: ' . $this->vacation->end_at->format('d-m-Y'))
+            ->line('Nowy status wniosku:' . $status)
+            ->line('Pierwszy dzień urlopu : ' . $firstDay)
+            ->line('Ostatni dzień urlopu: ' . $lastDay)
             ->lineIf($this->vacation->message, "Dodatkowe informacje: {$this->vacation->message}")
             ->salutation('Pozdrawiam');
     }
