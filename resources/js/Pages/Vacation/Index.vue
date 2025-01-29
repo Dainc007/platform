@@ -105,11 +105,6 @@ function nextStep() {
 
         <template #header>
             <div class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                <Link v-show="activeStep === 2 && subStep === 1" :href="route('dashboard')">
-                    <i class="fas fa-arrow-left text-blue-500"> Cofnij</i>
-                </Link>
-                <i v-if="activeStep >= 3" class="fas fa-arrow-left text-blue-500" @click="prevStep"> Cofnij</i>
-
                 <ol v-if="!$page.props.auth.isAdmin"
                     class=" mt-3 items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse">
                     <li :class="['flex items-center dark:text-blue-500 space-x-2.5 rtl:space-x-reverse', { 'text-blue-600': activeStep === 1 }]">
@@ -153,8 +148,14 @@ function nextStep() {
         </template>
 
 
-        <div class="p-12">
+        <div class="px-12 py-6 grid grid-cols-1 ">
             <!--User Panel-->
+            <section v-if="!$page.props.auth.isAdmin" class="mx-auto pb-6">
+                <Link v-show="activeStep === 2 && subStep === 1" :href="route('dashboard')">
+                    <i class="fas fa-arrow-left text-blue-500 text-xl"> Cofnij</i>
+                </Link>
+                <i v-if="activeStep >= 3" class="fas fa-arrow-left text-blue-500 text-xl" @click="prevStep"> Cofnij</i>
+            </section>
             <div v-if="!$page.props.auth.isAdmin" class="flex flex-col lg:flex-row justify-center space-y-4 lg:space-y-0 lg:space-x-4">
                 <!-- Kolumna z VueDatePicker i przyciskiem -->
                 <div class="flex flex-col space-y-4">
@@ -197,7 +198,7 @@ function nextStep() {
                 </div>
             </div>
 
-            <div class="flex flex-col space-y-4 w-full col-span-full"
+            <div class="flex flex-col space-y-4 w-full col-span-full mt-4"
                  v-show="activeStep === 3 && subStep === 1">
                     <TextArea
                         v-model="form.note"
@@ -207,7 +208,7 @@ function nextStep() {
                 <InputError class="mt-2" :message="form.errors.note"/>
 
                 <SecondaryButton
-                    class="my-2"
+                    class="my-2 flex items-center justify-center"
                     @click="nextStep"
                 >Przejdź do Podsumowania
                 </SecondaryButton>
