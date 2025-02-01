@@ -8,6 +8,7 @@ use App\Models\Meeting;
 use App\Models\MeetingDate;
 use App\Models\User;
 use App\Notifications\MeetingCreated;
+use App\Notifications\MeetingStatusChanged;
 use App\Services\MeetingService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -47,6 +48,8 @@ class MeetingController extends Controller
     public function update(UpdateMeetingRequest $request, Meeting $meeting)
     {
         $meeting->update($request->validated());
+
+        $meeting->user->notify(new MeetingStatusChanged($meeting));
     }
 
     public function destroy(Meeting $meeting)
