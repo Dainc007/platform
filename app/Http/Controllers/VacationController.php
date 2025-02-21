@@ -18,7 +18,7 @@ class VacationController extends Controller
         $user = Auth::user();
 
         $vacations = $user->isAdmin()
-            ? Vacation::with('user:id,name')->orderBy('id', 'desc')->paginate()
+            ? Vacation::with('user:id,name')->orderBy('id')->paginate()
             : $user->vacations()->orderBy('id', 'desc')->paginate();
 
         return inertia('Vacation/Index', [
