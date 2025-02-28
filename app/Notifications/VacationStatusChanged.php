@@ -8,6 +8,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Laravel\Reverb\Loggers\Log;
 
 class VacationStatusChanged extends Notification
 {
@@ -39,13 +40,16 @@ class VacationStatusChanged extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        $status =  __('vacation.status.'. $this->vacation->status);
+        $firstDay = $this->vacation->start_at->format('d-m-Y');
+        $lastDay = $this->vacation->end_at->format('d-m-Y');
+        $message = "$status wniosek o dni wolne $firstDay $lastDay";
+
         if($notifiable->phone_number)
         {
-            $status =  __('vacation.status.'. $this->vacation->status);
-            $firstDay = $this->vacation->start_at->format('d-m-Y');
-            $lastDay = $this->vacation->end_at->format('d-m-Y');
-            $message = "$status wniosek o dni wolne $firstDay $lastDay";
             $this->smsService->sendSMS($notifiable->phone_number, $message);
+        } else {
+            \Illuminate\Support\Facades\Log::error('Brak podanego numeru telefonu dla id: ' . $notifiable->id);
         }
 
         return (new MailMessage)

@@ -243,6 +243,9 @@ function nextStep() {
                                 {{$t('vacation.date')}}
                             </th>
                             <th scope="col" class="px-6 py-3">
+                                {{$t('vacation.message')}}
+                            </th>
+                            <th scope="col" class="px-6 py-3">
                                 {{$t('vacation.status')}}
                             </th>
 
@@ -269,6 +272,10 @@ function nextStep() {
                                     <div class="text-base font-semibold">{{ vacation.start_at }} - {{ vacation.end_at }}</div>
                                     <div :class="getStatusClass(vacation.status)">{{ $t('vacation.status.' + vacation.status)}}</div>
                                 </div>
+                            </th>
+
+                            <th scope="col" class="px-6 py-3">
+                                {{vacation.message}}
                             </th>
 
                             <th scope="col" class="px-6 py-3">
