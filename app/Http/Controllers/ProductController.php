@@ -18,7 +18,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         return inertia('Product/Index', [
-            'products' => Product::where('code', 'LIKE', $request->input('search', '') . '%')
+            'products' => Product::where('code', '=', $request->input('search', ''))
                 ->with(['currency', 'contractor', 'brand'])
                 ->orderBy('price')
                 ->paginate(15)
