@@ -54,6 +54,7 @@ class VacationRequestCreated extends Notification
             ->greeting('Witaj')
             ->line($username . ' zawnioskował o urlop:')
             ->line($this->vacation->start_at->format('Y-m-d') . ' : ' . $this->vacation->end_at->format('Y-m-d'))
+            ->lineIf($this->vacation->message, "Dodatkowe informacje: {$this->vacation->message}")
             ->salutation('Pozdrawiam');
 
     }

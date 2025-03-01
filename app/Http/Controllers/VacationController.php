@@ -51,7 +51,7 @@ class VacationController extends Controller
         $vacation = $user->vacations()->create([
             'start_at' => $start_at_mysql,
             'end_at' =>$end_at_mysql,
-            'message' => $request->validated('message') ?? ''
+            'message' => $request->validated('message') ?? $request->validated('note') ?? ''
         ]);
 
         if ($request->filled('note')) {
