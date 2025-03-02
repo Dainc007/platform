@@ -15,6 +15,7 @@ class Product extends Model
     const TYPE_STOCK = 'stock';
 
     protected $fillable = [
+        'id', 'created_at', 'updated_at',
         'code',
         'price',
         'currency_id',

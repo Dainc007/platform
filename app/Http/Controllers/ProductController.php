@@ -17,11 +17,19 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+        $products = Product::query();
+        $search = $request->input('search', '');
+
+        if (!empty($search)) {
+            $products->where('code', '=', $search);
+        }
+
+        $products->with(['currency', 'contractor', 'brand'])
+            ->orderBy('price')
+            ->paginate(15);
+
         return inertia('Product/Index', [
-            'products' => Product::where('code', '=', $request->input('search', ''))
-                ->with(['currency', 'contractor', 'brand'])
-                ->orderBy('price')
-                ->paginate(15)
+            'products' => $products
         ]);
     }
 

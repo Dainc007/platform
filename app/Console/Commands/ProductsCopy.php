@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Product;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -14,6 +15,7 @@ class ProductsCopy extends Command
      * @var string
      */
     protected $signature = 'app:products-copy';
+    protected $i = 0;
 
     /**
      * The console command description.
@@ -27,11 +29,32 @@ class ProductsCopy extends Command
      */
     public function handle()
     {
-        DB::connection('second_mysql')->table('products')->orderBy('id')->chunk(1000, function ($products) {
-            DB::connection('mysql')->transaction(function () use ($products) {
-                DB::connection('mysql')->table('products')->insert($products->toArray());
-            });
-        });
+        $connection = DB::connection('mysql')->table('products');
+        $scndConnection = DB::connection('second_mysql');
+
+//        dd($connection->count(), $scndConnection->table('products')->count());
+
+//        $scndConnection->table('products')
+//            ->orderBy('id')
+//            ->each(function ($product) use ($connection) {
+//                $connection->insertOrIgnore((array)$product);
+//                echo $product->id . PHP_EOL;
+//            });
+
+//        DB::connection('second_mysql')->table('products')
+//            ->orderBy('id')->chunk(1000, function ($products)  {
+//                // Przekonwertuj produkty na tablicę
+//                $dataToInsert = [];
+//
+//                foreach ($products as $product) {
+//                    $dataToInsert[] = (array)$product; // Dodaj każdy produkt do tablicy
+//                }
+//                $this->i++;
+//
+//                // Wstaw wszystkie produkty jednocześnie, ignorując istniejące
+//                DB::connection('mysql')->table('products')->insertOrIgnore($dataToInsert);
+//                echo $this->i . PHP_EOL;
+//            });
 
         $this->info('Products copied successfully!');
     }
