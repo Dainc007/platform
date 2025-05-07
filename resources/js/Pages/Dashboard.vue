@@ -3,7 +3,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import SendMessage from "@/Components/SendMessage.vue";
 import ChatMessage from "@/Components/ChatMessage.vue";
-import {onMounted} from "vue";
 
 const props = defineProps({
     friend: {
@@ -19,14 +18,6 @@ const props = defineProps({
     }
 });
 
-onMounted(() => {
-    if (props.conversation) {
-        Echo.channel(`conversations.${props.conversation.id}`)
-            .listen('MessageCreated', (event) => {
-                props.conversation.messages.push(event.message);
-            });
-    }
-});
 </script>
 
 <template>
