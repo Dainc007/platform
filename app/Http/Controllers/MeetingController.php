@@ -14,18 +14,34 @@ use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-
+use App\Http\Requests\TableFilterRequest;
 class MeetingController extends Controller
 {
-    public function index(Request $request, MeetingService $meetingService)
+    public function index(TableFilterRequest $request, MeetingService $meetingService)
     {
         $date = $request->has('date')
             ? Carbon::parse($request->get('date'))->format('Y-m-d')
             : today()->format('Y-m-d');
 
+        $upcomingMeetings = Meeting::with(['notes' ,'user']);
+
+        if($request->has('year') && $request->year !== null) {
+            $upcomingMeetings = $upcomingMeetings->whereYear('start_at', $request->year);
+        }
+
+        if($request->has('month') && $request->month !== null) {
+            $upcomingMeetings = $upcomingMeetings->whereMonth('start_at', $request->month);
+        }
+
+        if($request->has('status') && $request->status !== null) {
+            $upcomingMeetings = $upcomingMeetings->where('status', $request->status);
+        }
+
+        $upcomingMeetings = $upcomingMeetings->orderBy('start_at');
+
         return Inertia::render('Meeting/Index', [
             'meetings' => fn () => ($meetingService->getAvailableMeetings($date)),
-            'upcomingMeetings' => Meeting::with(['notes' ,'user'])->orderBy('start_date')->paginate(10),
+            'upcomingMeetings' => $upcomingMeetings->paginate(10),
             'disabledDates' => MeetingDate::where('date', '>=', today()->format('Y-m-d'))->where('is_enabled', false)->pluck('date')->toArray() ?? [],
         ]);
     }
