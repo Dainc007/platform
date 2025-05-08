@@ -62,9 +62,16 @@
             </div>
         </div>
 
-        <div class="p-12 grid grid-cols-1 ">
+        <div class="p-12 pt-0 grid grid-cols-1 ">
             <section class="space-y-6 md:col-span-2" v-if="$page.props.auth.isAdmin">
                 <h2 class="font-semibold text-3xl dark:text-white text-center">Nadchodzące Spotkania</h2>
+                
+                <TableFilters 
+                    :route="'meetings.index'"
+                    :statuses="['done', 'cancelled', 'pending']"
+                    :show-status="true"
+                />
+
                 <div class="relative shadow-md sm:rounded-lg overflow-x-auto">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -347,6 +354,7 @@ import TextArea from "@/Components/TextArea.vue";
 import moment from "moment/moment";
 import {addDays} from "date-fns";
 import {Inertia} from "@inertiajs/inertia";
+import TableFilters from '@/Components/TableFilters.vue';
 
 
 const date = ref(new Date());

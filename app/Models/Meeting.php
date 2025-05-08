@@ -24,7 +24,7 @@ class Meeting extends Model
     const DURATION = 20;
 
     public const AVAILABLE_STATUSES = [
-        'free', 'booked', 'cancelled', 'done'
+        'free', 'booked', 'cancelled', 'done', 'accepted', 'rejected', 'pending', 'cancelled'
     ];
 
     public function user(): BelongsTo

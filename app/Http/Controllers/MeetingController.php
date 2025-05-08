@@ -26,11 +26,11 @@ class MeetingController extends Controller
         $upcomingMeetings = Meeting::with(['notes' ,'user']);
 
         if($request->has('year') && $request->year !== null) {
-            $upcomingMeetings = $upcomingMeetings->whereYear('start_at', $request->year);
+            $upcomingMeetings = $upcomingMeetings->whereYear('start_date', $request->year);
         }
 
         if($request->has('month') && $request->month !== null) {
-            $upcomingMeetings = $upcomingMeetings->whereMonth('start_at', $request->month);
+            $upcomingMeetings = $upcomingMeetings->whereMonth('start_date', $request->month);
         }
 
         if($request->has('status') && $request->status !== null) {
