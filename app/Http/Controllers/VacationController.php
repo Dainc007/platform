@@ -9,22 +9,39 @@ use App\Models\Vacation;
 use App\Notifications\VacationRequestCreated;
 use App\Notifications\VacationStatusChanged;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\TableFilterRequest;
 
 class VacationController extends Controller
 {
 
-    public function index()
+    public function index(TableFilterRequest $request)
     {
         $user = Auth::user();
 
-        $vacations = $user->isAdmin()
-            ? Vacation::with('user:id,name')->orderBy('id')->paginate()
-            : $user->vacations()->orderBy('id', 'desc')->paginate();
+        if($user->isAdmin()) {
+            $vacations = Vacation::with('user:id,name');
+
+            if($request->has('year') && $request->year !== null) {
+                $vacations = $vacations->whereYear('start_at', $request->year);
+            }
+
+            if($request->has('month') && $request->month !== null) {
+                $vacations = $vacations->whereMonth('start_at', $request->month);
+            }
+
+            if($request->has('status') && $request->status !== null) {
+                $vacations = $vacations->where('status', $request->status);
+            }
+
+            $vacations = $vacations->orderBy('id');
+        } else {
+            $vacations = $user->vacations()->orderBy('id', 'desc');
+        }
 
         return inertia('Vacation/Index', [
-            'vacations' => $vacations,
+            'vacations' => $vacations->paginate(),
             'upcomingVacations' => Vacation::where('status', 'accepted')->where('start_at', '>=', now())->with('user:id,name')->get(),
-            'statuses' => array_diff(Vacation::AVAILABLE_STATUSES, ['cancelled'])
+            'statuses' => Vacation::AVAILABLE_STATUSES
         ]);
     }
 
