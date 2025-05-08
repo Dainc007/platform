@@ -37,7 +37,10 @@ class MeetingController extends Controller
             $upcomingMeetings = $upcomingMeetings->where('status', $request->status);
         }
 
-        $upcomingMeetings = $upcomingMeetings->orderBy('start_at');
+        // Add sorting
+        $sort = $request->input('sort', 'start_date');
+        $direction = $request->input('direction', 'asc');
+        $upcomingMeetings = $upcomingMeetings->orderBy($sort, $direction);
 
         return Inertia::render('Meeting/Index', [
             'meetings' => fn () => ($meetingService->getAvailableMeetings($date)),

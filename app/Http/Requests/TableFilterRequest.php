@@ -18,6 +18,8 @@ class TableFilterRequest extends FormRequest
             'year' => 'nullable|integer|min:2020',
             'month' => 'nullable|integer|min:1|max:12',
             'status' => 'nullable|string',
+            'sort' => 'nullable|string',
+            'direction' => 'nullable|string|in:asc,desc',
         ];
     }
 }
