@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
         Model::preventLazyLoading(!$this->app->isProduction());
         Model::preventSilentlyDiscardingAttributes();
         Model::preventAccessingMissingAttributes();
-        URL::forceScheme('https');
+        Model::unguard();
     }
 
     /**

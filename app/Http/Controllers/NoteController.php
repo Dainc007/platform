@@ -32,7 +32,13 @@ class NoteController extends Controller
      */
     public function store(StoreNoteRequest $request)
     {
-        //
+        if (!$request->user()->hasAccessToAdminNotes()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $note = Note::create($request->validated());
+
+        return back()->with('success', 'Notatka utworzona');
     }
 
     /**
@@ -64,6 +70,12 @@ class NoteController extends Controller
      */
     public function destroy(Note $note)
     {
-        //
+        if (!$request->user()->hasAccessToAdminNotes()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $note->delete();
+
+        return back()->with('success', 'Notatka usunięta');
     }
 }

@@ -188,6 +188,12 @@
                                 <button @click="destroy(meeting.id)" title="Usuń" class="p-2 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs inline-flex items-center">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
+                                <button v-if="hasAccessToAdminNotes" 
+                                        @click="openNoteModal(meeting)" 
+                                        title="Dodaj notatkę" 
+                                        class="p-2 text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-500 dark:hover:bg-blue-600 border border-blue-200 dark:border-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-100 dark:focus:ring-blue-700 font-medium rounded-lg text-xs inline-flex items-center ml-2">
+                                    <i class="fa-solid fa-note-sticky"></i>
+                                </button>
                             </td>
                         </tr>
                         </tbody>
@@ -370,6 +376,46 @@
 
         </div>
     </AuthenticatedLayout>
+
+    <Modal :show="showNoteModal" @close="closeNoteModal">
+        <div class="p-6">
+            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                Dodaj notatkę do spotkania
+            </h2>
+
+            <div class="mt-6">
+                <InputLabel for="noteTitle" value="Tytuł" />
+                <TextInput
+                    id="noteTitle"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="noteForm.title"
+                    required
+                />
+                <InputError class="mt-2" :message="noteForm.errors.title" />
+            </div>
+
+            <div class="mt-6">
+                <InputLabel for="noteContent" value="Treść" />
+                <TextArea
+                    id="noteContent"
+                    class="mt-1 block w-full"
+                    v-model="noteForm.content"
+                    required
+                />
+                <InputError class="mt-2" :message="noteForm.errors.content" />
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <SecondaryButton @click="closeNoteModal" class="mr-3">
+                    Anuluj
+                </SecondaryButton>
+                <PrimaryButton @click="submitNote" :disabled="noteForm.processing">
+                    Zapisz
+                </PrimaryButton>
+            </div>
+        </div>
+    </Modal>
 </template>
 
 <script setup>
@@ -389,6 +435,8 @@ import {addDays} from "date-fns";
 import {Inertia} from "@inertiajs/inertia";
 import TableFilters from '@/Components/TableFilters.vue';
 import axios from "axios";
+import Modal from '@/Components/Modal.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 
 const date = ref(new Date());
@@ -442,7 +490,8 @@ const updateMeeting = useForm({
 const props = defineProps({
     meetings: [],
     upcomingMeetings: Object,
-    disabledDates: []
+    disabledDates: [],
+    hasAccessToAdminNotes: Boolean
 })
 
 const submit = (date) => {
@@ -489,5 +538,35 @@ const toggleSelectAll = (event) => {
     } else {
         selectedRows.value = [];
     }
+};
+
+const showNoteModal = ref(false);
+const selectedMeeting = ref(null);
+
+const noteForm = useForm({
+    title: '',
+    content: '',
+    notable_id: null,
+    notable_type: 'App\\Models\\Meeting'
+});
+
+const openNoteModal = (meeting) => {
+    selectedMeeting.value = meeting;
+    noteForm.notable_id = meeting.id;
+    showNoteModal.value = true;
+};
+
+const closeNoteModal = () => {
+    showNoteModal.value = false;
+    selectedMeeting.value = null;
+    noteForm.reset();
+};
+
+const submitNote = () => {
+    noteForm.post(route('notes.store'), {
+        onSuccess: () => {
+            closeNoteModal();
+        },
+    });
 };
 </script>
