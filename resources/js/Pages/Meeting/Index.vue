@@ -65,8 +65,10 @@
         <div class="p-12 pt-0 grid grid-cols-1 ">
             <section class="space-y-6 md:col-span-2" v-if="$page.props.auth.isAdmin">
                 <h2 class="font-semibold text-3xl dark:text-white text-center">Nadchodzące Spotkania</h2>
-                
-                <TableFilters 
+
+<!--                <Link class="btn btn-success text-white">Drukuj Raport wszystkich Spotkań</Link>-->
+
+                <TableFilters
                     :route="'meetings.index'"
                     :statuses="['accepted', 'cancelled', 'pending', 'done']"
                     :show-status="true"
@@ -76,6 +78,16 @@
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
+                            <th scope="col" class="p-4">
+                                <div class="flex items-center">
+                                    <input
+                                        @change="toggleSelectAll"
+                                        id="checkbox-all"
+                                        type="checkbox"
+                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                                </div>
+                            </th>
                             <th scope="col" class="px-6 py-3 text-center">
                                 zgłaszający
                             </th>
@@ -117,6 +129,16 @@
                 'border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-200 dark:hover:bg-gray-600': true
                 }"
                         >
+                            <td class="w-4 p-4">
+                                <div class="flex items-center">
+                                    <input :id="`checkbox-${meeting.id}`" type="checkbox"
+                                           :value="meeting.id"
+                                           @change="updateSelectRow(meeting.id)"
+                                           :checked="selectedRows.includes(meeting.id)"
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                                </div>
+                            </td>
                             <td class="px-6 py-4 text-center">
                                 {{ meeting.user.name }}
                             </td>
@@ -179,6 +201,8 @@
                                 v-for="(link, index) in upcomingMeetings.links"
                                 :key="index"
                                 :href="link.url"
+                                preserve-state
+                                preserve-scroll
                                 class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                                 v-html="$t(link.label)"
                             />
@@ -364,6 +388,7 @@ import moment from "moment/moment";
 import {addDays} from "date-fns";
 import {Inertia} from "@inertiajs/inertia";
 import TableFilters from '@/Components/TableFilters.vue';
+import axios from "axios";
 
 
 const date = ref(new Date());
@@ -414,7 +439,7 @@ const updateMeeting = useForm({
     status: ''
 });
 
-defineProps({
+const props = defineProps({
     meetings: [],
     upcomingMeetings: Object,
     disabledDates: []
@@ -447,5 +472,22 @@ const toggleSort = () => {
         preserveState: true,
         preserveScroll: true
     });
+};
+
+const selectedRows = ref([]);
+
+const updateSelectRow = (rowId) => {
+    if (selectedRows.value.includes(rowId)) {
+        selectedRows.value = selectedRows.value.filter(id => id !== rowId);
+    } else {
+        selectedRows.value.push(rowId);
+    }
+};
+const toggleSelectAll = (event) => {
+    if (event.target.checked) {
+        selectedRows.value = props.upcomingMeetings.data.map(meeting => meeting.id);
+    } else {
+        selectedRows.value = [];
+    }
 };
 </script>

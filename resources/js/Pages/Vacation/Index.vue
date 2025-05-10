@@ -104,6 +104,23 @@ function handleDayClick() {
  console.log(1);
 }
 
+const selectedRows = ref([]);
+
+const updateSelectRow = (rowId) => {
+    if (selectedRows.value.includes(rowId)) {
+        selectedRows.value = selectedRows.value.filter(id => id !== rowId);
+    } else {
+        selectedRows.value.push(rowId);
+    }
+};
+const toggleSelectAll = (event) => {
+    if (event.target.checked) {
+        selectedRows.value = props.vacations.data.map(meeting => meeting.id);
+    } else {
+        selectedRows.value = [];
+    }
+};
+
 </script>
 
 <template>
@@ -238,16 +255,26 @@ function handleDayClick() {
             </div>
             <!--Admin Panel-->
             <div v-if="$page.props.auth.isAdmin" class="grid grid-cols-1">
-                <TableFilters 
+                <TableFilters
                     :route="'vacations.index'"
                     :statuses="statuses"
                     :show-status="true"
                 />
-                
+
                 <div class="flex flex-col items-start space-y-4 overflow-x-auto">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
+                            <th scope="col" class="p-4">
+                                <div class="flex items-center">
+                                    <input
+                                        @change="toggleSelectAll"
+                                        id="checkbox-all"
+                                        type="checkbox"
+                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                                </div>
+                            </th>
                             <th scope="col" class="px-6 py-3">
                                 {{$t('vacation.requester')}}
                             </th>
@@ -274,6 +301,16 @@ function handleDayClick() {
                                         'bg-red-100': vacation.status === 'rejected',
                                         }"
                         >
+                            <th class="w-4 p-4">
+                                <div class="flex items-center">
+                                    <input :id="`checkbox-${vacation.id}`" type="checkbox"
+                                           :value="vacation.id"
+                                           @change="updateSelectRow(vacation.id)"
+                                           :checked="selectedRows.includes(vacation.id)"
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                                </div>
+                            </th>
                             <th scope="col" class="px-6 py-3">
                                 {{vacation.user.name}}
                             </th>
@@ -340,6 +377,7 @@ function handleDayClick() {
                             :key="index"
                             :href="link.url"
                             v-html="$t(link.label)"
+                            preserve-state
                             preserve-scroll
                             :class="[
 'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 border border-gray-300 dark:border-gray-700 dark:text-gray-400',
