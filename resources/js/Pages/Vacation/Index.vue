@@ -99,11 +99,6 @@ function nextStep() {
     activeStep.value += 1;
     subStep.value = 1;
 }
-
-function handleDayClick() {
- console.log(1);
-}
-
 const selectedRows = ref([]);
 
 const updateSelectRow = (rowId) => {
@@ -123,7 +118,7 @@ const toggleSelectAll = (event) => {
 
 const printSelectedRows = () => {
     if (selectedRows.value.length === 0) return;
-    
+
     const url = route('reports.generate', {
         type: 'vacations',
         ids: selectedRows.value
@@ -271,7 +266,7 @@ const printSelectedRows = () => {
                     <div class="flex justify-between items-center mb-4">
                         <div class="w-24">
                             <button v-if="selectedRows.length > 0"
-                                    @click="printSelectedRows" 
+                                    @click="printSelectedRows"
                                     class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                                 Drukuj
                             </button>
@@ -395,7 +390,7 @@ const printSelectedRows = () => {
                     <div class="flex justify-between items-center m-2">
                         <div class="w-24">
                             <button v-if="selectedRows.length > 0"
-                                    @click="printSelectedRows" 
+                                    @click="printSelectedRows"
                                     class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                                 Drukuj
                             </button>

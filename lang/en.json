@@ -63,5 +63,9 @@
     "modal.send": "Send",
 
     "dataPicker.cancel": "Cancel",
-    "dataPicker.pick": "Pick"
+    "dataPicker.pick": "Pick",
+
+    "meeting.status.rejected": "Anulowane",
+    "meeting.status.done": "Odbyte",
+    "meeting.status.cancelled": "Odwołane"
 }

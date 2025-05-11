@@ -9,6 +9,7 @@ use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\GenerateReportController;
 use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NoteController;
@@ -68,6 +69,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', AdminPanelController::class)->name('admin.dashboard');
         Route::resource('settings', SettingController::class)->only(['index', 'update']);
     });
+
+    Route::get('reports/generate', GenerateReportController::class)->name('reports.generate');
 });
 
 require __DIR__.'/auth.php';

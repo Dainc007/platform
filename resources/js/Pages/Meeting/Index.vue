@@ -69,7 +69,7 @@
                 <div class="flex justify-between items-center mb-4">
                     <div class="w-24">
                         <button v-if="selectedRows.length > 0"
-                                @click="printSelectedRows" 
+                                @click="printSelectedRows"
                                 class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                             Drukuj
                         </button>
@@ -195,13 +195,13 @@
                                 <button @click="destroy(meeting.id)" title="Usuń" class="p-2 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs inline-flex items-center">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
-                                <button v-if="hasAccessToAdminNotes" 
-                                        @click="openNoteModal(meeting)" 
-                                        title="Dodaj notatkę" 
+                                <button v-if="hasAccessToAdminNotes"
+                                        @click="openNoteModal(meeting)"
+                                        title="Dodaj notatkę"
                                         class="p-2 text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-500 dark:hover:bg-blue-600 border border-blue-200 dark:border-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-100 dark:focus:ring-blue-700 font-medium rounded-lg text-xs inline-flex items-center ml-2">
                                     <i class="fa-solid fa-note-sticky"></i>
                                 </button>
-    
+
                             </td>
                         </tr>
                         </tbody>
@@ -211,7 +211,7 @@
                     <div class="flex justify-between items-center m-2">
                         <div class="w-24">
                             <button v-if="selectedRows.length > 0"
-                                    @click="printSelectedRows" 
+                                    @click="printSelectedRows"
                                     class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                                 Drukuj
                             </button>
@@ -589,16 +589,11 @@ const submitNote = () => {
 
 const printSelectedRows = () => {
     if (selectedRows.value.length === 0) return;
-    
-    router.post(route('reports.generate'), {
+
+    const url = route('reports.generate', {
         type: 'meetings',
         ids: selectedRows.value
-    }, {
-        preserveState: true,
-        preserveScroll: true,
-        onSuccess: () => {
-            // Optional: Add any success handling here
-        }
     });
+    window.open(url, '_blank');
 };
 </script>
