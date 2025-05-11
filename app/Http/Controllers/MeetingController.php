@@ -68,8 +68,12 @@ class MeetingController extends Controller
     public function update(UpdateMeetingRequest $request, Meeting $meeting)
     {
         $meeting->update($request->validated());
+        if($meeting->isDirty('status')) {
+            $meeting->user->notify(new MeetingStatusChanged($meeting));
+        }
 
-        $meeting->user->notify(new MeetingStatusChanged($meeting));
+        return back()->with(['message' => 'Rekord został zaktualizowany']);
+
     }
 
     public function destroy(Meeting $meeting)

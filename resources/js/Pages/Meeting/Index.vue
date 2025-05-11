@@ -196,7 +196,7 @@
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                                 <button v-if="hasAccessToAdminNotes"
-                                        @click="openNoteModal(meeting)"
+                                        @click="openDescriptionModal(meeting)"
                                         title="Dodaj notatkę"
                                         class="p-2 text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-500 dark:hover:bg-blue-600 border border-blue-200 dark:border-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-100 dark:focus:ring-blue-700 font-medium rounded-lg text-xs inline-flex items-center ml-2">
                                     <i class="fa-solid fa-note-sticky"></i>
@@ -394,40 +394,28 @@
         </div>
     </AuthenticatedLayout>
 
-    <Modal :show="showNoteModal" @close="closeNoteModal">
+    <Modal :show="showDescriptionModal" @close="closeDescriptionModal">
         <div class="p-6">
             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                 Dodaj notatkę do spotkania
             </h2>
 
             <div class="mt-6">
-                <InputLabel for="noteTitle" value="Tytuł" />
-                <TextInput
-                    id="noteTitle"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="noteForm.title"
-                    required
-                />
-                <InputError class="mt-2" :message="noteForm.errors.title" />
-            </div>
-
-            <div class="mt-6">
-                <InputLabel for="noteContent" value="Treść" />
+                <InputLabel for="description" value="Treść" />
                 <TextArea
-                    id="noteContent"
+                    id="description"
                     class="mt-1 block w-full"
-                    v-model="noteForm.content"
+                    v-model="descriptionForm.description"
                     required
                 />
-                <InputError class="mt-2" :message="noteForm.errors.content" />
+                <InputError class="mt-2" :message="descriptionForm.errors.description" />
             </div>
 
             <div class="mt-6 flex justify-end">
-                <SecondaryButton @click="closeNoteModal" class="mr-3">
+                <SecondaryButton @click="closeDescriptionModal" class="mr-3">
                     Anuluj
                 </SecondaryButton>
-                <PrimaryButton @click="submitNote" :disabled="noteForm.processing">
+                <PrimaryButton @click="submitDescription" :disabled="descriptionForm.processing">
                     Zapisz
                 </PrimaryButton>
             </div>
@@ -557,32 +545,29 @@ const toggleSelectAll = (event) => {
     }
 };
 
-const showNoteModal = ref(false);
+const showDescriptionModal = ref(false);
 const selectedMeeting = ref(null);
 
-const noteForm = useForm({
-    title: '',
-    content: '',
-    notable_id: null,
-    notable_type: 'App\\Models\\Meeting'
+const descriptionForm = useForm({
+    description: '',
 });
 
-const openNoteModal = (meeting) => {
+const openDescriptionModal = (meeting) => {
     selectedMeeting.value = meeting;
-    noteForm.notable_id = meeting.id;
-    showNoteModal.value = true;
+    descriptionForm.description = meeting.description ?? '';
+    showDescriptionModal.value = true;
 };
 
-const closeNoteModal = () => {
-    showNoteModal.value = false;
+const closeDescriptionModal = () => {
+    showDescriptionModal.value = false;
     selectedMeeting.value = null;
-    noteForm.reset();
+    descriptionForm.reset();
 };
 
-const submitNote = () => {
-    noteForm.post(route('notes.store'), {
+const submitDescription = () => {
+    descriptionForm.patch(route('meetings.update', selectedMeeting.value), {
         onSuccess: () => {
-            closeNoteModal();
+            closeDescriptionModal();
         },
     });
 };
