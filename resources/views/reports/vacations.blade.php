@@ -3,80 +3,42 @@
 <head>
     <meta charset="utf-8">
     <title>{{ $title }}</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-            line-height: 1.4;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f5f5f5;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .status {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        .status-accepted {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .status-rejected {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        .status-pending {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="header">
-        <h1>{{ $title }}</h1>
-        <p>Data wygenerowania: {{ $date }}</p>
+<body class="p-8 text-xs">
+    <div class="text-center mb-8">
+        <h1 class="text-lg font-bold mb-2">{{ $title }}</h1>
+        <p class="text-xs text-gray-600">Data wygenerowania: {{ $date }}</p>
     </div>
 
-    <table>
+    <table class="w-full border-collapse">
         <thead>
             <tr>
-                <th>Pracownik</th>
-                <th>Data rozpoczęcia</th>
-                <th>Data zakończenia</th>
-                <th>Status</th>
-                <th>Wiadomość</th>
+                @foreach($headers as $header)
+                    <th class="border border-gray-300 bg-gray-50 p-2 font-semibold text-xs">{{ $header }}</th>
+                @endforeach
             </tr>
         </thead>
         <tbody>
             @foreach($records as $record)
-            <tr>
-                <td>{{ $record['user'] }}</td>
-                <td>{{ $record['start_date'] }}</td>
-                <td>{{ $record['end_date'] }}</td>
-                <td>
-                    <span class="status status-{{ $record['status'] }}">
-                        {{ $record['status'] }}
-                    </span>
-                </td>
-                <td>{{ $record['message'] }}</td>
-            </tr>
+                <tr class="even:bg-gray-50">
+                    <td class="border border-gray-300 p-2 text-center w-[15%]">{{ $record['user'] }}</td>
+                    <td class="border border-gray-300 p-2 text-center w-[15%]">{{ $record['start_date'] }}</td>
+                    <td class="border border-gray-300 p-2 text-center w-[15%]">{{ $record['end_date'] }}</td>
+                    <td class="border border-gray-300 p-2 text-center w-[15%]">
+                        <span class="inline-block px-2 py-1 rounded text-xs font-semibold min-w-[80px] 
+                            @if($record['status'] === 'accepted')
+                                text-green-800
+                            @elseif($record['status'] === 'rejected')
+                                text-red-800
+                            @else
+                                text-yellow-800
+                            @endif">
+                            {{ $record['status'] }}
+                        </span>
+                    </td>
+                    <td class="border border-gray-300 p-2 text-center w-[40%]">{{ $record['message'] }}</td>
+                </tr>
             @endforeach
         </tbody>
     </table>

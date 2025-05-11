@@ -6,5 +6,7 @@ return [
         'approved' => 'Zaakceptowany',
         'rejected' => 'Odrzucony',
         'pending' => 'Oczekujący',
+        'done' => "Odbyte",
+        'cancelled' => "Anulowane"
     ],
 ];
