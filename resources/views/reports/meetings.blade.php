@@ -3,45 +3,52 @@
 <head>
     <meta charset="utf-8">
     <title>{{ $title }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'DejaVu Sans', sans-serif;
+            font-size: 12px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 6px 8px;
+            text-align: center;
+        }
+        th {
+            background: #eee;
+        }
+        .status {
+            font-weight: bold;
+        }
+    </style>
 </head>
-<body class="p-8 text-xs">
-    <div class="text-center mb-8">
-        <h1 class="text-lg font-bold mb-2">{{ $title }}</h1>
-        <p class="text-xs text-gray-600">Data wygenerowania: {{ $date }}</p>
-    </div>
-
-    <table class="w-full border-collapse">
+<body>
+    <h1 style="text-align:center;">{{ $title }}</h1>
+    <p style="text-align:center;">Data wygenerowania: {{ $date }}</p>
+    <table>
         <thead>
             <tr>
                 @foreach($headers as $header)
-                    <th class="border border-gray-300 bg-gray-50 p-2 font-semibold text-xs">{{ $header }}</th>
+                    <th>{{ $header }}</th>
                 @endforeach
             </tr>
         </thead>
         <tbody>
             @foreach($records as $record)
-                <tr class="even:bg-gray-50">
-                    <td class="border border-gray-300 p-2 text-center w-[15%]">{{ $record['user'] }}</td>
-                    <td class="border border-gray-300 p-2 text-center w-[10%]">{{ $record['date'] }}</td>
-                    <td class="border border-gray-300 p-2 text-center w-[15%]">{{ $record['time'] }}</td>
-                    <td class="border border-gray-300 p-2 text-center w-[10%]">{{ $record['hours_worked'] }}h</td>
-                    <td class="border border-gray-300 p-2 text-center w-[15%]">
-                        <span class="inline-block px-2 py-1 rounded text-xs font-semibold min-w-[80px] 
-                            @if($record['status'] === 'done')
-                                text-green-800
-                            @elseif($record['status'] === 'cancelled')
-                                text-red-800
-                            @else
-                                text-yellow-800
-                            @endif">
-                            {{ $record['status'] }}
-                        </span>
-                    </td>
-                    <td class="border border-gray-300 p-2 text-center w-[35%]">{{ $record['notes'] }}</td>
+                <tr>
+                    <td>{{ $record['user'] }}</td>
+                    <td>{{ $record['date'] }}</td>
+                    <td>{{ $record['time'] }}</td>
+                    <td>{{ $record['hours_worked'] }}h</td>
+                    <td class="status">{{ $record['status'] }}</td>
+                    <td>{{ $record['notes'] }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 </body>
-</html> 
+</html>

@@ -6,6 +6,8 @@ use App\Http\Requests\GenerateReportRequest;
 use App\Services\ReportService;
 use Spatie\LaravelPdf\PdfBuilder;
 use function Spatie\LaravelPdf\Support\pdf;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class GenerateReportController extends Controller
 {
@@ -13,7 +15,7 @@ class GenerateReportController extends Controller
      * Handle the incoming request.
      * @throws \Exception
      */
-    public function __invoke(GenerateReportRequest $request): PdfBuilder
+    public function __invoke(GenerateReportRequest $request)
     {
          $type = $request->validated('type');
          $ids = $request->validated('ids');
@@ -24,9 +26,9 @@ class GenerateReportController extends Controller
             default => throw new \Exception('Invalid report type'),
         };
 
-        return pdf()
-            ->view($data['view'], $data)
-            ->name($data['filename']);
+    
+        $pdf = Pdf::loadView($data['view'], $data);
+        return $pdf->download($data['filename']);
 
     }
 }
