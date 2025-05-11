@@ -66,13 +66,20 @@
             <section class="space-y-6 md:col-span-2" v-if="$page.props.auth.isAdmin">
                 <h2 class="font-semibold text-3xl dark:text-white text-center">Nadchodzące Spotkania</h2>
 
-<!--                <Link class="btn btn-success text-white">Drukuj Raport wszystkich Spotkań</Link>-->
-
-                <TableFilters
-                    :route="'meetings.index'"
-                    :statuses="['accepted', 'cancelled', 'pending', 'done']"
-                    :show-status="true"
-                />
+                <div class="flex justify-between items-center mb-4">
+                    <div class="w-24">
+                        <button v-if="selectedRows.length > 0"
+                                @click="printSelectedRows" 
+                                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            Drukuj
+                        </button>
+                    </div>
+                    <TableFilters
+                        :route="'meetings.index'"
+                        :statuses="['accepted', 'cancelled', 'pending', 'done']"
+                        :show-status="true"
+                    />
+                </div>
 
                 <div class="relative shadow-md sm:rounded-lg overflow-x-auto">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -113,7 +120,7 @@
                                 Status
                             </th>
                             <th scope="col" class="px-6 py-3 text-center">
-                                Usuwanie
+                                Akcje
                             </th>
                         </tr>
                         </thead>
@@ -194,26 +201,36 @@
                                         class="p-2 text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-500 dark:hover:bg-blue-600 border border-blue-200 dark:border-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-100 dark:focus:ring-blue-700 font-medium rounded-lg text-xs inline-flex items-center ml-2">
                                     <i class="fa-solid fa-note-sticky"></i>
                                 </button>
+    
                             </td>
                         </tr>
                         </tbody>
                     </table>
                     <div class="text-green-500 bg-red-500/20">
                     </div>
-                    <nav class=" m-2 flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
-                         aria-label="Table navigation">
-                        <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-                            <Link
-                                v-for="(link, index) in upcomingMeetings.links"
-                                :key="index"
-                                :href="link.url"
-                                preserve-state
-                                preserve-scroll
-                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                                v-html="$t(link.label)"
-                            />
-                        </ul>
-                    </nav>
+                    <div class="flex justify-between items-center m-2">
+                        <div class="w-24">
+                            <button v-if="selectedRows.length > 0"
+                                    @click="printSelectedRows" 
+                                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                Drukuj
+                            </button>
+                        </div>
+                        <nav class="flex items-center flex-column flex-wrap md:flex-row justify-end pt-4"
+                             aria-label="Table navigation">
+                            <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+                                <Link
+                                    v-for="(link, index) in upcomingMeetings.links"
+                                    :key="index"
+                                    :href="link.url"
+                                    preserve-state
+                                    preserve-scroll
+                                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                    v-html="$t(link.label)"
+                                />
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </section>
 
@@ -567,6 +584,21 @@ const submitNote = () => {
         onSuccess: () => {
             closeNoteModal();
         },
+    });
+};
+
+const printSelectedRows = () => {
+    if (selectedRows.value.length === 0) return;
+    
+    router.post(route('reports.generate'), {
+        type: 'meetings',
+        ids: selectedRows.value
+    }, {
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: () => {
+            // Optional: Add any success handling here
+        }
     });
 };
 </script>

@@ -121,6 +121,16 @@ const toggleSelectAll = (event) => {
     }
 };
 
+const printSelectedRows = () => {
+    if (selectedRows.value.length === 0) return;
+    
+    const url = route('reports.generate', {
+        type: 'vacations',
+        ids: selectedRows.value
+    });
+    window.open(url, '_blank');
+};
+
 </script>
 
 <template>
@@ -255,181 +265,205 @@ const toggleSelectAll = (event) => {
             </div>
             <!--Admin Panel-->
             <div v-if="$page.props.auth.isAdmin" class="grid grid-cols-1">
-                <TableFilters
-                    :route="'vacations.index'"
-                    :statuses="statuses"
-                    :show-status="true"
-                />
+                <section class="space-y-6 md:col-span-2" v-if="$page.props.auth.isAdmin">
+                    <h2 class="font-semibold text-3xl dark:text-white text-center">Nadchodzące Urlop</h2>
 
-                <div class="flex flex-col items-start space-y-4 overflow-x-auto">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="p-4">
-                                <div class="flex items-center">
-                                    <input
-                                        @change="toggleSelectAll"
-                                        id="checkbox-all"
-                                        type="checkbox"
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="checkbox-all-search" class="sr-only">checkbox</label>
-                                </div>
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                {{$t('vacation.requester')}}
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                {{$t('vacation.date')}}
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                {{$t('vacation.message')}}
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                {{$t('vacation.status')}}
-                            </th>
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="w-24">
+                            <button v-if="selectedRows.length > 0"
+                                    @click="printSelectedRows" 
+                                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                Drukuj
+                            </button>
+                        </div>
+                        <TableFilters
+                            :route="'vacations.index'"
+                            :statuses="['accepted', 'rejected', 'pending']"
+                            :show-status="true"
+                        />
+                    </div>
 
-                            <th scope="col" class="px-6 py-3">
-                                {{$t('actions')}}
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for="vacation in vacations.data" v-if="vacations" :key="vacation.id"
-                            class="border-b hover:bg-blue-200"
-                            :class="{
-                                        'bg-green-100': vacation.status === 'accepted',
-                                        'bg-red-100': vacation.status === 'rejected',
-                                        }"
-                        >
-                            <th class="w-4 p-4">
-                                <div class="flex items-center">
-                                    <input :id="`checkbox-${vacation.id}`" type="checkbox"
-                                           :value="vacation.id"
-                                           @change="updateSelectRow(vacation.id)"
-                                           :checked="selectedRows.includes(vacation.id)"
-                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                                </div>
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                {{vacation.user.name}}
-                            </th>
+                    <div class="flex flex-col items-start space-y-4 overflow-x-auto">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="p-4">
+                                    <div class="flex items-center">
+                                        <input
+                                            @change="toggleSelectAll"
+                                            id="checkbox-all"
+                                            type="checkbox"
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    {{$t('vacation.requester')}}
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    {{$t('vacation.date')}}
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    {{$t('vacation.message')}}
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    {{$t('vacation.status')}}
+                                </th>
 
-                            <th scope="row"
-                                class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                <div class="ps-3">
-                                    <div class="text-base font-semibold">{{ vacation.start_at }} - {{ vacation.end_at }}</div>
-                                    <div :class="getStatusClass(vacation.status)">{{ $t('vacation.status.' + vacation.status)}}</div>
-                                </div>
-                            </th>
+                                <th scope="col" class="px-6 py-3">
+                                    {{$t('actions')}}
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="vacation in vacations.data" v-if="vacations" :key="vacation.id"
+                                class="border-b hover:bg-blue-200"
+                                :class="{
+                                            'bg-green-100': vacation.status === 'accepted',
+                                            'bg-red-100': vacation.status === 'rejected',
+                                            }"
+                            >
+                                <th class="w-4 p-4">
+                                    <div class="flex items-center">
+                                        <input :id="`checkbox-${vacation.id}`" type="checkbox"
+                                               :value="vacation.id"
+                                               @change="updateSelectRow(vacation.id)"
+                                               :checked="selectedRows.includes(vacation.id)"
+                                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    {{vacation.user.name}}
+                                </th>
 
-                            <th scope="col" class="px-6 py-3">
-                                {{vacation.message}}
-                            </th>
+                                <th scope="row"
+                                    class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                    <div class="ps-3">
+                                        <div class="text-base font-semibold">{{ vacation.start_at }} - {{ vacation.end_at }}</div>
+                                        <div :class="getStatusClass(vacation.status)">{{ $t('vacation.status.' + vacation.status)}}</div>
+                                    </div>
+                                </th>
 
-                            <th scope="col" class="px-6 py-3">
-                                <svg v-if="vacation.status === 'accepted'" class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-gray-800 dark:text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd" d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z" clip-rule="evenodd"/>
-                                </svg>
+                                <th scope="col" class="px-6 py-3">
+                                    {{vacation.message}}
+                                </th>
 
-                                <svg v-if="vacation.status === 'rejected'" class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-gray-800 dark:text-red-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z" clip-rule="evenodd"/>
-                                </svg>
+                                <th scope="col" class="px-6 py-3">
+                                    <svg v-if="vacation.status === 'accepted'" class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-gray-800 dark:text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path fill-rule="evenodd" d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z" clip-rule="evenodd"/>
+                                    </svg>
 
-                                <svg v-if="vacation.status === 'cancelled'" class="w-6 h-6 text-gray-800 dark:text-white"
-                                     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                     fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                          stroke-width="2" d="M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                </svg>
+                                    <svg v-if="vacation.status === 'rejected'" class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-gray-800 dark:text-red-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z" clip-rule="evenodd"/>
+                                    </svg>
 
-                                <svg v-if="vacation.status === 'pending'"
-                                     class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-gray-800 dark:text-white animate-spin-slow"
-                                     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                          stroke-width="3"
-                                          d="M18.5 4h-13m13 16h-13M8 20v-3.333a2 2 0 0 1 .4-1.2L10 12.6a1 1 0 0 0 0-1.2L8.4 8.533a2 2 0 0 1-.4-1.2V4h8v3.333a2 2 0 0 1-.4 1.2L13.957 11.4a1 1 0 0 0 0 1.2l1.643 2.867a2 2 0 0 1 .4 1.2V20H8Z"/>
-                                </svg>
-                            </th>
-                            <th class="px-6 py-4">
-                                <div class="flex space-x-2">
-                                    <button @click="reply(vacation)" class="p-2 dark:bg-gray-800 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M14.502 7.046h-2.5v-.928a2.122 2.122 0 0 0-1.199-1.954 1.827 1.827 0 0 0-1.984.311L3.71 8.965a2.2 2.2 0 0 0 0 3.24L8.82 16.7a1.829 1.829 0 0 0 1.985.31 2.121 2.121 0 0 0 1.199-1.959v-.928h1a2.025 2.025 0 0 1 1.999 2.047V19a1 1 0 0 0 1.275.961 6.59 6.59 0 0 0 4.662-7.22 6.593 6.593 0 0 0-6.437-5.695Z"/>
-                                        </svg>
-                                    </button>
+                                    <svg v-if="vacation.status === 'cancelled'" class="w-6 h-6 text-gray-800 dark:text-white"
+                                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                         fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                              stroke-width="2" d="M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                    </svg>
 
-                                    <button @click="destroy(vacation.id)" title="Usuń" class="p-2 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs inline-flex items-center">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </th>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="text-green-500 bg-red-500/20">
-                </div>
-                <nav class=" m-2 flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
-                    <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-                        <Link
-                            v-for="(link, index) in vacations.links"
-                            :key="index"
-                            :href="link.url"
-                            v-html="$t(link.label)"
-                            preserve-state
-                            preserve-scroll
-                            :class="[
+                                    <svg v-if="vacation.status === 'pending'"
+                                         class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-gray-800 dark:text-white animate-spin-slow"
+                                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                              stroke-width="3"
+                                              d="M18.5 4h-13m13 16h-13M8 20v-3.333a2 2 0 0 1 .4-1.2L10 12.6a1 1 0 0 0 0-1.2L8.4 8.533a2 2 0 0 1-.4-1.2V4h8v3.333a2 2 0 0 1-.4 1.2L13.957 11.4a1 1 0 0 0 0 1.2l1.643 2.867a2 2 0 0 1 .4 1.2V20H8Z"/>
+                                    </svg>
+                                </th>
+                                <th class="px-6 py-4">
+                                    <div class="flex space-x-2">
+                                        <button @click="reply(vacation)" class="p-2 dark:bg-gray-800 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M14.502 7.046h-2.5v-.928a2.122 2.122 0 0 0-1.199-1.954 1.827 1.827 0 0 0-1.984.311L3.71 8.965a2.2 2.2 0 0 0 0 3.24L8.82 16.7a1.829 1.829 0 0 0 1.985.31 2.121 2.121 0 0 0 1.199-1.959v-.928h1a2.025 2.025 0 0 1 1.999 2.047V19a1 1 0 0 0 1.275.961 6.59 6.59 0 0 0 4.662-7.22 6.593 6.593 0 0 0-6.437-5.695Z"/>
+                                            </svg>
+                                        </button>
+
+                                        <button @click="destroy(vacation.id)" title="Usuń" class="p-2 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs inline-flex items-center">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </th>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-green-500 bg-red-500/20">
+                    </div>
+                    <div class="flex justify-between items-center m-2">
+                        <div class="w-24">
+                            <button v-if="selectedRows.length > 0"
+                                    @click="printSelectedRows" 
+                                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                Drukuj
+                            </button>
+                        </div>
+                        <nav class="flex items-center flex-column flex-wrap md:flex-row justify-end pt-4"
+                             aria-label="Table navigation">
+                            <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+                                <Link
+                                    v-for="(link, index) in vacations.links"
+                                    :key="index"
+                                    :href="link.url"
+                                    v-html="$t(link.label)"
+                                    preserve-state
+                                    preserve-scroll
+                                    :class="[
 'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 border border-gray-300 dark:border-gray-700 dark:text-gray-400',
 link.active ? 'bg-blue-500 text-white dark:bg-blue-700 dark:text-white' : 'bg-white hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white'
 ]"
-                        />
-                    </ul>
-                </nav>
-            </div>
-            <!--Answer modal Panel-->
-            <Modal :show="response" @close="closeModal">
-
-                <div class="p-6">
-                    <h4 class="font-semibold text-xl text-blue-500 text-center">
-                       Urlop od {{ activeVacation.start_at }} do {{ activeVacation.end_at }}
-                    </h4>
-                    <select
-                        id="status"
-                        v-model="form.status"
-                        class="my-3 block w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                    >
-                        <option v-for="status in statuses" :key="status" :value="status">
-                            {{$t('vacation.status.' + status)}}
-                        </option>
-                    </select>
-                    <input id="newStartDate"
-                           v-model="form.startDate"
-                           class=" mt-1 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                           type='date'> do
-                    <input id="newEndDate"
-                           v-model="form.endDate"
-                           class="mb-3 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-
-                           type='date'>
-
-
-                    <TextArea v-model="form.message"></TextArea>
-
-                    <div class="mt-6 flex justify-end">
-                        <SecondaryButton @click="closeModal"> {{$t('modal.cancel')}} </SecondaryButton>
-
-                        <PrimaryButton
-                            class="ms-3"
-                            :class="{ 'opacity-25': form.processing }"
-                            :disabled="form.processing"
-                            @click="updateVacation"
-                        >
-                            {{$t('vacation.send')}}
-                        </PrimaryButton>
+                                />
+                            </ul>
+                        </nav>
                     </div>
-                </div>
-            </Modal>
+                </section>
+
+                <!--Answer modal Panel-->
+                <Modal :show="response" @close="closeModal">
+
+                    <div class="p-6">
+                        <h4 class="font-semibold text-xl text-blue-500 text-center">
+                           Urlop od {{ activeVacation.start_at }} do {{ activeVacation.end_at }}
+                        </h4>
+                        <select
+                            id="status"
+                            v-model="form.status"
+                            class="my-3 block w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                        >
+                            <option v-for="status in statuses" :key="status" :value="status">
+                                {{$t('vacation.status.' + status)}}
+                            </option>
+                        </select>
+                        <input id="newStartDate"
+                               v-model="form.startDate"
+                               class=" mt-1 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                               type='date'> do
+                        <input id="newEndDate"
+                               v-model="form.endDate"
+                               class="mb-3 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+
+                               type='date'>
+
+
+                        <TextArea v-model="form.message"></TextArea>
+
+                        <div class="mt-6 flex justify-end">
+                            <SecondaryButton @click="closeModal"> {{$t('modal.cancel')}} </SecondaryButton>
+
+                            <PrimaryButton
+                                class="ms-3"
+                                :class="{ 'opacity-25': form.processing }"
+                                :disabled="form.processing"
+                                @click="updateVacation"
+                            >
+                                {{$t('vacation.send')}}
+                            </PrimaryButton>
+                        </div>
+                    </div>
+                </Modal>
+            </div>
         </div>
     </AuthenticatedLayout>
 </template>
