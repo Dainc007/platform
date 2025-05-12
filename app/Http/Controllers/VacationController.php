@@ -33,7 +33,7 @@ class VacationController extends Controller
                 $vacations = $vacations->where('status', $request->status);
             }
 
-            $vacations = $vacations->orderBy('id');
+            $vacations = $vacations->orderBy('start_at', 'asc');
         } else {
             $vacations = $user->vacations()->orderBy('id', 'desc');
         }

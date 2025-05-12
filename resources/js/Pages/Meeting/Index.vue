@@ -75,8 +75,9 @@
                         </button>
                     </div>
                     <TableFilters
+                        :modelName="'meeting'"
                         :route="'meetings.index'"
-                        :statuses="['accepted', 'cancelled', 'pending', 'done']"
+                        :statuses="['done', 'cancelled', 'pending']"
                         :show-status="true"
                     />
                 </div>
@@ -170,6 +171,7 @@
                 <span v-for="note in meeting.notes" :key="note.id">
                     {{ note.content }}
                 </span>
+                                        <span v-if="meeting.description"><small>Notatka Admina:</small><br> {{meeting.description}}</span>
                                     </div>
                                 </template>
                             </td>
@@ -192,13 +194,18 @@
                                 </svg>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <button @click="destroy(meeting.id)" title="Usuń" class="p-2 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs inline-flex items-center">
+                                <button @click="destroy(meeting.id)" title="Usuń"
+                                        class="p-2 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs inline-flex items-center">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                                 <button v-if="hasAccessToAdminNotes"
                                         @click="openDescriptionModal(meeting)"
-                                        title="Dodaj notatkę"
-                                        class="p-2 text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-500 dark:hover:bg-blue-600 border border-blue-200 dark:border-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-100 dark:focus:ring-blue-700 font-medium rounded-lg text-xs inline-flex items-center ml-2">
+                                        :title="meeting.description"
+                                        :class="[
+            'p-2 text-white',
+            meeting.description ? 'bg-blue-600 dark:bg-blue-800 hover:bg-blue-500 dark:hover:bg-blue-600' : 'bg-blue-300 dark:bg-blue-700 hover:bg-blue-400 dark:hover:bg-blue-500',
+            'border border-blue-200 dark:border-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-100 dark:focus:ring-blue-700 font-medium rounded-lg text-xs inline-flex items-center ml-2'
+        ]">
                                     <i class="fa-solid fa-note-sticky"></i>
                                 </button>
 
@@ -439,7 +446,6 @@ import moment from "moment/moment";
 import {addDays} from "date-fns";
 import {Inertia} from "@inertiajs/inertia";
 import TableFilters from '@/Components/TableFilters.vue';
-import axios from "axios";
 import Modal from '@/Components/Modal.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 

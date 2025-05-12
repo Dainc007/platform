@@ -272,6 +272,7 @@ const printSelectedRows = () => {
                             </button>
                         </div>
                         <TableFilters
+                            :modelName="'vacation'"
                             :route="'vacations.index'"
                             :statuses="['accepted', 'rejected', 'pending']"
                             :show-status="true"

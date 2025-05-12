@@ -94,6 +94,7 @@
     "meeting.header": "Spotkania",
     "meeting.status.rejected": "Anulowane",
     "meeting.status.done": "Odbyte",
+    "meeting.status.pending": "Zaplanowane",
     "meeting.status.cancelled": "Odwołane",
 
     "form.errors.hoursWorked": "To Pole musi być >= 0",

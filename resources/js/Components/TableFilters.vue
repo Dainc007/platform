@@ -11,6 +11,10 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
+    modelName: {
+        type: String,
+        required: true
+    },
     showStatus: {
         type: Boolean,
         default: true
@@ -78,7 +82,7 @@ const resetFilters = () => {
                     <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
                 </select>
             </div>
-            
+
             <!-- Month Select -->
             <div class="w-full sm:w-32">
                 <label for="month" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -108,7 +112,7 @@ const resetFilters = () => {
                 >
                     <option :value="null">Wszystkie</option>
                     <option v-for="status in statuses" :key="status" :value="status">
-                        {{ $t('vacation.status.' + status) }}
+                        {{ $t(modelName + '.status.' + status) }}
                     </option>
                 </select>
             </div>
@@ -124,4 +128,4 @@ const resetFilters = () => {
             </div>
         </div>
     </div>
-</template> 
+</template>
