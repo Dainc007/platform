@@ -183,7 +183,7 @@
                                 </template>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <svg v-show="meeting.status !== 'done'" @click="handleUpdateMeeting(meeting, 'done')"
+                                <svg v-show="meeting.status !== 'cancelled'" @click="handleUpdateMeeting(meeting, 'cancelled')"
                                      class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-green-500 mx-auto" aria-hidden="true"
                                      xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                     <path fill-rule="evenodd"
@@ -191,8 +191,8 @@
                                           clip-rule="evenodd"/>
                                 </svg>
 
-                                <svg v-show="meeting.status !== 'cancelled'"
-                                     @click="handleUpdateMeeting(meeting, 'cancelled')"
+                                <svg v-show="meeting.status !== 'done'"
+                                     @click="handleUpdateMeeting(meeting, 'done')"
                                      class="w-6 h-6 text-red-600 dark:text-white mx-auto"
                                      aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                      fill="none" viewBox="0 0 24 24">
