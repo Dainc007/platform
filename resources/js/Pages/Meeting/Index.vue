@@ -171,7 +171,14 @@
                 <span v-for="note in meeting.notes" :key="note.id">
                     {{ note.content }}
                 </span>
-                                        <span v-if="meeting.description"><small>Notatka Admina:</small><br> {{meeting.description}}</span>
+                                        <span v-if="meeting.description">
+                                            <br>
+                                            <small>
+                                                Notatka Admina:
+                                            </small>
+                                            <br>
+                                            <b>{{meeting.description}}</b>
+                                        </span>
                                     </div>
                                 </template>
                             </td>

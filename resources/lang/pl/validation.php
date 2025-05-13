@@ -5,4 +5,5 @@ return [
     'attributes' => [
         'date' => 'data',
     ],
+    'min_words' => 'Pole :attribute musi zawierać co najmniej :min słów.',
 ];

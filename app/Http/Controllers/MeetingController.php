@@ -38,8 +38,8 @@ class MeetingController extends Controller
         }
 
         // Add sorting
-        $sort = $request->input('sort', 'start_date');
-        $direction = $request->input('direction', 'asc');
+        $sort = $request->input('sort', 'id');
+        $direction = $request->input('direction', 'desc');
         $upcomingMeetings = $upcomingMeetings->orderBy($sort, $direction);
 
         return Inertia::render('Meeting/Index', [
