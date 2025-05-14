@@ -39,7 +39,7 @@ class VacationController extends Controller
         }
 
         return inertia('Vacation/Index', [
-            'vacations' => $vacations->paginate(),
+            'vacations' => $vacations->paginate()->withQueryString(),
             'upcomingVacations' => Vacation::where('status', 'accepted')->where('start_at', '>=', now())->with('user:id,name')->get(),
             'statuses' => Vacation::AVAILABLE_STATUSES
         ]);

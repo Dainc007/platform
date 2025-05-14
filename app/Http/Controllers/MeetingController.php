@@ -44,7 +44,7 @@ class MeetingController extends Controller
 
         return Inertia::render('Meeting/Index', [
             'meetings' => fn () => ($meetingService->getAvailableMeetings($date)),
-            'upcomingMeetings' => $upcomingMeetings->paginate(10),
+            'upcomingMeetings' => $upcomingMeetings->paginate(10)->withQueryString(),
             'disabledDates' => MeetingDate::where('date', '>=', today()->format('Y-m-d'))->where('is_enabled', false)->pluck('date')->toArray() ?? [],
             'hasAccessToAdminNotes' => $request->user()?->hasAccessToAdminNotes()
         ]);
