@@ -42,9 +42,12 @@ class MeetingCreated extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $user = $this->meeting->user;
+
+        $startDateLine = 'godzina rozpoczęcia: ' . $this->meeting->start_date;
+
         if($number = $user->phone_number)
         {
-            $this->smsService->sendSMS($number, 'Czekaj na wiadomość zwrotna z potwierdzeniem lub odrzuceniem  wybranego przez ciebie terminu.');
+            $this->smsService->sendSMS($number, $startDateLine . ' Czekaj na wiadomość zwrotna z potwierdzeniem lub odrzuceniem  wybranego przez ciebie terminu.');
         }
 
         $username = $user->name;
@@ -53,7 +56,7 @@ class MeetingCreated extends Notification
             ->subject($username . ' Zaplanował Spotkanie')
             ->greeting('Witaj')
             ->line($username . ' zaplanował nowe spotkanie.')
-            ->line('godzina rozpoczęcia: ' . $this->meeting->start_date);
+            ->line($startDateLine);
 
         if ($this->meeting->notes && $this->meeting->notes->isNotEmpty()) {
             $mailMessage->line("Dodatkowa notatka: {$this->meeting->notes?->first()->content}");

@@ -49,12 +49,6 @@ class MeetingStatusChanged extends Notification
             case 'rejected':
                 $smsText = "Wniosek o spotkanie został odrzucony.";
                 break;
-            case 'done':
-                $smsText = "Twoje spotkanie z dnia $date zostało oznaczone jako zakończone.";
-                break;
-            case 'cancelled':
-                $smsText = "Twoje spotkanie z dnia $date zostało odwołane.";
-                break;
             // Dodaj tu kolejne statusy jeśli chcesz
         }
 
@@ -71,7 +65,7 @@ class MeetingStatusChanged extends Notification
             ->subject('Zmiana statusu spotkania')
             ->greeting('Witaj')
             ->line('Status Twojego spotkania uległ zmianie.')
-            ->line('Nowy status wniosku: ' . __('vacation.status.' . $this->meeting->status))
+            ->line('Nowy status wniosku: ' . __('meeting.status.' . $this->meeting->status))
             ->line('Data spotkania: ' . $date)
             ->salutation('Pozdrawiam');
     }
