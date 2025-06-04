@@ -52,7 +52,21 @@ class MeetingController extends Controller
 
     public function store(StoreMeetingRequest $request): RedirectResponse
     {
-        $meeting = Meeting::create($request->getForInsert());
+        $meetingData = $request->getForInsert();
+
+        $isAlreadyBooked = Meeting::where([
+            'start_date' => $meetingData['start_date'],
+            'end_date' => $meetingData['end_date'],
+            'status' => $meetingData['status'],
+        ])->exists();
+
+        if($isAlreadyBooked) {
+            return redirect()->to(route('meeting.index'))->with([
+                'message' => 'Termin został zajęty przez innego użytkownika i nie jest już dostępny'
+            ]);
+        }
+
+        $meeting = Meeting::create($meetingData);
 
         if ($request->filled('note')) {
             $meeting->notes()->create([
