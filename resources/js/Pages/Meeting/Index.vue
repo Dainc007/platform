@@ -100,14 +100,19 @@
                                 zgłaszający
                             </th>
                             <th scope="col"
-                             class="px-6 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700" @click="toggleSort">
+                                class="px-6 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700"
+                                @click="toggleSort">
                                 <div class="flex items-center">
-                                        Termin
-                                    <svg v-if="sortDirection === 'asc'" class="w-3 h-3 ml-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                                    Termin
+                                    <svg v-if="sortDirection === 'asc'" class="w-3 h-3 ml-1.5" aria-hidden="true"
+                                         xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
                                     </svg>
-                                    <svg v-else class="w-3 h-3 ml-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
+                                    <svg v-else class="w-3 h-3 ml-1.5" aria-hidden="true"
+                                         xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
                                     </svg>
                                 </div>
                             </th>
@@ -177,21 +182,21 @@
                                                 Notatka Admina:
                                             </small>
                                             <br>
-                                            <b>{{meeting.description}}</b>
+                                            <b>{{ meeting.description }}</b>
                                         </span>
                                     </div>
                                 </template>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <svg v-show="meeting.status !== 'cancelled'" @click="handleUpdateMeeting(meeting, 'cancelled')"
-                                     class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-green-500 mx-auto" aria-hidden="true"
+                                <svg v-if="meeting.status === 'done'" @click="handleUpdateMeeting(meeting, 'cancelled')"
+                                     class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-green-500 mx-auto"
+                                     aria-hidden="true"
                                      xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                     <path fill-rule="evenodd"
                                           d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
                                           clip-rule="evenodd"/>
                                 </svg>
-
-                                <svg v-show="meeting.status !== 'done'"
+                                <svg v-else-if="meeting.status === 'cancelled'"
                                      @click="handleUpdateMeeting(meeting, 'done')"
                                      class="w-6 h-6 text-red-600 dark:text-white mx-auto"
                                      aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -199,6 +204,27 @@
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                           stroke-width="2" d="M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                 </svg>
+                                <span v-else>
+                                                               <svg
+                                                                   @click="handleUpdateMeeting(meeting, 'done')"
+                                                                   class="w-8 h-8 md:w-6 md:h-6 sm:w-4 sm:h-4 text-green-500 mx-auto"
+                                                                   aria-hidden="true"
+                                                                   xmlns="http://www.w3.org/2000/svg"
+                                                                   fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd"
+                                          d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
+                                          clip-rule="evenodd"/>
+                                </svg>
+
+                                <svg
+                                    @click="handleUpdateMeeting(meeting, 'cancelled')"
+                                    class="w-6 h-6 text-red-600 dark:text-white mx-auto"
+                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2" d="M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                </span>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <button @click="destroy(meeting.id)" title="Usuń"
@@ -252,9 +278,12 @@
                 <Link v-show="activeStep === 2 && subStep === 1" :href="route('dashboard')">
                     <i class="fas fa-arrow-left text-blue-500 text-xl"> Cofnij</i>
                 </Link>
-                <i v-show="activeStep === 2 && subStep === 2" class="fas fa-arrow-left text-blue-500 text-xl" @click="subStep -= 1;"> Cofnij</i>
-                <i v-show="activeStep === 3 && subStep === 1" class="fas fa-arrow-left text-blue-500 text-xl" @click="subStep = 2; activeStep = 2;"> Cofnij</i>
-                <i v-show="activeStep === 4" class="fas fa-arrow-left text-blue-500 text-xl" @click="prevStep"> Cofnij</i>
+                <i v-show="activeStep === 2 && subStep === 2" class="fas fa-arrow-left text-blue-500 text-xl"
+                   @click="subStep -= 1;"> Cofnij</i>
+                <i v-show="activeStep === 3 && subStep === 1" class="fas fa-arrow-left text-blue-500 text-xl"
+                   @click="subStep = 2; activeStep = 2;"> Cofnij</i>
+                <i v-show="activeStep === 4" class="fas fa-arrow-left text-blue-500 text-xl" @click="prevStep">
+                    Cofnij</i>
                 <div class="hidden">
                     <div class="days">
                         <div
@@ -415,14 +444,14 @@
             </h2>
 
             <div class="mt-6">
-                <InputLabel for="description" value="Treść" />
+                <InputLabel for="description" value="Treść"/>
                 <TextArea
                     id="description"
                     class="mt-1 block w-full"
                     v-model="descriptionForm.description"
                     required
                 />
-                <InputError class="mt-2" :message="descriptionForm.errors.description" />
+                <InputError class="mt-2" :message="descriptionForm.errors.description"/>
             </div>
 
             <div class="mt-6 flex justify-end">
@@ -485,7 +514,7 @@ const handleDate = (modelData) => {
 
     router.reload({
         only: ['meetings'],
-        data: { date: form.date }
+        data: {date: form.date}
     });
 }
 
@@ -520,7 +549,7 @@ const submit = (date) => {
 };
 
 const destroy = (id) => {
-    if(confirm('Jesteś pewien?')) {
+    if (confirm('Jesteś pewien?')) {
         Inertia.delete(route('meetings.destroy', id))
     }
     return (destroy)
