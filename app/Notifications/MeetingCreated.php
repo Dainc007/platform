@@ -42,12 +42,11 @@ class MeetingCreated extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $user = $this->meeting->user;
-
-        $startDateLine = 'godzina rozpoczęcia: ' . $this->meeting->start_date;
+        $startDateLine = 'Spotkanie zostało umówione na: ' . $this->meeting->start_date;
 
         if($number = $user->phone_number)
         {
-            $this->smsService->sendSMS($number, $startDateLine . ' Czekaj na wiadomość zwrotna z potwierdzeniem lub odrzuceniem  wybranego przez ciebie terminu.');
+            $this->smsService->sendSMS($number, $startDateLine . ' W razie nieobecności poinformuj nas o tym!');
         }
 
         $username = $user->name;
