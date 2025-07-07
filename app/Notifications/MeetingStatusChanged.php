@@ -49,6 +49,8 @@ class MeetingStatusChanged extends Notification
             case 'rejected':
                 $smsText = "Wniosek o spotkanie został odrzucony.";
                 break;
+            case 'cancelled':
+                $smsText = "Wniosek o spotkanie został odrzucony.";
             // Dodaj tu kolejne statusy jeśli chcesz
         }
 
