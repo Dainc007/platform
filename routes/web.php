@@ -26,13 +26,13 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard', [
         'friend' => Auth::user(),
         'currentUser' => Auth::user(),
-        'conversation' => Conversation::with(['messages' => function ($query) {
+        'conversation' => \App\Models\Conversation::with(['messages' => function ($query) {
             $query->orderBy('id', 'desc');
         }, 'messages.user'])->find(2)
     ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', \App\Http\Middleware\EnsureUserIsActive::class])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\EnsureUserIsActive::class])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -40,7 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/analytics/truncate', [AnalyticsController::class, 'truncate'])->name('analytics.truncate');
     Route::get('/analytics/export', [AnalyticsController::class, 'export'])->name('analytics.export');
 });
-Route::middleware(['auth'])->group(function () {
+
+Route::middleware(['auth', \App\Http\Middleware\EnsureUserIsActive::class])->group(function () {
     Route::resources([
         'conversations' => ConversationController::class,
         'messages' => MessageController::class,
@@ -51,6 +52,22 @@ Route::middleware(['auth'])->group(function () {
         'analytics' => AnalyticsController::class,
         'ftp' => FtpController::class,
     ]);
+
+    // Admin: User management
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('/users', [\App\Http\Controllers\Admin\UserManagementController::class, 'index'])->name('users.index');
+        Route::post('/users/{user}/toggle', [\App\Http\Controllers\Admin\UserManagementController::class, 'toggle'])->name('users.toggle');
+        Route::get('/users/{user}/activity', [\App\Http\Controllers\Admin\UserManagementController::class, 'activity'])->name('users.activity');
+    });
+});
+
+Route::middleware(['auth'])->group(function() {
+    Route::get('/inactive', function() {
+        if (Auth::user()->is_active) {
+            return redirect()->intended(route('dashboard'));
+        }
+        return Inertia::render('Auth/Inactive');
+    })->name('inactive');
 });
 
 require __DIR__.'/auth.php';

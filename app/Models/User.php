@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_active',
     ];
 
     /**
@@ -42,12 +43,20 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 
     public function isAdmin()
     {
-        return true;
+        return in_array($this->email, ['danielheinze96@gmail.com', 'kontakt@partio.pl']);
+    }
+
+    public function toArray()
+    {
+        return array_merge(parent::toArray(), [
+            'isAdmin' => $this->isAdmin(),
+        ]);
     }
 
     public function articles()

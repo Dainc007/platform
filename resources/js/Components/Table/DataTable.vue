@@ -22,7 +22,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="row in rows.data" v-if="rows.data.length" :key="row.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+        <template v-if="rows.data.length">
+            <tr v-for="row in rows.data" :key="row.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
             <td class="w-4 p-4">
                 <div class="flex items-center">
                     <input id="checkbox-table-search-1" type="checkbox"
@@ -54,6 +55,7 @@
                 <a :href="route('users.destroy', row)" class="font-medium text-red-600 dark:text-red-500 hover:underline mx-auto">Delete</a>
             </td>
         </tr>
+        </template>
         </tbody>
     </table>
     <Pagination :links="rows.links"></Pagination>
