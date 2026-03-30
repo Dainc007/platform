@@ -23,6 +23,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
+    return redirect()->route('products.index');
     return Inertia::render('Dashboard', [
         'friend' => Auth::user(),
         'currentUser' => Auth::user(),

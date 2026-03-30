@@ -6,6 +6,9 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,9 +25,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Model::preventLazyLoading(! $this->app->isProduction());
-        Model::preventSilentlyDiscardingAttributes();
-        Model::preventAccessingMissingAttributes();
+        $isProduction = App::isProduction();
+        Model::shouldBeStrict($isProduction);
+        DB::prohibitDestructiveCommands($isProduction);
+        URL::forceScheme('https');
 
         Gate::define('viewPulse', function (User $user) {
             return $user->isAdmin();
