@@ -172,36 +172,38 @@ function roundedNumber(number) {
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-if="products" v-for="product in products.data" :key="product.id"
-                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td class="w-4 p-4">
-                            <div class="flex items-center">
-                                <input id="checkbox-table-search-1" type="checkbox"
-                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                            </div>
-                        </td>
-                        <th scope="row"
-                            class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                            <div>
-                                <div class="text-base font-semibold">{{ product.code }}</div>
-                                <div class="font-normal text-gray-500">{{ product.brand.name }}</div>
-                            </div>
-                        </th>
+                    <template v-if="products && products.data">
+                        <tr v-for="product in products.data" :key="product.id"
+                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <td class="w-4 p-4">
+                                <div class="flex items-center">
+                                    <input id="checkbox-table-search-1" type="checkbox"
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                                </div>
+                            </td>
+                            <th scope="row"
+                                class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                <div>
+                                    <div class="text-base font-semibold">{{ product.code }}</div>
+                                    <div class="font-normal text-gray-500">{{ product.brand.name }}</div>
+                                </div>
+                            </th>
 
-                        <th scope="row">
-                            {{formatPrice(product.product_price)}}
-                        </th>
-                        <th scope="row">
-                            {{formatPrice(product.temp_product_price)}}
-                        </th>
-                        <th scope="row">
-                            {{formatPrice(product.price_difference)}}
-                        </th>
-                        <th scope="row" :class="{'text-green-500': product.price_difference_percentage > 0, 'text-red-500': product.price_difference_percentage < 0}">
-                            {{ roundedNumber(product.price_difference_percentage) }} %
-                        </th>
-                    </tr>
+                            <th scope="row">
+                                {{formatPrice(product.product_price)}}
+                            </th>
+                            <th scope="row">
+                                {{formatPrice(product.temp_product_price)}}
+                            </th>
+                            <th scope="row">
+                                {{formatPrice(product.price_difference)}}
+                            </th>
+                            <th scope="row" :class="{'text-green-500': product.price_difference_percentage > 0, 'text-red-500': product.price_difference_percentage < 0}">
+                                {{ roundedNumber(product.price_difference_percentage) }} %
+                            </th>
+                        </tr>
+                    </template>
                     </tbody>
                 </table>
                 <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
@@ -209,9 +211,9 @@ function roundedNumber(number) {
                     <span
                         class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
                     </span>
-                    <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+                    <ul v-if="products && products.links" class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
                         <Link
-                            v-if="products && products.links" v-for=" (link, index) in products.links"
+                            v-for=" (link, index) in products.links"
                             :key="index"
                             :href="link.url"
                             class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"

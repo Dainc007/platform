@@ -24,7 +24,7 @@ class ProductController extends Controller
             $products->where('code', '=', $search);
         }
 
-        $products->with(['currency', 'contractor', 'brand'])
+        $products = $products->with(['currency', 'contractor', 'brand'])
             ->orderBy('price')
             ->paginate(15);
 

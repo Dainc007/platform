@@ -57,6 +57,9 @@ const showingNavigationDropdown = ref(false);
                         <NavLink :href="route('analytics.index')" :active="route().current('analytics*')">
                             {{$t('nav.analytics')}}
                         </NavLink>
+                        <NavLink v-if="$page.props.auth.user.isAdmin" :href="route('admin.users.index')" :active="route().current('admin.users.*')">
+                            {{$t('nav.users_management')}}
+                        </NavLink>
                         <NavLink :href="route('ftp.index')" :active="route().current('ftp*')">
                                 FTP
                         </NavLink>
@@ -172,6 +175,9 @@ const showingNavigationDropdown = ref(false);
               </ResponsiveNavLink>
                 <ResponsiveNavLink :href="route('files.index')" :active="route().current('files*')">
                     {{$t('nav.analytics')}}
+                </ResponsiveNavLink>
+                <ResponsiveNavLink v-if="$page.props.auth.user.isAdmin" :href="route('admin.users.index')" :active="route().current('admin.users.*')">
+                    {{$t('nav.users_management')}}
                 </ResponsiveNavLink>
                 <ResponsiveNavLink :href="route('ftp.index')" :active="route().current('ftp*')">
                     FTP

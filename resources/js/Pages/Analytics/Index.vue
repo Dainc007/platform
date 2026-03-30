@@ -152,7 +152,7 @@ const destroy = (id, files) => {
                     <span
                         class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
                     </span>
-                <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+                <ul v-if="analytics && analytics.links" class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
                     <Link
                         v-for=" (link, index) in analytics.links"
                         :preserveScroll="true"
@@ -162,31 +162,33 @@ const destroy = (id, files) => {
 'flex items-center justify-center px-3 h-8 leading-tight border',
 link.active ? 'text-white bg-blue-500 border-blue-500' : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
 ]"
-                        v-htm v-html="link.label"
+                        v-html="link.label"
                     />
                 </ul>
             </nav>
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <tbody>
-                <tr v-for="(file) in analytics.data" v-if="analytics"
-                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                        <div class="ps-3">
-                            <div class="text-base font-semibold">
-                                {{ file.path.replace('public/', '') }}
+                <template v-if="analytics && analytics.data">
+                    <tr v-for="(file) in analytics.data"
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                            <div class="ps-3">
+                                <div class="text-base font-semibold">
+                                    {{ file.path.replace('public/', '') }}
+                                </div>
                             </div>
-                        </div>
-                    </th>
-                    <td class="px-6 py-4 text-center">
-                        <button @click="destroy(file.id, analytics)" title="Usuń" class="m-1 p-1 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs px-2 py-1 text-center inline-flex items-center">
-                            <i class="mx-1 py-1 fa-solid fa-trash"></i> <!-- Ikona usuwania -->
-                        </button>
-                        <button :disabled="file.status === 'pending'"  @click="download(file.id, analytics)" title="Pobierz" class="m-1 p-1 text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-500 dark:hover:bg-blue-600 border border-blue-200 dark:border-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-100 dark:focus:ring-blue-700 font-medium rounded-lg text-xs px-2 py-1 text-center inline-flex items-center">
-                            <i v-if="file.status === 'pending'" class="fa fa-spinner fa-spin text-blue-500"></i>
-                            <i v-else class="mx-1 py-1 fa-solid fa-download"></i> <!-- Ikona pobierania -->
-                        </button>
-                    </td>
-                </tr>
+                        </th>
+                        <td class="px-6 py-4 text-center">
+                            <button @click="destroy(file.id, analytics)" title="Usuń" class="m-1 p-1 text-white bg-red-600 dark:bg-red-700 hover:bg-red-500 dark:hover:bg-red-600 border border-red-200 dark:border-red-600 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-700 font-medium rounded-lg text-xs px-2 py-1 text-center inline-flex items-center">
+                                <i class="mx-1 py-1 fa-solid fa-trash"></i> <!-- Ikona usuwania -->
+                            </button>
+                            <button :disabled="file.status === 'pending'"  @click="download(file.id, analytics)" title="Pobierz" class="m-1 p-1 text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-500 dark:hover:bg-blue-600 border border-blue-200 dark:border-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-100 dark:focus:ring-blue-700 font-medium rounded-lg text-xs px-2 py-1 text-center inline-flex items-center">
+                                <i v-if="file.status === 'pending'" class="fa fa-spinner fa-spin text-blue-500"></i>
+                                <i v-else class="mx-1 py-1 fa-solid fa-download"></i> <!-- Ikona pobierania -->
+                            </button>
+                        </td>
+                    </tr>
+                </template>
                 </tbody>
             </table>
         </div>
