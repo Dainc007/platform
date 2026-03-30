@@ -90,3 +90,24 @@ Or for specific modules:
 ./vendor/bin/pest tests/Feature/Admin/UserActivityTest.php
 ```
 
+### Manual Deployment (If `npm run build` is not possible on the server)
+If your server lacks Node.js/NPM or has restricted resources, you can build the assets locally and upload them:
+
+1.  **Build Assets Locally:**
+    ```bash
+    npm install
+    npm run build
+    ```
+
+2.  **Package Changes and Assets:**
+    Run this command to create a ZIP containing only the modified files from the `admin-user-management` branch AND the compiled assets:
+    ```bash
+    zip -r changes.zip $(git diff --name-only partio admin-user-management) public/build
+    ```
+
+3.  **Upload and Extract:**
+    - Upload `changes.zip` to your server.
+    - Extract it in the project root: `unzip -o changes.zip`.
+    - Run `php artisan migrate` if there are new migrations.
+    - Run `php artisan optimize:clear` to refresh the cache.
+
